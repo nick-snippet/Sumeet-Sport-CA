@@ -50,7 +50,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav buttons (capsule center) */}
-          <div className="hidden md:flex flex-1 justify-center gap-6 text-black font-semibold text-lg">
+          <div className="hidden md:flex flex-1 justify-center gap-4 text-black font-semibold text-lg">
             {navItems.map((item, i) => (
               <button
                 key={i}
