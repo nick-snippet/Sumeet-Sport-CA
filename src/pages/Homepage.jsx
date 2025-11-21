@@ -470,7 +470,7 @@ export default function HomePage() {
       {/* PROGRAMS & FACILITIES */}
       <section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
         <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-3xl font-bold mb-6 text-[#1c9e9e]">Programs & Facilities</h3>
+          <h3 className="text-3xl font-bold mb-6 text-[#00f5f5]">Programs & Facilities</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
