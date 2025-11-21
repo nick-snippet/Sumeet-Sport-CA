@@ -46,7 +46,7 @@ export default function Navbar() {
           {/* Logo (floating to left of capsule) */}
           <Link to="/" className="flex items-center gap-3 select-none" onClick={() => scrollToSection("home-section")}>
             <img src="/images/logo4.png" alt="logo" className="h-12 w-12 rounded-full shadow-lg object-cover" />
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent tracking-wide">SUMEET SPORTS</span>
+            <span className="text-2xl font-extrabold bg-sky-200 bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent tracking-wide">SUMEET SPORTS</span>
           </Link>
 
           {/* Desktop nav buttons (capsule center) */}
