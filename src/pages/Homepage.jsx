@@ -497,7 +497,7 @@ export default function HomePage() {
           </div>
         </div>
         
-     {/* Extra Two Rectangular Cards (resize to VMG style) */}
+     {/* residential and expo */}
 <div className="max-w-5xl mx-auto px-6 mt-12 space-y-6">
   <div className="bg-gradient-to-r from-pink-100 to-sky-100 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
     <div className="w-full md:w-1/3 flex-shrink-0">
@@ -506,7 +506,7 @@ export default function HomePage() {
     <div className="w-full md:w-2/3">
       <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Residential Facilities</h3>
       <p className="text-gray-800 text-lg leading-relaxed"> 
-        {/* add description here */}
+        {/* description  */}
         The Academy Ensures Not Only Cricket Training But Also Comfortable Living Arrangements.
         Well-Maintained Residential And Food Facilities Are Provided At Appasaheb Birnale Public School Boys Hostel, Sangli
         This Ensures A Disciplined Environment And Holistic Growth For Every Player.
@@ -522,7 +522,7 @@ export default function HomePage() {
     <div className="w-full md:w-2/3">
       <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Competition and Exposure</h3>
       <p className="text-gray-800 text-lg leading-relaxed">
-        {/* add description here */}
+        {/* description  */}
         The Academy Frequently Arranges Practice Matches and Tournaments,
               <br></br> 
              Giving Players Real-Time Match Experience and Building Confidence.
@@ -555,7 +555,7 @@ export default function HomePage() {
           )}
 
           <div className="space-y-16 pb-4">
-            {/* Keep your existing event mapping — copy events array from your previous code */}
+            {/*—  events array  */}
             {[
               {
                 title: "Maharashtra Premier League Selections",
