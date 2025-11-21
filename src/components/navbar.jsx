@@ -39,7 +39,7 @@ useEffect(() => {
   }, []);
 
   // scroll-to-section helper: if not on home path navigate to "/" then scroll
-  const scrollToSection = (id) => {
+  const scrollToSection = (id) => {}
     setOpen(false);
     if (location.pathname !== "/") {
       navigate("/");
