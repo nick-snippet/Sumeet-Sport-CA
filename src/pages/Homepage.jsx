@@ -726,8 +726,8 @@ export default function HomePage() {
             </div>
             <div>
               <h4 className="font-semibold mb-1 text-[#0f2547]">Phone</h4>
-              <p className="text-gray-600">+91 9403230200</p>
-              <p className="text-gray-600">+91 7507878219</p>
+              <p className="text-gray-900">+91 9403230200</p>
+              <p className="text-gray-900">+91 7507878219</p>
             </div>
           </div>
         </div>
@@ -739,8 +739,8 @@ export default function HomePage() {
               ✉️
             </div>
             <div>
-              <h4 className="font-semibold mb-1 text-[#0f2547]">Email</h4>
-              <p className="text-gray-600">info@sumeetsportsacademy.com</p>
+              <h4 className="font-semibold mb-1 text-[#000000]">Email</h4>
+              <p className="text-gray-900">info@sumeetsportsacademy.com</p>
             </div>
           </div>
         </div>
@@ -753,7 +753,7 @@ export default function HomePage() {
             </div>
             <div>
               <h4 className="font-semibold mb-1 text-[#0f2547]">Address</h4>
-              <p className="text-gray-600">
+              <p className="text-gray-900">
                 Sumeet Sports Cricket Academy,  
                 Appasaheb Birnale Public School, Sangli, Maharashtra
               </p>
