@@ -79,7 +79,7 @@ export default function Navbar() {
           initial={{ y: -14, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.35 }}
-          className={`pointer-events-auto w-full max-w-4xl rounded-full px-4 py-3 flex items-center justify-between gap-6 backdrop-blur-xl border border-white/20 shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition-all duration-300 ${scrolled ? "bg-white/10" : "bg-white/5"}`}
+          className={`pointer-events-auto w-full max-w-4xl rounded-full px-4 py-3 flex items-center justify-between gap-6 backdrop-blur-2xl border border-white/20 shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition-all duration-300 ${scrolled ? "bg-white/10" : "bg-white/5"}`}
         >
           {/* Logo (left) */}
           <Link to="/" className="flex items-center gap-3 select-none" onClick={() => scrollToSection("home-section")}>
@@ -88,13 +88,13 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop nav buttons */}
-          <div className="hidden md:flex flex-1 justify-center gap-4 text-white font-semibold text-lg">
+          <div className="hidden md:flex flex-1 justify-center gap-4 text-black font-semibold text-lg">
             {navItems.map((item, i) => (
               <button
                 key={i}
                 onClick={() => scrollToSection(item.id)}
                 className={`relative px-4 py-1 rounded-full transition flex items-center justify-center
-                  ${activeSection === item.id ? "bg-white/20  shadow-lg ring-1 ring-white/20" : "text-white/90  hover:text-white"}
+                  ${activeSection === item.id ? "bg-white/20  shadow-lg ring-1 ring-white/20" : "text-black  hover:text-white"}
                 `}
                 aria-current={activeSection === item.id ? "true" : "false"}
               >
