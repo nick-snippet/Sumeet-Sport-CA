@@ -497,53 +497,43 @@ export default function HomePage() {
           </div>
         </div>
         
-
-<div className="mt-10 space-y-8">
-
-  {/* Residential Facilities */}
-  <div className="flex flex-col md:flex-row  bg-gradient-to-r from-pink-200 to-sky-200 rounded-l p-6 shadow-xl">
-    <img
-      src="/images/hostel.jpeg"
-      alt="Residential Facilities"
-      className="w-full md:w-1/3 h-50 object-cover rounded-2xl mb-2 md:mb-0 md:mr-6"
-    />
-    <div className="md:w-2/3">
-      <h3 className="text-4xl font-bold text-[#0f2547] mb-3">
-        Residential Facilities
-      </h3>
-      <p className="text-gray-900 text-2x leading-relaxed">
+     {/* Extra Two Rectangular Cards (resize to VMG style) */}
+<div className="max-w-5xl mx-auto px-6 mt-12 space-y-6">
+  <div className="bg-gradient-to-r from-pink-100 to-sky-100 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
+    <div className="w-full md:w-1/3 flex-shrink-0">
+      <img src="/images/hostel.jpeg" alt="Residential facilities" className="w-full h-48 object-cover rounded-2xl" />
+    </div>
+    <div className="w-full md:w-2/3">
+      <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Residential Facilities</h3>
+      <p className="text-gray-800 text-lg leading-relaxed"> 
+        {/* add description here */}
         The Academy Ensures Not Only Cricket Training But Also Comfortable Living Arrangements.
         Well-Maintained Residential And Food Facilities Are Provided At Appasaheb Birnale Public School Boys Hostel, Sangli
         This Ensures A Disciplined Environment And Holistic Growth For Every Player.
+		
       </p>
     </div>
   </div>
 
-        {/* Competition and Exposure */}
-        <div className="flex flex-col md:flex-row  bg-gradient-to-r from-sky-200 to-pink-200 rounded-3xl p-8 shadow-xl">
-          <img
-            src="/images/exposure.jpeg"
-            alt="Competition and Exposure"
-            className="w-full md:w-1/3 h-50 object-cover rounded-2xl mb-6 md:mb-0 md:mr-6"
-          />
-          <div className="md:w-2/3">
-            <h3 className="text-4xl font-bold text-[#0f2547] mt-1">
-              Competition and Exposure
-            </h3>
-            <p className="text-gray-900 text-2x leading-relaxed mt-3">
-              
-              The Academy Frequently Arranges Practice Matches and Tournaments,
+  <div className="bg-gradient-to-r from-sky-100 to-pink-100 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
+    <div className="w-full md:w-1/3 flex-shrink-0">
+      <img src="/images/exposure.jpeg" alt="Competition and exposure" className="w-full h-48 object-cover rounded-2xl" />
+    </div>
+    <div className="w-full md:w-2/3">
+      <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Competition and Exposure</h3>
+      <p className="text-gray-800 text-lg leading-relaxed">
+        {/* add description here */}
+        The Academy Frequently Arranges Practice Matches and Tournaments,
               <br></br> 
              Giving Players Real-Time Match Experience and Building Confidence.
              <br />
               These Initiatives Ensure Players are Well-Prepared for Higher-level Challenges.
-            </p>
-            
-          </div>
-        </div>
+      </p>
+    </div>
+  </div>
+</div>
 
-      </div>
-            </section>
+     </section>
 
       {/* GALLERY */}
       <section id="gallery-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
