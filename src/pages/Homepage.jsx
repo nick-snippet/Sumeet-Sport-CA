@@ -753,7 +753,7 @@ export default function HomePage() {
           <h3 className="text-4xl font-semibold px-3 mb-6 text-[#0f2547]">
             Contact Information
           </h3>
-          <p className="text-gray-600 mb-8 leading-relaxed">
+          <p className="text-gray-900 mb-8 leading-relaxed">
             Reach out to us anytime. We usually respond within 24 hours.
           </p>
         </div>
