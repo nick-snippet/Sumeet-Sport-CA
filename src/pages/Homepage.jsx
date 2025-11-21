@@ -361,9 +361,7 @@ export default function HomePage() {
 {/* VISION / MISSION / GOALS – NEW SECTION */}
 <section id="vision-section" className="py-20 bg-white">
   <div className="max-w-5xl mx-auto px-6">
-    <h2 className="text-5xl font-extrabold text-[#0f2547] text-center mb-12">
-      Vision • Mission • Goals
-    </h2>
+    
 
     {/* VISION */}
     <div
