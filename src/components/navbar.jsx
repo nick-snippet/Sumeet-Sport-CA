@@ -106,7 +106,7 @@ export default function Navbar() {
           </Link>
 
           {/* ================= DESKTOP NAVBAR ================= */}
-          <div className="hidden md:flex flex-1 justify-center gap-4 text-white font-semibold text-lg">
+          <div className="hidden md:flex flex-1 justify-center gap-4 text-gray-800 font-semibold text-lg">
             {navItems.map((item, i) => (
               <button
                 key={i}
