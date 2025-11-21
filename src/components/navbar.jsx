@@ -94,7 +94,7 @@ export default function Navbar() {
                 key={i}
                 onClick={() => scrollToSection(item.id)}
                 className={`relative px-4 py-1 rounded-full transition flex items-center justify-center
-                  ${activeSection === item.id ? "bg-white/20 text-sky-600 shadow-lg ring-1 ring-white/30" : "text-black/90 hover:text-pink-500"}
+                  ${activeSection === item.id ? "bg-white/20 text-sky-600 shadow-lg ring-1 ring-white/20" : "text-black/90 hover:text-sky-500"}
                 `}
                 aria-current={activeSection === item.id ? "true" : "false"}
               >
@@ -124,7 +124,7 @@ export default function Navbar() {
                 key={i}
                 onClick={() => scrollToSection(item.id)}
                 className={`block w-full py-3 text-lg font-semibold hover:text-pink-500 hover:bg-gray-50 rounded-full transition mb-2 ${
-                  activeSection === item.id ? "bg-white/30" : ""
+                  activeSection === item.id ? "bg-white/20" : ""
                 }`}
               >
                 {item.label}
