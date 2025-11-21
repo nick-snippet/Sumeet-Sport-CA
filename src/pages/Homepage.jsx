@@ -280,15 +280,13 @@ export default function HomePage() {
         </div>
       </section>
 {/* ABOUT US  SECTION  */}
-<section id="about-extra" className="py-12">
+<section id="about-extra" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-6xl mx-auto px-6">
     <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f2547] mb-4">
       About Us
     </h2>
 
-    <h3 className="text-xl md:text-2xl font-semibold text-gray-800 mb-4">
-      Building Discipline • Character • Excellence
-    </h3>
+    
 
     <p className="text-gray-900 leading-relaxed text-lg md:text-xl">
       At <b>Sumeet Sports Cricket Academy</b>, We Believe Every Athlete Deserves A 
@@ -301,11 +299,15 @@ export default function HomePage() {
       Our Academy Focuses On Shaping Players Not Just As Athletes, But As 
       Confident, Responsible, And Mentally Strong Individuals — Prepared 
       For District, State, And National-Level Selections.
+      <br /> <br />
+      The academy frequently arranges practice matches and tournaments,
+       giving players real-time match experience and building confidence. 
+      These initiatives ensure players are well-prepared for higher-level challenges
     </p>
     </div>
     </section>
       {/* COACHES */}
-      <section id="coaches-section" className="py-12 bg-white/40">
+      <section id="coaches-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
         <div className="max-w-6xl mx-auto px-6">
           <h3 className="text-3xl font-bold mb-8 text-[#0f2547]">Expert Coaches</h3>
 
@@ -318,7 +320,7 @@ export default function HomePage() {
       </section>
       {/* PROUD PLAYERS SECTION */}
   <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
-    <div className="max-w-7xl mx-auto px-6">
+    <div className="max-w-6xl mx-auto px-6">
       <h2 className="text-4xl font-extrabold text-[#0f2547] text-center mb-12">
         Our Proud Players
       </h2>
@@ -359,7 +361,7 @@ export default function HomePage() {
 
      
 {/* VISION / MISSION / GOALS – NEW SECTION */}
-<section id="vision-section" className="py-20 bg-white">
+<section id="vision-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-5xl mx-auto px-6">
     
 
@@ -466,7 +468,7 @@ export default function HomePage() {
           
 
       {/* PROGRAMS & FACILITIES */}
-      <section id="programs-section" className="py-12 bg-sky-200">
+      <section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
         <div className="max-w-6xl mx-auto px-6">
           <h3 className="text-3xl font-bold mb-6 text-[#1c9e9e]">Programs & Facilities</h3>
           
@@ -496,20 +498,20 @@ export default function HomePage() {
         </div>
         
 
-<div className="mt-12 space-y-8">
+<div className="mt-10 space-y-8">
 
   {/* Residential Facilities */}
-  <div className="flex flex-col md:flex-row  bg-gradient-to-r from-pink-200 to-sky-200 rounded-3xl p-8 shadow-xl">
+  <div className="flex flex-col md:flex-row  bg-gradient-to-r from-pink-200 to-sky-200 rounded-l p-6 shadow-xl">
     <img
       src="/images/hostel.jpeg"
       alt="Residential Facilities"
-      className="w-full md:w-1/3 h-60 object-cover rounded-2xl mb-2 md:mb-0 md:mr-6"
+      className="w-full md:w-1/3 h-50 object-cover rounded-2xl mb-2 md:mb-0 md:mr-6"
     />
     <div className="md:w-2/3">
       <h3 className="text-4xl font-bold text-[#0f2547] mb-3">
         Residential Facilities
       </h3>
-      <p className="text-gray-900 text-2xl leading-relaxed">
+      <p className="text-gray-900 text-2x leading-relaxed">
         The Academy Ensures Not Only Cricket Training But Also Comfortable Living Arrangements.
         Well-Maintained Residential And Food Facilities Are Provided At Appasaheb Birnale Public School Boys Hostel, Sangli
         This Ensures A Disciplined Environment And Holistic Growth For Every Player.
@@ -522,13 +524,13 @@ export default function HomePage() {
           <img
             src="/images/exposure.jpeg"
             alt="Competition and Exposure"
-            className="w-full md:w-1/3 h-60 object-cover rounded-2xl mb-6 md:mb-0 md:mr-6"
+            className="w-full md:w-1/3 h-50 object-cover rounded-2xl mb-6 md:mb-0 md:mr-6"
           />
           <div className="md:w-2/3">
             <h3 className="text-4xl font-bold text-[#0f2547] mt-1">
               Competition and Exposure
             </h3>
-            <p className="text-gray-900 text-2xl leading-relaxed mt-3">
+            <p className="text-gray-900 text-2x leading-relaxed mt-3">
               
               The Academy Frequently Arranges Practice Matches and Tournaments,
               <br></br> 
@@ -544,7 +546,7 @@ export default function HomePage() {
             </section>
 
       {/* GALLERY */}
-      <section id="gallery-section" className="py-20 bg-sky-200">
+      <section id="gallery-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
         <div className="max-w-7xl mx-auto px-6">
           <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-4xl md:text-5xl font-extrabold text-[#0f2547] text-center mb-3">
             Gallery Highlights
@@ -605,59 +607,175 @@ export default function HomePage() {
         </div>
       </section>
 
+      
       {/* CONTACT */}
-      <section id="contact-section" className="py-16">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f2547]">Ready to Begin Your Cricket Journey?</h2>
-            <p className="text-gray-700 mt-3 max-w-2xl mx-auto">Enroll now and start your path toward excellence. Get in touch with us today and our team will contact you soon.</p>
+<section id="contact-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
+  <div className="container mx-auto px-6">
+
+    {/* Heading */}
+    <div className="text-center mb-16">
+      <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0f2547]">
+        Get In <span className="bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent">
+          Touch
+        </span>
+      </h2>
+      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        Have questions about admissions, programs or training?  
+        Our team will reach out within 24 hours.
+      </p>
+    </div>
+
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+
+      {/* LEFT – FORM */}
+      <div>
+        <div className="rounded-2xl border border-gray-200 shadow-md bg-white hover:border-pink-400 transition">
+          <div className="p-8">
+
+            <h3 className="text-2xl font-semibold mb-6 text-[#0f2547]">
+              Send us a Message
+            </h3>
+
+            <form className="space-y-6" onSubmit={handleContactSubmit}>
+              
+              {/* First + Last Name */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-gray-800">First Name</label>
+                  <input
+                    value={contactForm.first}
+                    onChange={(e) =>
+                      setContactForm({ ...contactForm, first: e.target.value })
+                    }
+                    placeholder="Enter your first name"
+                    className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="text-gray-800">Last Name</label>
+                  <input
+                    value={contactForm.last}
+                    onChange={(e) =>
+                      setContactForm({ ...contactForm, last: e.target.value })
+                    }
+                    placeholder="Enter your last name"
+                    className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+                  />
+                </div>
+              </div>
+
+              {/* Email */}
+              <div>
+                <label className="text-gray-800">Email</label>
+                <input
+                  value={contactForm.email}
+                  onChange={(e) =>
+                    setContactForm({ ...contactForm, email: e.target.value })
+                  }
+                  placeholder="Enter your email address"
+                  type="email"
+                  className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+                />
+              </div>
+
+              {/* Message */}
+              <div>
+                <label className="text-gray-800">Message</label>
+                <textarea
+                  value={contactForm.message}
+                  onChange={(e) =>
+                    setContactForm({ ...contactForm, message: e.target.value })
+                  }
+                  rows="6"
+                  placeholder="Write your message here"
+                  className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+                ></textarea>
+              </div>
+
+              {/* Submit */}
+              <button
+                type="submit"
+                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium bg-gradient-to-r from-sky-500 to-pink-500 hover:opacity-90 transition"
+              >
+                Send Message
+              </button>
+            </form>
+
           </div>
+        </div>
+      </div>
 
-          <div className="bg-pink-100 rounded-3xl shadow-xl p-8 md:p-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="md:col-span-2">
-              <form className="space-y-4" onSubmit={handleContactSubmit}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input value={contactForm.first} onChange={(e) => setContactForm({ ...contactForm, first: e.target.value })} type="text" placeholder="First name" className="w-full px-4 py-3 border rounded-lg focus:outline-none" />
-                  <input value={contactForm.last} onChange={(e) => setContactForm({ ...contactForm, last: e.target.value })} type="text" placeholder="Last name" className="w-full px-4 py-3 border rounded-lg focus:outline-none" />
-                </div>
+      {/* RIGHT – CONTACT INFO */}
+      <div className="space-y-8">
 
-                <div>
-                  <input value={contactForm.email} onChange={(e) => setContactForm({ ...contactForm, email: e.target.value })} type="email" placeholder="Email address" className="w-full px-4 py-3 border rounded-lg focus:outline-none" />
-                </div>
+        <div>
+          <h3 className="text-2xl font-semibold mb-6 text-[#0f2547]">
+            Contact Information
+          </h3>
+          <p className="text-gray-600 mb-8 leading-relaxed">
+            Reach out to us anytime. We usually respond within 24 hours.
+          </p>
+        </div>
 
-                <div>
-                  <textarea value={contactForm.message} onChange={(e) => setContactForm({ ...contactForm, message: e.target.value })} rows="5" placeholder="Your message" className="w-full px-4 py-3 border rounded-lg focus:outline-none"></textarea>
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <button type="submit" className="px-6 py-3 bg-gradient-to-r from-sky-500 to-pink-500 text-white rounded-lg font-semibold">Send Message</button>
-                  <p className="text-sm text-gray-600">We'll respond within 24 hours.</p>
-                </div>
-              </form>
+        {/* Phone */}
+        <div className="rounded-2xl border border-gray-200 shadow-sm bg-white hover:border-pink-400 transition">
+          <div className="p-6 flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-sky-300 to-pink-300 rounded-full flex items-center justify-center text-white">
+              📞
             </div>
-
-            <div className="flex flex-col gap-6">
-              <div className="bg-sky-200 rounded-xl p-5">
-                <h4 className="font-semibold text-[#0f2547] mb-2">Contact Info</h4>
-                <p className="text-sm text-black">Email: info@sumeetsportsacademy.com</p>
-                <p className="text-sm text-black">Phone: +91 9403230200</p>
-                <p className="text-sm text-black">Phone: +91 7507878219</p>
-              </div>
-
-              <div className="bg-sky-200 rounded-xl p-5">
-                <h4 className="font-semibold text-[#0f2547] mb-2">Visit Us</h4>
-                <p className="text-sm text-black">Sumeet Sports Cricket Academy, Near Appasaheb Birnale Public School Sangli, Maharashtra</p>
-              </div>
-
-              <div className="bg-sky-200 rounded-xl p-5">
-                <h4 className="font-semibold text-[#00000088] mb-2">Quick Guarantee</h4>
-                <p className="text-sm text-black">We’ll get back to you within 24 hours and help you choose the right program.</p>
-              </div>
+            <div>
+              <h4 className="font-semibold mb-1 text-[#0f2547]">Phone</h4>
+              <p className="text-gray-600">+91 9403230200</p>
+              <p className="text-gray-600">+91 7507878219</p>
             </div>
           </div>
         </div>
-      </section>
 
+        {/* Email */}
+        <div className="rounded-2xl border border-gray-200 shadow-sm bg-white hover:border-pink-400 transition">
+          <div className="p-6 flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+              ✉️
+            </div>
+            <div>
+              <h4 className="font-semibold mb-1 text-[#0f2547]">Email</h4>
+              <p className="text-gray-600">info@sumeetsportsacademy.com</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Address */}
+        <div className="rounded-2xl border border-gray-200 shadow-sm bg-white hover:border-pink-400 transition">
+          <div className="p-6 flex items-center space-x-4">
+            <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-pink-500 rounded-full flex items-center justify-center text-white">
+              📍
+            </div>
+            <div>
+              <h4 className="font-semibold mb-1 text-[#0f2547]">Address</h4>
+              <p className="text-gray-600">
+                Sumeet Sports Cricket Academy,  
+                Appasaheb Birnale Public School, Sangli, Maharashtra
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Guarantee */}
+        <div className="bg-gradient-to-r from-sky-400 to-pink-400 rounded-2xl p-8 text-white">
+          <h4 className="text-xl font-semibold mb-3">Quick Response Guarantee</h4>
+          <p className="text-white/90 mb-4">We respond to all inquiries within 24 hours.</p>
+          <div className="flex items-center space-x-2">
+            <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+            <span className="text-sm">Available Now</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
       {/* FOOTER */}
       <footer className="bg-[#0b1020] text-gray-300 rounded-t-[40px] pt-12">
         <div className="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-4 gap-8">

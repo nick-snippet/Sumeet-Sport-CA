@@ -8,6 +8,29 @@ export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const [activeSection, setActiveSection] = useState("home-section");
+
+useEffect(() => {
+  const handleScroll = () => {
+    const sections = navItems.map((nav) => nav.id);
+    let current = "home-section";
+
+    sections.forEach((sec) => {
+      const el = document.getElementById(sec);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= 150 && rect.bottom >= 150) {
+          current = sec;
+        }
+      }
+    });
+
+    setActiveSection(current);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -34,6 +57,7 @@ export default function Navbar() {
     { label: "Contact", id: "contact-section" },
   ];
 
+
   return (
     <nav className="fixed inset-x-0 top-4 z-50 pointer-events-none">
       <div className="flex justify-center px-4">
@@ -41,26 +65,28 @@ export default function Navbar() {
           initial={{ y: -14, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.35 }}
-          className={`pointer-events-auto w-full max-w-6xl rounded-full px-6 py-3 flex items-center justify-between gap-6 backdrop-blur-xl border border-white/20 shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition-all duration-300 ${scrolled ? "bg-white/10" : "bg-white/5"}`}
+          className={`pointer-events-auto w-full max-w-4xl rounded-full px-4 py-3 flex items-center justify-between gap-6 backdrop-blur-xl border border-white/20 shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition-all duration-300 ${scrolled ? "bg-white/10" : "bg-white/5"}`}
         >
           {/* Logo (floating to left of capsule) */}
           <Link to="/" className="flex items-center gap-3 select-none" onClick={() => scrollToSection("home-section")}>
             <img src="/images/logo4.png" alt="logo" className="h-12 w-12 rounded-full shadow-lg object-cover" />
-            <span className="text-2xl font-extrabold bg-sky-200 bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent tracking-wide">SUMEET SPORTS</span>
+            <span className="text-2xl font-extrabold  bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent tracking-wide">SUMEET SPORTS</span>
           </Link>
 
-          {/* Desktop nav buttons (capsule center) */}
-          <div className="hidden md:flex flex-1 justify-center gap-4 text-black font-semibold text-lg">
-            {navItems.map((item, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToSection(item.id)}
-                className="relative px-4 py-1 rounded-full transition hover:text-red-500 hover:shadow-md"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
+          {/* Desktop nav buttons */}
+        <div className="hidden md:flex flex-1 justify-center gap-4 text-black font-semibold text-lg">
+          {navItems.map((item, i) => (
+            <button
+              key={i}
+              onClick={() => scrollToSection(item.id)}
+              className={`relative px-4 py-1 rounded-full transition hover:text-red-500 hover:shadow-md
+                ${activeSection === item.id ? "bg-sky-300 shadow-lg backdrop-blur-xl" : ""}
+              `}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
 
           {/* Mobile menu button */}
           <button className="md:hidden text-black text-2xl pointer-events-auto" onClick={() => setOpen(!open)} aria-label="menu">
