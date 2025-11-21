@@ -266,13 +266,13 @@ export default function HomePage() {
 
       {/* STATS */}
       <section id="stats-section" className="py-10">
-        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-6">
+        <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-3 gap-6 ">
           {[
             { value: "150+", label: "Active Players" },
             { value: "20+", label: "Tournament Hosted" },
             { value: "8+", label: "Certified Coaches" },
           ].map((s, i) => (
-            <motion.div key={i} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.12 }} className="bg-white rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-all">
+            <motion.div key={i} initial={{ opacity: 0, y: 8 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.12 }} className="bg-sky-100 rounded-2xl p-6 text-center shadow-md hover:shadow-lg transition-all">
               <div className="text-3xl font-bold text-[#0f1724]">{s.value}</div>
               <div className="text-sm text-gray-600 mt-1">{s.label}</div>
             </motion.div>
@@ -321,7 +321,7 @@ export default function HomePage() {
       {/* PROUD PLAYERS SECTION */}
   <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
     <div className="max-w-6xl mx-auto px-6">
-      <h2 className="text-4xl font-extrabold text-[#0f2547] text-center mb-12">
+      <h2 className="text-5xl font-extrabold text-[#0f2547] text-center mb-12">
         Our Proud Players
       </h2>
 
@@ -470,7 +470,7 @@ export default function HomePage() {
       {/* PROGRAMS & FACILITIES */}
       <section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
         <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-3xl font-bold mb-6 text-[#000000]">Programs & Facilities</h3>
+          <h3 className="text-5xl font-bold  text-sky-900 text-center mb-12">Programs & Facilities</h3>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
@@ -498,39 +498,86 @@ export default function HomePage() {
         </div>
         
      {/* residential and expo */}
-<div className="max-w-6xl mx-auto px-6 mt-12 space-y-6">
-  <div className="bg-gradient-to-r from-pink-100 to-sky-100 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
-    <div className="w-full md:w-1/3 flex-shrink-0">
-      <img src="/images/hostel.jpeg" alt="Residential facilities" className="w-full h-48 object-cover rounded-2xl" />
-    </div>
-    <div className="w-full md:w-2/3">
-      <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Residential Facilities</h3>
-      <p className="text-gray-800 text-lg leading-relaxed"> 
-        {/* description  */}
-        The Academy Ensures Not Only Cricket Training But Also Comfortable Living Arrangements.
-        Well-Maintained Residential And Food Facilities Are Provided At Appasaheb Birnale Public School Boys Hostel, Sangli
-        This Ensures A Disciplined Environment And Holistic Growth For Every Player.
-		
-      </p>
-    </div>
-  </div>
+      <div className="max-w-6xl mx-auto px-6 mt-12 space-y-10">
 
-  <div className="bg-gradient-to-r from-sky-100 to-pink-100 rounded-3xl p-6 shadow-xl flex flex-col md:flex-row items-center gap-6">
-    <div className="w-full md:w-1/3 flex-shrink-0">
-      <img src="/images/exposure.jpeg" alt="Competition and exposure" className="w-full h-48 object-cover rounded-2xl" />
+  {/* RESIDENTIAL FACILITIES */}
+  <motion.div
+    onClick={() =>
+      setSelectedCard({
+        title: "Residential Facilities",
+        img: "/images/hostel.jpeg",
+        desc: `The Academy Ensures Not Only Cricket Training But Also Comfortable Living Arrangements.
+        Well-Maintained Residential And Food Facilities Are Provided At Appasaheb Birnale Public School Boys Hostel, Sangli.
+        This Ensures A Disciplined Environment And Holistic Growth For Every Player.`,
+      })
+    }
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.03, y: -6 }}
+    transition={{ duration: 0.3 }}
+    className="cursor-pointer bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl overflow-hidden"
+  >
+    <div className="flex flex-col md:flex-row items-center gap-6 p-6">
+      <div className="w-full md:w-1/3 flex-shrink-0">
+        <motion.img
+          src="/images/hostel.jpeg"
+          alt="Residential facilities"
+          className="w-full h-48 object-cover rounded-2xl"
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
+
+      <div className="w-full md:w-2/3">
+        <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Residential Facilities</h3>
+        <p className="text-gray-800 text-lg leading-relaxed">
+          The Academy ensures comfortable living arrangements with well-maintained hostel
+          and food facilities at Appasaheb Birnale Public School Boys Hostel, Sangli — ensuring
+          discipline and holistic growth.
+        </p>
+      </div>
     </div>
-    <div className="w-full md:w-2/3">
-      <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Competition and Exposure</h3>
-      <p className="text-gray-800 text-lg leading-relaxed">
-        {/* description  */}
-        The Academy Frequently Arranges Practice Matches and Tournaments,
-              <br></br> 
-             Giving Players Real-Time Match Experience and Building Confidence.
-             <br />
-              These Initiatives Ensure Players are Well-Prepared for Higher-level Challenges.
-      </p>
+  </motion.div>
+
+  {/* COMPETITION & EXPOSURE */}
+  <motion.div
+    onClick={() =>
+      setSelectedCard({
+        title: "Competition & Exposure",
+        img: "/images/exposure.jpeg",
+        desc: `The Academy Frequently Arranges Practice Matches and Tournaments,
+        Giving Players Real-Time Match Experience and Building Confidence.
+        These Initiatives Ensure Players Are Well-Prepared For Higher-Level Challenges.`,
+      })
+    }
+    initial={{ opacity: 0, y: 12 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    whileHover={{ scale: 1.03, y: -6 }}
+    transition={{ duration: 0.3 }}
+    className="cursor-pointer bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl overflow-hidden"
+  >
+    <div className="flex flex-col md:flex-row items-center gap-6 p-6">
+      <div className="w-full md:w-1/3 flex-shrink-0">
+        <motion.img
+          src="/images/exposure.jpeg"
+          alt="Competition and exposure"
+          className="w-full h-48 object-cover rounded-2xl"
+          whileHover={{ scale: 1.08 }}
+          transition={{ duration: 0.5 }}
+        />
+      </div>
+
+      <div className="w-full md:w-2/3">
+        <h3 className="text-3xl font-bold text-[#0f2547] mb-3">Competition & Exposure</h3>
+        <p className="text-gray-800 text-lg leading-relaxed">
+          The Academy regularly organizes practice games and tournaments, giving players
+          real match exposure and confidence — preparing them for district, state and
+          higher-level competitions.
+        </p>
+      </div>
     </div>
-  </div>
+  </motion.div>
+
 </div>
 
      </section>
@@ -703,7 +750,7 @@ export default function HomePage() {
       <div className="space-y-8">
 
         <div>
-          <h3 className="text-4xl font-semibold mb-6 text-[#0f2547]">
+          <h3 className="text-4xl font-semibold px-3 mb-6 text-[#0f2547]">
             Contact Information
           </h3>
           <p className="text-gray-600 mb-8 leading-relaxed">
