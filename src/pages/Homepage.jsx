@@ -764,7 +764,7 @@ export default function HomePage() {
         {showContactPopup && (
           <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="fixed left-1/2 -translate-x-1/2 bottom-8 z-50">
             <div className="bg-white rounded-xl px-6 py-4 shadow-xl border border-gray-200">
-              <p className="font-semibold">Enquiry delivered, we will respond in respond asap..!!!!</p>
+              <p className="font-semibold">Enquiry delivered, we will respond to you asap..!!!!</p>
               <div className="mt-2 text-right">
                 <button className="text-sm text-sky-600 font-semibold" onClick={() => setShowContactPopup(false)}>Close</button>
               </div>
