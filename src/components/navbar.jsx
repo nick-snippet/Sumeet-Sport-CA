@@ -94,7 +94,7 @@ export default function Navbar() {
                 key={i}
                 onClick={() => scrollToSection(item.id)}
                 className={`relative px-4 py-1 rounded-full transition flex items-center justify-center
-                  ${activeSection === item.id ? "bg-white/20 text-sky-600 shadow-lg ring-1 ring-white/20" : "text-black/90 hover:text-sky-500"}
+                  ${activeSection === item.id ? "bg-white/20 text-white shadow-lg ring-1 ring-white/20" : "text-black/90  hover:text-white"}
                 `}
                 aria-current={activeSection === item.id ? "true" : "false"}
               >
