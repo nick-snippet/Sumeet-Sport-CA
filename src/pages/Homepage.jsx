@@ -44,7 +44,7 @@ export default function HomePage() {
       title: "Senior Coach • Former Maharashtra Ranji Player",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
-    <p className="text-2xl font-bold text-[#0f2547]">✨ *Highlights*</p>
+    <p className="text-2xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
 
     <ul className="list-disc text-l pl-5 space-y-1 font-medium">
       <li>Co-Owner — Sumeet Sports Cricket Academy, Sangli</li>
@@ -87,7 +87,7 @@ export default function HomePage() {
       title: "Head Coach • Former Maharashtra Ranji Player",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
-    <p className="text-xl font-bold text-[#0f2547]">🔥 *Prashaant Kore*</p>
+    <p className="text-xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
 
     <ul className="list-disc text-l pl-5 space-y-1 font-medium">
       <li>Co-Owner & Head Coach — Sumeet Sports Cricket Academy</li>
