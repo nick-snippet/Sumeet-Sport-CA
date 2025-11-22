@@ -846,7 +846,7 @@ export default function HomePage() {
           <div>
             <h4 className="font-semibold mb-2 text-white text-2xl">Follow Us</h4>
             <div className="flex gap-3">
-              <a href="#" className="w-9 h-9 rounded-full bg-pink-500 flex items-center justify-center hover:scale-110 transition" aria-label="Instagram"><FaInstagram className="text-white" /></a>
+              <a href="https://www.instagram.com/sumeetsports_cricket_academy  " className="w-9 h-9 rounded-full bg-pink-500 flex items-center justify-center hover:scale-110 transition" aria-label="Instagram"><FaInstagram className="text-white" /></a>
               <a href="#" className="w-9 h-9 rounded-full bg-blue-700 flex items-center justify-center hover:scale-110 transition" aria-label="LinkedIn"><FaLinkedin className="text-white" /></a>
               <a href="#" className="w-9 h-9 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110 transition" aria-label="Website"><FaGlobe className="text-white" /></a>
               <a href="#" className="w-9 h-9 rounded-full bg-orange-500 flex items-center justify-center hover:scale-110 transition" aria-label="Cricket"><GiCricketBat className="text-white" /></a>
