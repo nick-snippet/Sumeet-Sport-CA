@@ -118,9 +118,11 @@ export default function HomePage() {
       modern cricketing methods to help players grow technically, mentally, and physically.
     </p>
   </div>
+  
 ),
             
             image: "/images/coaches/prashaantsir.jpg",
+            
           },
         ];
 

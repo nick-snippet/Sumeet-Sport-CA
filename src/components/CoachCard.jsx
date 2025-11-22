@@ -3,7 +3,16 @@ import React from "react";
 import { motion } from "framer-motion";
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 
-export default function CoachCard({ name, title, description, details, image }) {
+export default function CoachCard({
+  name,
+  title,
+  description,
+  details,
+  image,
+  instagram,
+  linkedin,
+  website,
+}) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -30,7 +39,6 @@ export default function CoachCard({ name, title, description, details, image }) 
 
         {/* MAIN DETAILS */}
         <div className="space-y-3 text-[15px] leading-relaxed">
-
           {/* Summary Points (bullets + emojis) */}
           <ul className="list-disc pl-5 space-y-1">
             {details?.map((item, idx) => (
@@ -47,22 +55,43 @@ export default function CoachCard({ name, title, description, details, image }) 
             </p>
           )}
 
-          
-           
-          {/* SOCIAL ICONS */}
-        <div className="flex gap-4 mt-4">
-          <a href="#" className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center hover:scale-110 transition">
-            <FaInstagram className="text-white" />
-          </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center hover:scale-110 transition">
-            <FaLinkedin className="text-white" />
-          </a>
-          <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110 transition">
-            <FaGlobe className="text-white" />
-          </a>
-        </div>
+          {/* SOCIAL ICONS – NOW OPEN LINKS */}
+          <div className="flex gap-4 mt-4">
+            {instagram && (
+              <a
+                href={instagram}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-pink-500 flex items-center justify-center hover:scale-110 transition"
+              >
+                <FaInstagram className="text-white" />
+              </a>
+            )}
 
-          <p className="text-gray-800 text-[15px] leading-relaxed">{/* You can insert long paragraphs directly in parent component */}</p>
+            {linkedin && (
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center hover:scale-110 transition"
+              >
+                <FaLinkedin className="text-white" />
+              </a>
+            )}
+
+            {website && (
+              <a
+                href={website}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110 transition"
+              >
+                <FaGlobe className="text-white" />
+              </a>
+            )}
+          </div>
+
+          <p className="text-gray-800 text-[15px] leading-relaxed"></p>
         </div>
       </div>
     </motion.div>
