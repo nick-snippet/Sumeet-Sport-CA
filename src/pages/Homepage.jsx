@@ -10,7 +10,7 @@ import AwardPlayercard from "../components/AwardPlayercard";
 // footer / icon imports
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
-import { Facebook, Linkedin } from "lucide-react";
+import { Facebook } from "lucide-react";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -44,7 +44,7 @@ export default function HomePage() {
       name: "Sumeet Chavan",
       title: "Senior Coach • Former Maharashtra Ranji Player",
       instagram:"https://www.instagram.com/sumeetchavan9?igsh=MW5tczBocGl0d3hwNw==",
-      linkedin:"https://www.instagram.com/sumeetchavan9?",
+      Facebook:"",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
     <p className="text-2xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
@@ -88,6 +88,7 @@ export default function HomePage() {
     {
       name: "Prashaant Kore",
       title: "Head Coach • Former Maharashtra Ranji Player",
+      instagram:"https://www.instagram.com/prashaant_kore",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
     <p className="text-xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
@@ -318,7 +319,7 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-12">
             {coaches.map((c, i) => (
-              <CoachCard key={i} name={c.name} title={c.title} description={c.description} image={c.image} instagram={c.instagram} linkedin={c.linkedin}/>
+              <CoachCard key={i} name={c.name} title={c.title} description={c.description} image={c.image} instagram={c.instagram} />
             ))}
           </div>
         </div>
@@ -349,7 +350,10 @@ export default function HomePage() {
           { name: "Soham Chavan", tournament: "Maharashtra U-14 Team", image: "/images/players/player3.jpeg" },
           { name: "Aneesh Joshi", tournament: "Maharashtra U-19 & U-16 Team", image: "/images/players/player4.jpg" },
           { name: "Aryan Desai", tournament: "U-19 Maharashtra Camp", image: "/images/players/player5.jpeg" },
+          { name: "Soham Sargar", tournament: "U-16 Maharashtra Camp", image: "/images/players/player7.jpeg" },
           { name: "Nidhi Shambhawani", tournament: "U-19 Women's Maharashtra Camp", image: "/images/women3.jpeg" },
+          { name: "Madhushree Uplavikar", tournament: "U-15 Women's Maharashtra Camp", image: "/images/women7.jpeg" },
+
         ].map((p, i) => (
     
           <AwardPlayercard
@@ -617,7 +621,7 @@ export default function HomePage() {
               {
                 title: "Women’s Cricket Empowerment Camp",
                 desc: "Focused on enhancing skills and confidence of our women cricketers through specialized coaching sessions.",
-                images: ["/images/women1.jpeg", "/images/women2.jpeg", "/images/women3.jpeg"],
+                images: ["/images/women1.jpeg", "/images/women2.jpeg", "/images/women3.jpeg","/images/women7.jpeg"],
               },
               {
                 title: "Annual Trophy Tournament 2025",
@@ -627,7 +631,7 @@ export default function HomePage() {
               {
                 title: "Junior Cricket Summer Camp",
                 desc: "A training camp to shape young players with technical drills, fun matches, and motivational sessions.",
-                images: ["/images/camp1.jpeg", "/images/camp2.jpeg", "/images/camp3.jpeg"],
+                images: ["/images/camp1.jpeg", "/images/camp2.jpeg", "/images/camp3.jpeg","/images/players/player7.jpeg"],
               },
             ].map((event, idx) => (
               <motion.section key={idx} initial="hidden" whileInView="visible" viewport={{ once: true }} className="bg-white rounded-3xl shadow-lg p-8 md:p-10">
