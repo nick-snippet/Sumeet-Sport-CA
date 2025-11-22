@@ -10,6 +10,7 @@ import AwardPlayercard from "../components/AwardPlayercard";
 // footer / icon imports
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
+import { Facebook, Linkedin } from "lucide-react";
 
 export default function HomePage() {
   const { user } = useAuth();
@@ -42,6 +43,8 @@ export default function HomePage() {
     {
       name: "Sumeet Chavan",
       title: "Senior Coach • Former Maharashtra Ranji Player",
+      instagram:"https://www.instagram.com/sumeetchavan9?igsh=MW5tczBocGl0d3hwNw==",
+      linkedin:"https://www.instagram.com/sumeetchavan9?",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
     <p className="text-2xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
@@ -315,7 +318,7 @@ export default function HomePage() {
 
           <div className="flex flex-col gap-12">
             {coaches.map((c, i) => (
-              <CoachCard key={i} name={c.name} title={c.title} description={c.description} image={c.image} />
+              <CoachCard key={i} name={c.name} title={c.title} description={c.description} image={c.image} instagram={c.instagram} linkedin={c.linkedin}/>
             ))}
           </div>
         </div>
