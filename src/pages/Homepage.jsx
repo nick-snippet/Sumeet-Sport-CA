@@ -743,7 +743,7 @@ export default function HomePage() {
 
           </div>
         </div>
-        <p className="text-xl text-gray-600 max-w-3xl mt-5 mx-auto">* We Will Reach Out Instantly..!!</p>
+        <p className="text-xl text-gray-900 max-w-3xl mt-5 mx-auto">* We Will Reach Out Instantly..!!</p>
       </div>
 
       {/* RIGHT – CONTACT INFO */}
