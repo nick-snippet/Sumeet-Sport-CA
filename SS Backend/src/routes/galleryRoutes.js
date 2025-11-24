@@ -1,10 +1,15 @@
-import express from "express";
-import upload from "../middlewares/upload.js";
-import { uploadGallery, getGallery } from "../controllers/galleryController.js";
-
+// src/routes/galleryRoutes.js
+const express = require("express");
 const router = express.Router();
+const upload = require("../middlewares/upload");
+const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
+const galleryController = require("../controllers/galleryController");
 
-router.post("/upload", upload.array("images", 10), uploadGallery);
-router.get("/", getGallery);
+// Public
+router.get("/", galleryController.listEvents);
 
-export default router;
+// Admin create (multiple images: images[])
+router.post("/", firebaseAuth, requireAdmin, upload.array("images", 12), galleryController.createEvent);
+router.delete("/:id", firebaseAuth, requireAdmin, galleryController.deleteEvent);
+
+module.exports = router;

@@ -1,10 +1,12 @@
-import express from "express";
-import upload from "../middlewares/upload.js";
-import { uploadPlayer, getPlayers } from "../controllers/playersController.js";
-
+// src/routes/playersRoutes.js
+const express = require("express");
 const router = express.Router();
+const upload = require("../middlewares/upload");
+const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
+const playersController = require("../controllers/playersController");
 
-router.post("/upload", upload.single("image"), uploadPlayer);
-router.get("/", getPlayers);
+router.get("/", playersController.listPlayers);
+router.post("/", firebaseAuth, requireAdmin, upload.single("image"), playersController.createPlayer);
+router.delete("/:id", firebaseAuth, requireAdmin, playersController.deletePlayer);
 
-export default router;
+module.exports = router;

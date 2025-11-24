@@ -1,10 +1,22 @@
-import multer from "multer";
+// src/middlewares/upload.js
+const multer = require("multer");
+const os = require("os");
+const path = require("path");
 
-const storage = multer.memoryStorage();
+// Store files temporarily in OS tmp dir; uploadService will push to Firebase and unlink.
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, os.tmpdir());
+  },
+  filename: function (req, file, cb) {
+    const name = `${Date.now()}-${file.originalname.replace(/\s+/g, "_")}`;
+    cb(null, name);
+  },
+});
 
 const upload = multer({
   storage,
-  limits: { fileSize: 5 * 1024 * 1024 }, // max 5 MB
+  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
 });
 
-export default upload;
+module.exports = upload;

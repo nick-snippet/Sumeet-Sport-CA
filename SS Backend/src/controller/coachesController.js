@@ -1,25 +1,39 @@
-import { uploadToFirebase } from "../services/uploadService.js";
+// src/controllers/coachesController.js
+const { uploadFileToFirebase } = require("../services/uploadService");
 
-let coaches = []; // later convert to database
+// For demo/simple persistence we will store metadata in-memory.
+// Replace with real DB (Firestore / Mongo) later.
+const coachesStore = []; // each item: { id, name, title, description, imageUrl, pathInBucket }
 
-export const uploadCoach = async (req, res) => {
+exports.listCoaches = (req, res) => {
+  return res.json(coachesStore);
+};
+
+exports.createCoach = async (req, res, next) => {
   try {
-    const imageUrl = await uploadToFirebase(req.file, "coaches");
+    const { name, title, description } = req.body;
+    if (!req.file) return res.status(400).json({ error: "Image file required" });
 
-    const coach = {
-      name: req.body.name,
-      title: req.body.title,
-      description: req.body.description,
-      image: imageUrl
+    const uploadResult = await uploadFileToFirebase(req.file.path, "coaches");
+    const newCoach = {
+      id: Date.now().toString(),
+      name,
+      title,
+      description,
+      imageUrl: uploadResult.publicUrl,
+      pathInBucket: uploadResult.pathInBucket,
     };
-
-    coaches.push(coach);
-    res.json({ success: true, coach });
+    coachesStore.push(newCoach);
+    return res.status(201).json(newCoach);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getCoaches = (req, res) => {
-  res.json(coaches);
+exports.deleteCoach = (req, res) => {
+  const { id } = req.params;
+  const idx = coachesStore.findIndex((c) => c.id === id);
+  if (idx === -1) return res.status(404).json({ error: "Not found" });
+  coachesStore.splice(idx, 1);
+  return res.json({ ok: true });
 };

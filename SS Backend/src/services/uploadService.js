@@ -1,26 +1,46 @@
-import bucket from "../config/firebase.js";
-import { v4 as uuidv4 } from "uuid";
+// src/services/uploadService.js
+const { bucket } = require("../config/firebase");
+const path = require("path");
+const { v4: uuidv4 } = require("uuid");
+const fs = require("fs");
 
-export const uploadToFirebase = async (file, folder) => {
-  return new Promise((resolve, reject) => {
-    const filename = `${folder}/${Date.now()}-${file.originalname}`;
-    const blob = bucket.file(filename);
-    const blobStream = blob.createWriteStream({
-      resumable: false,
+if (!bucket) {
+  console.warn("uploadService: Firebase bucket not initialized. Uploads will fail until firebase config is fixed.");
+}
+
+/**
+ * Upload local file (multer stores file locally in tmp) to firebase storage
+ * returns { publicUrl, pathInBucket }
+ */
+async function uploadFileToFirebase(localFilePath, destinationFolder = "uploads") {
+  if (!bucket) throw new Error("Firebase bucket not initialized");
+
+  const ext = path.extname(localFilePath);
+  const filename = `${destinationFolder}/${Date.now()}-${uuidv4()}${ext}`;
+  await bucket.upload(localFilePath, {
+    destination: filename,
+    public: false, // we will create signed URL
+    metadata: {
       metadata: {
-        metadata: {
-          firebaseStorageDownloadTokens: uuidv4()
-        }
-      }
-    });
-
-    blobStream.on("error", (err) => reject(err));
-
-    blobStream.on("finish", async () => {
-      const url = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filename)}?alt=media`;
-      resolve(url);
-    });
-
-    blobStream.end(file.buffer);
+        firebaseStorageDownloadTokens: uuidv4(),
+      },
+    },
   });
+
+  // create signed url (valid for 5 years)
+  const file = bucket.file(filename);
+  const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 365 * 5;
+  const [url] = await file.getSignedUrl({
+    action: "read",
+    expires: new Date(expiresAt),
+  });
+
+  // remove local file
+  try { fs.unlinkSync(localFilePath); } catch (e) {}
+
+  return { publicUrl: url, pathInBucket: filename };
+}
+
+module.exports = {
+  uploadFileToFirebase,
 };

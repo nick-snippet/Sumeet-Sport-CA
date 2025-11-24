@@ -1,31 +1,44 @@
-import { uploadToFirebase } from "../services/uploadService.js";
+// src/controllers/galleryController.js
+const { uploadFileToFirebase } = require("../services/uploadService");
 
-let galleryEvents = [];
+const galleryStore = []; // { id, title, desc, images: [ { publicUrl, pathInBucket } ] }
 
-export const uploadGallery = async (req, res) => {
+exports.listEvents = (req, res) => {
+  res.json(galleryStore);
+};
+
+/**
+ * Expect form-data: title, desc, images[] (multiple)
+ */
+exports.createEvent = async (req, res, next) => {
   try {
-    let images = [];
+    const { title, desc } = req.body;
+    const files = req.files;
+    if (!files || files.length === 0) return res.status(400).json({ error: "At least one image required" });
 
-    for (const file of req.files) {
-      const url = await uploadToFirebase(file, "gallery");
-      images.push(url);
+    const uploaded = [];
+    for (const f of files) {
+      const r = await uploadFileToFirebase(f.path, "gallery");
+      uploaded.push(r);
     }
 
     const event = {
-      title: req.body.title,
-      description: req.body.description,
-      images
+      id: Date.now().toString(),
+      title,
+      desc,
+      images: uploaded,
     };
-
-    galleryEvents.push(event);
-
-    res.json({ success: true, event });
-
+    galleryStore.push(event);
+    res.status(201).json(event);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getGallery = (req, res) => {
-  res.json(galleryEvents);
+exports.deleteEvent = (req, res) => {
+  const { id } = req.params;
+  const idx = galleryStore.findIndex((g) => g.id === id);
+  if (idx === -1) return res.status(404).json({ error: "Not found" });
+  galleryStore.splice(idx, 1);
+  res.json({ ok: true });
 };

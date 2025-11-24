@@ -1,24 +1,35 @@
-import { uploadToFirebase } from "../services/uploadService.js";
+// src/controllers/playersController.js
+const { uploadFileToFirebase } = require("../services/uploadService");
 
-let players = [];
+const playersStore = []; // { id, name, tournament, imageUrl, pathInBucket }
 
-export const uploadPlayer = async (req, res) => {
+exports.listPlayers = (req, res) => {
+  res.json(playersStore);
+};
+
+exports.createPlayer = async (req, res, next) => {
   try {
-    const imageUrl = await uploadToFirebase(req.file, "players");
-
-    const player = {
-      name: req.body.name,
-      tournament: req.body.tournament,
-      image: imageUrl
+    const { name, tournament } = req.body;
+    if (!req.file) return res.status(400).json({ error: "Image file required" });
+    const uploadResult = await uploadFileToFirebase(req.file.path, "players");
+    const newPlayer = {
+      id: Date.now().toString(),
+      name,
+      tournament,
+      imageUrl: uploadResult.publicUrl,
+      pathInBucket: uploadResult.pathInBucket,
     };
-
-    players.push(player);
-    res.json({ success: true, player });
+    playersStore.push(newPlayer);
+    return res.status(201).json(newPlayer);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    next(err);
   }
 };
 
-export const getPlayers = (req, res) => {
-  res.json(players);
+exports.deletePlayer = (req, res) => {
+  const { id } = req.params;
+  const idx = playersStore.findIndex((p) => p.id === id);
+  if (idx === -1) return res.status(404).json({ error: "Not found" });
+  playersStore.splice(idx, 1);
+  res.json({ ok: true });
 };

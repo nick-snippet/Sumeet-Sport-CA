@@ -1,18 +1,14 @@
-// /utils/helpers.js
+// src/util/helpers.js
+// Small helper utilities (currently unused but useful later)
 
-// Generates clean filenames for Firebase Storage
-export const generateFileName = (originalName) => {
-  const ext = originalName.split(".").pop();
-  const unique = Date.now() + "-" + Math.round(Math.random() * 1e9);
-  return `${unique}.${ext}`;
-};
+function safeGet(obj, path, fallback = undefined) {
+  try {
+    return path.split(".").reduce((acc, k) => (acc ? acc[k] : undefined), obj) || fallback;
+  } catch {
+    return fallback;
+  }
+}
 
-// Standard success response wrapper
-export const success = (res, data, message = "OK") => {
-  return res.status(200).json({ success: true, message, data });
-};
-
-// Standard error response wrapper
-export const failure = (res, error, code = 400) => {
-  return res.status(code).json({ success: false, error });
+module.exports = {
+  safeGet,
 };
