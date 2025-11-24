@@ -1,4 +1,4 @@
-// src/controllers/coachesController.js
+// src/controller/coachesController.js
 const { uploadFileToFirebase } = require("../services/uploadService");
 
 // For demo/simple persistence we will store metadata in-memory.

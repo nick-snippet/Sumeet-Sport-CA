@@ -9,7 +9,7 @@ app.use(express.json());
 
 // Routes
 const coachesRoutes = require("./src/routes/coachesRoutes");
-const playersRoutes = require("./src/routes/playersRoutes");
+const playersRoutes = require("./src/routes/playerRoutes");
 const galleryRoutes = require("./src/routes/galleryRoutes");
 
 app.use("/api/coaches", coachesRoutes);

@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/upload");
 const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
-const coachesController = require("../controllers/coachesController");
+const coachesController = require("../controller/coachesController");
 
 // Public read
 router.get("/", coachesController.listCoaches);

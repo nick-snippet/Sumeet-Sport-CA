@@ -3,10 +3,10 @@ const express = require("express");
 const router = express.Router();
 const upload = require("../middlewares/upload");
 const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
-const playersController = require("../controllers/playersController");
+const playerControllers = require("../controller/playerControllers");
 
-router.get("/", playersController.listPlayers);
-router.post("/", firebaseAuth, requireAdmin, upload.single("image"), playersController.createPlayer);
-router.delete("/:id", firebaseAuth, requireAdmin, playersController.deletePlayer);
+router.get("/", playerControllers.listPlayers);
+router.post("/", firebaseAuth, requireAdmin, upload.single("image"), playerControllers.createPlayer);
+router.delete("/:id", firebaseAuth, requireAdmin, playerControllers.deletePlayer);
 
 module.exports = router;
