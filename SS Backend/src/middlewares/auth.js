@@ -1,53 +1,68 @@
 // src/middlewares/auth.js
-// Validates Firebase ID Token sent in Authorization: Bearer <token>
-// Also checks admin claim for admin-only routes.
+// Verifies Firebase ID token and enforces admin-only routes.
+// Expects `src/config/firebase.js` to export `admin`.
 
-const { admin } = require("../config/firebase");
+import { admin } from "../config/firebase.js";
 
 /**
- * attach req.user = { uid, email, name, claims }
+ * Verify Firebase ID Token from Authorization header.
+ * Adds req.user = { uid, email, name, claims } on success.
  */
-async function firebaseAuth(req, res, next) {
+export async function firebaseAuth(req, res, next) {
+  if (!admin) {
+    console.error("firebaseAuth: Firebase admin not initialized (admin is undefined).");
+    return res.status(500).json({ error: "Server misconfiguration: auth provider not initialized" });
+  }
+
   const authHeader = req.headers.authorization || "";
   const idToken = authHeader.startsWith("Bearer ") ? authHeader.split(" ")[1] : null;
-  if (!idToken) return res.status(401).json({ error: "Missing auth token" });
+
+  if (!idToken) {
+    return res.status(401).json({ error: "Missing or malformed Authorization header" });
+  }
 
   try {
     const decoded = await admin.auth().verifyIdToken(idToken);
+
     req.user = {
       uid: decoded.uid,
       email: decoded.email,
       name: decoded.name || decoded.email,
       claims: decoded,
     };
-    next();
+
+    return next();
   } catch (err) {
-    console.error("verifyIdToken failed:", err.message);
-    return res.status(401).json({ error: "Invalid auth token" });
+    // Common causes: token expired, invalid token, network issues
+    console.error("firebaseAuth: verifyIdToken failed:", err?.message || err);
+    return res.status(401).json({ error: "Invalid or expired auth token" });
   }
 }
 
 /**
- * Admin-only middleware — expects a custom claim `admin: true`.
- * If you haven't set custom claims, you can check email (not recommended for prod).
+ * Admin-only middleware.
+ * Checks:
+ *  - Firebase custom claim `admin: true` OR
+ *  - fallback admin email set via env ADMIN_EMAIL_FALLBACK
  *
- * IMPORTANT: add your admin emails or set custom claims via Firebase admin SDK
+ * NOTE: it's recommended to use custom claims rather than email fallback.
  */
-function requireAdmin(req, res, next) {
-  const userClaims = (req.user && req.user.claims) || {};
+export function requireAdmin(req, res, next) {
+  // ensure firebaseAuth ran
+  if (!req.user) {
+    return res.status(401).json({ error: "Authentication required" });
+  }
+
+  const userClaims = req.user?.claims || {};
   const isAdminClaim = !!userClaims.admin;
 
-  // fallback: allow one specific admin email (change below)
-  const ADMIN_EMAIL_FALLBACK = "admin@gmail.com"; // <<-- change this if needed
+  // Fallback admin email — read from env if provided (safer than hardcoding)
+  const ADMIN_EMAIL_FALLBACK = process.env.ADMIN_EMAIL_FALLBACK || "admin@gmail.com";
+  const isAdminByEmail = req.user?.email === ADMIN_EMAIL_FALLBACK;
 
-  const isAdminByEmail = req.user && req.user.email === ADMIN_EMAIL_FALLBACK;
-
-  if (isAdminClaim || isAdminByEmail) return next();
+  if (isAdminClaim || isAdminByEmail) {
+    return next();
+  }
 
   return res.status(403).json({ error: "Admin access required" });
 }
-
-module.exports = {
-  firebaseAuth,
-  requireAdmin,
-};

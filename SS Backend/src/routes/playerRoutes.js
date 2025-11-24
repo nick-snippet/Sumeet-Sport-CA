@@ -1,12 +1,28 @@
-// src/routes/playersRoutes.js
-const express = require("express");
+import express from "express";
+import upload from "../middlewares/upload.js";
+import { firebaseAuth, requireAdmin } from "../middlewares/auth.js";
+import * as playerControllers from "../controller/playerControllers.js";
+
 const router = express.Router();
-const upload = require("../middlewares/upload");
-const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
-const playerControllers = require("../controller/playerControllers");
 
+// Public list
 router.get("/", playerControllers.listPlayers);
-router.post("/", firebaseAuth, requireAdmin, upload.single("image"), playerControllers.createPlayer);
-router.delete("/:id", firebaseAuth, requireAdmin, playerControllers.deletePlayer);
 
-module.exports = router;
+// Admin create (single image)
+router.post(
+  "/",
+  firebaseAuth,
+  requireAdmin,
+  upload.single("image"),
+  playerControllers.createPlayer
+);
+
+// Admin delete
+router.delete(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  playerControllers.deletePlayer
+);
+
+export default router;

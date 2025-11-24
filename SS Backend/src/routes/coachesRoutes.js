@@ -1,17 +1,28 @@
-// src/routes/coachesRoutes.js
-const express = require("express");
+import express from "express";
+import upload from "../middlewares/upload.js";
+import { firebaseAuth, requireAdmin } from "../middlewares/auth.js";
+import * as coachesController from "../controller/coachesController.js";
+
 const router = express.Router();
-const upload = require("../middlewares/upload");
-const { firebaseAuth, requireAdmin } = require("../middlewares/auth");
-const coachesController = require("../controller/coachesController");
 
 // Public read
 router.get("/", coachesController.listCoaches);
 
-// Admin create (single image field: image)
-router.post("/", firebaseAuth, requireAdmin, upload.single("image"), coachesController.createCoach);
+// Admin create (single image)
+router.post(
+  "/",
+  firebaseAuth,
+  requireAdmin,
+  upload.single("image"),
+  coachesController.createCoach
+);
 
 // Admin delete
-router.delete("/:id", firebaseAuth, requireAdmin, coachesController.deleteCoach);
+router.delete(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  coachesController.deleteCoach
+);
 
-module.exports = router;
+export default router;

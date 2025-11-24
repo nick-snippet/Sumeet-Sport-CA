@@ -1,22 +1,22 @@
-// src/middlewares/upload.js
-const multer = require("multer");
-const os = require("os");
-const path = require("path");
+import multer from "multer";
+import os from "os";
+import path from "path";
 
-// Store files temporarily in OS tmp dir; uploadService will push to Firebase and unlink.
+// Temporary local storage before upload to Firebase Storage
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, os.tmpdir());
   },
-  filename: function (req, file, cb) {
-    const name = `${Date.now()}-${file.originalname.replace(/\s+/g, "_")}`;
-    cb(null, name);
-  },
+  filename: (req, file, cb) => {
+    const cleanName = file.originalname.replace(/\s+/g, "_");
+    const uniqueName = `${Date.now()}-${cleanName}`;
+    cb(null, uniqueName);
+  }
 });
 
 const upload = multer({
   storage,
-  limits: { fileSize: 10 * 1024 * 1024 }, // 10MB per file
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB
 });
 
-module.exports = upload;
+export default upload;
