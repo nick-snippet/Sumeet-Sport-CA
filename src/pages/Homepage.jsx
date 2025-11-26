@@ -577,7 +577,7 @@ useEffect(() => {
       {[
         { key: "ageWise", title: "Age Wise Coaching", desc: "Age-specific training for young talent.", img: "/images/Agewisecard.jpeg" },
         { key: "ground", title: "Spacious Ground For Booking", desc: "Available for matches & practice.", img: "/images/advanced.jpeg" },
-        { key: "night", title: "Night Practice Sessions", desc: "Under Flood Lights", img: "/images/GLphotos/trophy3.jpeg" },
+        { key: "night", title: "Night Practice Sessions", desc: "Under Flood Lights", img: "/images/nightfc/nightflood.jpeg" },
         { key: "residential", title: "Residential Facilities", desc: "Comfortable stay & nutrition for outstation students.", img: "/images/team.jpeg" },
         { key: "competitions", title: "Competitions & Exposure", desc: "Real match exposure & tournaments.", img: "/images/tournament.jpeg" },
         { key: "seasonal", title: "Seasonal Camps", desc: "Intensive holiday camps with guest coaches.", img: "/images/camps.jpeg" },
@@ -735,7 +735,7 @@ useEffect(() => {
                       onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "intermediate" ? null : "intermediate"); }}
                       className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "intermediate" ? "ring-2 ring-sky-300" : ""}`}
                     >
-                      <img src="/images/practice_nets.jpeg" alt="Intermediate 10-14" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <img src="/images/intermediate.jpeg" alt="Intermediate 10-14" className="w-full h-28 object-cover rounded-md mb-1" />
                       <h4 className="font-semibold text-lg">Intermediate Batch (10 – 14 Years)</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
                         <li>Advanced skill development in batting, bowling and fielding</li>
@@ -776,7 +776,7 @@ useEffect(() => {
                       onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "advanced" ? null : "advanced"); }}
                       className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "advanced" ? "ring-2 ring-sky-300" : ""}`}
                     >
-                      <img src="/images/advanced.jpeg" alt="Advanced 15+" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <img src="/images/players/player7.jpeg" alt="Advanced 15+" className="w-full h-28 object-cover rounded-md mb-1" />
                       <h4 className="font-semibold text-lg">Advance Batch (15 Years & Above)</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
                         <li>High-performance training program focused on fitness and professional techniques</li>
@@ -852,11 +852,11 @@ useEffect(() => {
                   {/* small image grid */}
                   <div className="grid grid-cols-3 gap-2">
                     {[
-                      "/images/night1.jpeg",
-                      "/images/night2.jpeg",
-                      "/images/night3.jpeg",
-                      "/images/GLphotos/trophy3.jpeg",
-                      "/images/players/player7.jpeg",
+                      "/images/nightfc/night1.jpeg",
+                      "/images/nightfc/night2.jpeg",
+                      "/images/nightfc/night3.jpeg",
+                      "/images/nightfc/night4.jpeg",
+                      "/images/nightfc/night5.jpeg",
                     ].map((src, i) => (
                       <img key={i} src={src} alt={`night-${i}`} className="w-full h-24 object-cover rounded-md" />
                     ))}
@@ -1233,7 +1233,7 @@ useEffect(() => {
         transition={{ duration: 0.4 }}
         className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
       >
-        <img src="/images/fc coaching.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Coaching" />
+        <img src="/images/football/sumeet fc mg.png" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Coaching" />
         <h3 className="text-xl font-bold text-[#0f1724] mb-2">Football Coaching Sessions</h3>
         <ul className="text-gray-800 text-sm space-y-1">
           <li>Beginner & intermediate batches</li>
@@ -1249,7 +1249,7 @@ useEffect(() => {
         transition={{ duration: 0.4, delay: 0.1 }}
         className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
       >
-        <img src="/images/advanced.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Ground Booking" />
+        <img src="/images/fc coaching.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Ground Booking" />
         <h3 className="text-xl font-bold text-[#0f1724] mb-2">Ground Booking for Football</h3>
         <ul className="text-gray-800 text-sm space-y-1">
           <li>7-a-side & 9-a-side formats</li>
@@ -1358,13 +1358,13 @@ useEffect(() => {
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           {[
-            { title: "T-Shirts", img: "/images/shop1/tshirt.jpg" },
-            { title: "Track Pants", img: "/images/shop1/trackpants.jpg" },
-            { title: "Shorts", img: "/images/shop1/shorts.jpg" },
+            { title: "T-Shirts", img: "/images/shop1/tshirt.jpeg" },
+            { title: "Track Pants", img: "/images/shop1/trackpants.png" },
+            { title: "Shorts", img: "/images/shop1/shorts.png" },
             { title: "Hoodies", img: "/images/shop1/hoodies.jpg" },
-            { title: "Caps", img: "/images/shop1/caps.jpg" },
-            { title: "Jerseys", img: "/images/shop1/jerseys.jpg" },
-            { title: "Gloves", img: "/images/shop1/gloves.jpg" },
+            { title: "Caps", img: "/images/shop1/caps.jpeg" },
+            { title: "Jerseys", img: "/images/shop1/jersy.jpeg" },
+            { title: "inners", img: "/images/shop1/hand.png" },
           ].map((item, i) => (
             <div
               key={i}
@@ -1396,7 +1396,7 @@ useEffect(() => {
         {/* Hero Section */}
         <div className="relative flex justify-center mb-8">
           <img 
-            src="/images/shop/shop2hero.jpeg"
+            src="/images/shop2/shop2hero.jpeg"
             alt="Sports Equipment Hero"
             className="w-64 drop-shadow-xl"
           />
@@ -1418,11 +1418,11 @@ useEffect(() => {
           {[
             { title: "Bats", img: "/images/shop2/bats.jpg" },
             { title: "Balls", img: "/images/shop2/balls.jpg" },
-            { title: "Helmets", img: "/images/shop2/helmets.jpg" },
+            { title: "Helmets", img: "/images/shop2/helmet.jpg" },
             { title: "Pads", img: "/images/shop2/pads.jpg" },
             { title: "Shoes", img: "/images/shop2/shoes.jpg" },
-            { title: "Accessories", img: "/images/shop2/accessories.jpg" },
-            { title: "Kits", img: "/images/shop2/kits.jpg" },
+            { title: "gloves", img: "/images/shop1/gloves.jpg" },
+            { title: "Kits", img: "/images/shop2/kits.png" },
           ].map((item, i) => (
             <div
               key={i}

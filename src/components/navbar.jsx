@@ -18,6 +18,7 @@ export default function Navbar() {
     { label: "Programs", id: "programs-section" },
     { label: "Gallery", id: "gallery-section" },
     { label: "Contact", id: "contact-section" },
+    { label: "Shop", id: "contact-section" },
   ];
 
   // scroll-to-section helper (works across routes)
