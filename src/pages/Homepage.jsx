@@ -38,6 +38,99 @@ export default function HomePage() {
     };
   }, []);
 
+  // ---- GALLERY STATES ----
+const [modalOpen, setModalOpen] = useState(false);
+const [modalImage, setModalImage] = useState(null);
+const [currentIndex, setCurrentIndex] = useState(0);
+
+const [activeFilter, setActiveFilter] = useState("All");
+const [visibleCount, setVisibleCount] = useState(12);
+
+// Gallery Images
+const galleryImages = [
+  { url: "/images/GLphotos/mpl1.jpeg", category: "MPL", title: "MPL Capture 1" },
+  { url: "/images/GLphotos/mpl2.jpeg", category: "MPL", title: "MPL Capture 2" },
+  { url: "/images/GLphotos/mpl3.jpeg", category: "MPL", title: "MPL Capture 3" },
+  { url: "/images/GLphotos/mpl4.jpeg", category: "MPL", title: "MPL Capture 4" },
+
+  { url: "/images/women1.jpeg", category: "Women", title: "Women Cricket 1" },
+  { url: "/images/women2.jpeg", category: "Women", title: "Women Cricket 2" },
+  { url: "/images/women3.jpeg", category: "Women Cricket 3" },
+  { url: "/images/women7.jpeg", category: "Women Cricket 4" },
+
+  { url: "/images/fitness.jpeg", category: "Trophy", title: "Fitness Warmup" },
+  { url: "/images/GLphotos/trophy3.jpeg", category: "Trophy", title: "Trophy Moment" },
+  { url: "/images/team.jpeg", category: "Trophy", title: "Team Unity" },
+  { url: "/images/GLphotos/trophy2.jpeg", category: "Trophy", title: "Trophy Lineup" },
+
+  { url: "/images/camp1.jpeg", category: "Camp", title: "Camp Day 1" },
+  { url: "/images/camp2.jpeg", category: "Camp", title: "Camp Day 2" },
+  { url: "/images/camp3.jpeg", category: "Camp", title: "Camp Day 3" },
+  { url: "/images/players/player7.jpeg", category: "Camp", title: "Junior Player" },
+];
+
+// Filtering Logic
+const filteredImages =
+  activeFilter === "All"
+    ? galleryImages
+    : galleryImages.filter((img) => img.category === activeFilter);
+
+// Modal functions
+const openImage = (img, index) => {
+  setModalImage(img);
+  setCurrentIndex(index);
+  setModalOpen(true);
+};
+
+const closeModal = () => setModalOpen(false);
+
+// ESC key support
+useEffect(() => {
+  const esc = (e) => e.key === "Escape" && closeModal();
+  window.addEventListener("keydown", esc);
+  return () => window.removeEventListener("keydown", esc);
+}, []);
+//
+
+// ---------- Programs & Facilities: states & handlers ----------
+const [programModalOpen, setProgramModalOpen] = useState(false);
+const [activeProgram, setActiveProgram] = useState(null); // "ageWise","ground","night","residential","competitions","seasonal"
+const [activeInner, setActiveInner] = useState(null); // e.g. "beginner","timings","night-gallery", etc.
+
+// scroll to CTA (contact-section)
+const scrollToCTA = () => {
+  const el = document.getElementById("contact-section");
+  if (el) el.scrollIntoView({ behavior: "smooth" });
+};
+
+// keyboard & inner-card arrow nav while modal open
+useEffect(() => {
+  const onKey = (e) => {
+    if (!programModalOpen) return;
+    if (e.key === "Escape") {
+      setProgramModalOpen(false);
+      setActiveProgram(null);
+      setActiveInner(null);
+    }
+    const orderMap = {
+      ageWise: ["beginner", "intermediate", "advanced"],
+      residential: ["accommodation", "food", "safety"],
+      competitions: ["weekly", "premier", "awards"],
+      ground: ["timings", "facilities"],
+    };
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      const keys = orderMap[activeProgram] || [];
+      if (keys.length) {
+        const idx = Math.max(0, keys.indexOf(activeInner ?? keys[0]));
+        const nextIdx = e.key === "ArrowLeft" ? Math.max(0, idx - 1) : Math.min(keys.length - 1, idx + 1);
+        setActiveInner(keys[nextIdx]);
+      }
+    }
+  };
+  window.addEventListener("keydown", onKey);
+  return () => window.removeEventListener("keydown", onKey);
+}, [programModalOpen, activeProgram, activeInner]);
+
   // Coaches (dynamic; can add more later)
  const coaches = [
     {
@@ -140,7 +233,7 @@ export default function HomePage() {
       "Focus on fundamentals: batting, bowling, fielding.",
       "Fun drills to build engagement and discipline.",
     ],
-    "Advanced Player Training": [
+    "Spacious Ground with Advanced Functionalities": [
       "Tactical match-scenario coaching.",
       "Video analysis & technique refinement.",
       "Personalised sessions for state-level aspirants.",
@@ -475,36 +568,368 @@ export default function HomePage() {
 {/* END NEW VMG SECTION */}
       
           
+{/* PROGRAMS & FACILITIES */}
+<section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
+  <div className="max-w-6xl mx-auto px-6">
+    <h3 className="text-5xl font-bold text-sky-900 text-center mb-12">Programs & Facilities</h3>
 
-      {/* PROGRAMS & FACILITIES */}
-      <section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
-        <div className="max-w-6xl mx-auto px-6">
-          <h3 className="text-5xl font-bold  text-sky-900 text-center mb-12">Programs & Facilities</h3>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { title: "Junior Coaching Program", desc: "Age-specific training for young talent.", img: "/images/juniors.jpeg" },
-              { title: "Advanced Player Training", desc: "High performance coaching & analysis.", img: "/images/advanced.jpeg" },
-              { title: "Fitness & Conditioning", desc: "Tailored strength and agility training.", img: "/images/GLphotos/trophy3.jpeg" },
-              { title: "Tournaments & Exposure", desc: "Regular matches to build competitive edge.", img: "/images/tournament.jpeg" },
-              { title: "Women’s Cricket Training", desc: "Dedicated sessions & mentoring.", img: "/images/women2.jpeg" },
-              { title: "Seasonal Camps", desc: "Intensive holiday camps with guest coaches.", img: "/images/camps.jpeg" },
-              
-            ].map((p, idx) => (
-              <motion.div key={idx} onClick={() => setSelectedCard(p)} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} whileHover={{ scale: 1.03, y: -6 }} transition={{ duration: 0.3 }} 
-              className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl overflow-hidden cursor-pointer">
-                <div className="w-full h-48 overflow-hidden rounded-t-3xl">
-                  <motion.img src={p.img} className="w-full h-full object-cover" whileHover={{ scale: 1.12 }} transition={{ duration: 0.5 }} alt={p.title} />
-                </div>
-
-                <div className="p-5 text-center">
-                  <h4 className="font-bold text-lg text-[#0f1724]">{p.title}</h4>
-                  <p className="text-sm text-gray-600 mt-2">{p.desc}</p>
-                </div>
-              </motion.div>
-            ))}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {[
+        { key: "ageWise", title: "Age Wise Coaching", desc: "Age-specific training for young talent.", img: "/images/juniors.jpeg" },
+        { key: "ground", title: "Spacious Ground For Booking", desc: "Available for matches & practice.", img: "/images/advanced.jpeg" },
+        { key: "night", title: "Night Practice Sessions", desc: "Under Flood Lights", img: "/images/GLphotos/trophy3.jpeg" },
+        { key: "residential", title: "Residential Facilities", desc: "Comfortable stay & nutrition for outstation students.", img: "/images/team.jpeg" },
+        { key: "competitions", title: "Competitions & Exposure", desc: "Real match exposure & tournaments.", img: "/images/tournament.jpeg" },
+        { key: "seasonal", title: "Seasonal Camps", desc: "Intensive holiday camps with guest coaches.", img: "/images/camps.jpeg" },
+      ].map((p) => (
+        <motion.div
+          key={p.key}
+          onClick={() => { setActiveProgram(p.key); setProgramModalOpen(true); setActiveInner(null); }}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.03, y: -6 }}
+          transition={{ duration: 0.28 }}
+          className="bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-xl overflow-hidden cursor-pointer"
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { setActiveProgram(p.key); setProgramModalOpen(true); setActiveInner(null); } }}
+        >
+          <div className="w-full h-48 overflow-hidden rounded-t-3xl">
+            <motion.img src={p.img} className="w-full h-full object-cover" whileHover={{ scale: 1.12 }} transition={{ duration: 0.5 }} alt={p.title} />
           </div>
-        </div>
+
+          <div className="p-5 text-center">
+            <h4 className="font-bold text-lg text-[#0f1724]">{p.title}</h4>
+            <p className="text-sm text-gray-600 mt-2">{p.desc}</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+  </div>
+
+  {/* Program Modal (centered on desktop, fullscreen-ish on mobile) */}
+  <AnimatePresence>
+    {programModalOpen && activeProgram && (
+      <motion.div
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-8"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={() => { setProgramModalOpen(false); setActiveProgram(null); setActiveInner(null); }}
+      >
+        {/* backdrop */}
+        <motion.div
+          className="absolute inset-0 bg-black/60"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        />
+
+        {/* modal content container:
+            - on small screens full width/height
+            - on sm+ screens centered box
+        */}
+        <motion.div
+          className="relative z-10 w-full h-full sm:h-auto sm:max-h-[85vh] sm:max-w-4xl bg-white rounded-2xl overflow-auto"
+          initial={{ y: 20, opacity: 0, scale: 0.98 }}
+          animate={{ y: 0, opacity: 1, scale: 1 }}
+          exit={{ y: 10, opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.22 }}
+          onClick={(e) => e.stopPropagation()}
+          role="dialog"
+          aria-modal="true"
+        >
+          {/* header */}
+          <div className="flex items-start justify-between p-6 border-b">
+            <div>
+              <h3 className="text-2xl font-bold text-[#0f2547]">
+                {
+                  {
+                    ageWise: "Age Wise Coaching",
+                    ground: "Ground Booking Facility",
+                    night: "Night Practice Sessions",
+                    residential: "Residential Facilities ",
+                    competitions: "Competitions & Exposure",
+                    seasonal: "Seasonal Camps",
+                  }[activeProgram]
+                }
+              </h3>
+              <p className="text-gray-700 mt-1">
+                {
+                  {
+                    ageWise: "Structured coaching by age and level. Click a level to see details.",
+                    ground: "Book our ground for practice, matches and tournaments.",
+                    night: "Evening training under professional flood lights.",
+                    residential: "Accommodation and food facilities for outstation students.",
+                    competitions: "Match practice, tournaments and awards for players.",
+                    seasonal: "Short-term intensive camps with guest coaches.",
+                  }[activeProgram]
+                }
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => { setProgramModalOpen(false); setActiveProgram(null); setActiveInner(null); }}
+                className="px-3 py-2 bg-white/90 rounded-full shadow hover:bg-white text-gray-900"
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
+
+          {/* modal body */}
+          <div className="p-6">
+            {/* ---------- AGE WISE: 3 centered mini-cards (expand downward) ---------- */}
+            {activeProgram === "ageWise" && (
+              <div>
+                <div className="flex flex-col md:flex-row items-stretch justify-center gap-6">
+                  {/* Beginner */}
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setActiveInner(prev => prev === "beginner" ? null : "beginner")}
+                      onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "beginner" ? null : "beginner"); }}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "beginner" ? "ring-2 ring-sky-300" : ""}`}
+                    >
+                      <img src="/images/juniors.jpeg" alt="Beginner 6-10" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <h4 className="font-semibold text-lg">Beginner Batch (6 – 10 Years)</h4>
+                      <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
+                        <li>Introduction to cricket fundamentals and basic skill development</li>
+                        <li>Age-appropriate exercises to build athletic ability, coordination and discipline</li>
+                        <li>Practice sessions conducted using soft leather ball for safety</li>
+                        <li>Regular practice matches to build confidence and game awareness</li>
+                      </ul>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {activeInner === "beginner" && (
+                        <motion.div
+                          key="beginner-details"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.28 }}
+                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
+                        >
+                          <div className="py-3">
+                            <p className="mb-2"><b>Beginner plan:</b> Twice weekly sessions, equipment guidance, parent progress updates.</p>
+                            <p className="mb-2">Ideal for first-time players learning fundamentals through play-based drills.</p>
+                            <div className="text-right">
+                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  {/* Intermediate */}
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setActiveInner(prev => prev === "intermediate" ? null : "intermediate")}
+                      onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "intermediate" ? null : "intermediate"); }}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "intermediate" ? "ring-2 ring-sky-300" : ""}`}
+                    >
+                      <img src="/images/practice_nets.jpeg" alt="Intermediate 10-14" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <h4 className="font-semibold text-lg">Intermediate Batch (10 – 14 Years)</h4>
+                      <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
+                        <li>Advanced skill development in batting, bowling and fielding</li>
+                        <li>Dedicated net practice sessions with certified coaches</li>
+                        <li>Training and matches conducted using leather ball</li>
+                        <li>Students participate in external tournaments to gain competitive exposure</li>
+                      </ul>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {activeInner === "intermediate" && (
+                        <motion.div
+                          key="intermediate-details"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.28 }}
+                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
+                        >
+                          <div className="py-3">
+                            <p className="mb-2"><b>Intermediate plan:</b> Three sessions weekly, match simulations, strength basics and diet guidance.</p>
+                            <p className="mb-2">Focus on polishing technique and introducing competitive strategies.</p>
+                            <div className="text-right">
+                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+
+                  {/* Advanced */}
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden">
+                    <div
+                      role="button"
+                      tabIndex={0}
+                      onClick={() => setActiveInner(prev => prev === "advanced" ? null : "advanced")}
+                      onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "advanced" ? null : "advanced"); }}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "advanced" ? "ring-2 ring-sky-300" : ""}`}
+                    >
+                      <img src="/images/advanced.jpeg" alt="Advanced 15+" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <h4 className="font-semibold text-lg">Advance Batch (15 Years & Above)</h4>
+                      <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
+                        <li>High-performance training program focused on fitness and professional techniques</li>
+                        <li>Full-time leather-ball matches and competitive tournaments</li>
+                        <li>Match simulations, tactical awareness and mental conditioning for higher-level cricket</li>
+                      </ul>
+                    </div>
+
+                    <AnimatePresence initial={false}>
+                      {activeInner === "advanced" && (
+                        <motion.div
+                          key="advanced-details"
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.28 }}
+                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
+                        >
+                          <div className="py-3">
+                            <p className="mb-2"><b>Advanced plan:</b> Daily focused training, personalized video analysis, tournament prep & trial support.</p>
+                            <p className="mb-2">Designed for serious aspirants preparing for district/state selection.</p>
+                            <div className="text-right">
+                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </motion.div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------- GROUND BOOKING: two inner cards (timings + facilities) ---------- */}
+            {activeProgram === "ground" && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <h4 className="font-semibold text-lg mb-2">Timings</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                    <li>Saturday — Half Day</li>
+                    <li>Sunday — Full Day</li>
+                    <li>Weekdays — On request (contact academy)</li>
+                  </ul>
+                  <div className="mt-3 text-right">
+                    <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Book Now</button>
+                  </div>
+                </motion.div>
+
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <h4 className="font-semibold text-lg mb-2">Facilities Available</h4>
+                  <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
+                    <li>Leather-ball & Tennis-ball pitches</li>
+                    <li>Practice nets & wicket covers</li>
+                    <li>Change rooms & basic first-aid</li>
+                    <li>Scorers & match setup assistance (on request)</li>
+                  </ul>
+                  <div className="mt-3 text-right">
+                    <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Enquire</button>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
+            {/* ---------- NIGHT PRACTICE: one inner card with images + text ---------- */}
+            {activeProgram === "night" && (
+              <div className="space-y-4">
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <h4 className="font-semibold text-lg mb-2">Night Practice (Under Flood Lights)</h4>
+                  <p className="text-sm text-gray-700 mb-3">
+                    Evening sessions from 6:00 PM to 8:00 PM. To support students with busy school schedules, our academy runs supervised night practices under high-quality LED floodlights — ideal for skill refinement and match practice.
+                  </p>
+
+                  {/* small image grid */}
+                  <div className="grid grid-cols-3 gap-2">
+                    {[
+                      "/images/night1.jpeg",
+                      "/images/night2.jpeg",
+                      "/images/night3.jpeg",
+                      "/images/GLphotos/trophy3.jpeg",
+                      "/images/players/player7.jpeg",
+                    ].map((src, i) => (
+                      <img key={i} src={src} alt={`night-${i}`} className="w-full h-24 object-cover rounded-md" />
+                    ))}
+                  </div>
+
+                  <div className="mt-3 text-sm text-gray-700">
+                    <p>First-ever night cricket practice facility in Sangli with professional lighting, coach supervision and safety measures. Perfect for school-goers and working parents.</p>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+
+            {/* ---------- RESIDENTIAL: three inner cards ---------- */}
+            {activeProgram === "residential" && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <img src="/images/hostel.jpeg" alt="accommodation" className="w-full h-28 object-cover rounded-md mb-3" />
+                  <h4 className="font-semibold text-lg">Accommodation</h4>
+                  <p className="text-sm text-gray-700 mt-2">Tie-up with Shri Babanrao Birnale Boys Hostel for safe, comfortable stay near the training grounds. Supervised environment suitable for athletes.</p>
+                </motion.div>
+
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <img src="/images/food.jpeg" alt="food" className="w-full h-28 object-cover rounded-md mb-3" />
+                  <h4 className="font-semibold text-lg">Food</h4>
+                  <p className="text-sm text-gray-700 mt-2">Nutritious, balanced meals prepared daily. Special sport-focused diets available on request.</p>
+                </motion.div>
+
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <img src="/images/safety.jpeg" alt="safety" className="w-full h-28 object-cover rounded-md mb-3" />
+                  <h4 className="font-semibold text-lg">Safety</h4>
+                  <p className="text-sm text-gray-700 mt-2">Monitored entry/exit, CCTV coverage and hostel wardens provide a safe environment for all trainees.</p>
+                </motion.div>
+              </div>
+            )}
+
+            {/* ---------- COMPETITIONS: 3-card layout ---------- */}
+            {activeProgram === "competitions" && (
+              <div>
+                <div className="flex flex-col md:flex-row items-stretch justify-center gap-6">
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                    <h4 className="font-semibold text-lg">Weekly Matches</h4>
+                    <p className="text-sm text-gray-700 mt-2">Weekend practice matches for all age groups to build match temperament and real-game fitness.</p>
+                  </motion.div>
+
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                    <h4 className="font-semibold text-lg">Premier League</h4>
+                    <p className="text-sm text-gray-700 mt-2">Annual U-13 & U-16 Sumeet Sports Premier League Tournament for academy players — league format and knockout stages.</p>
+                  </motion.div>
+
+                  <motion.div className="w-full md:w-1/3 bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                    <h4 className="font-semibold text-lg">Awards & Recognition</h4>
+                    <p className="text-sm text-gray-700 mt-2">Player awards, best batsman/bowler prizes and recognition ceremonies to encourage talent development.</p>
+                  </motion.div>
+                </div>
+              </div>
+            )}
+
+            {/* ---------- SEASONAL CAMPS (fallback simple content) ---------- */}
+            {activeProgram === "seasonal" && (
+              <div>
+                <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
+                  <h4 className="font-semibold text-lg">Seasonal Camps</h4>
+                  <p className="text-sm text-gray-700 mt-2">Intensive holiday camps with guest coaches, match practice, and fitness routines to help players level up quickly during holidays.</p>
+                </motion.div>
+              </div>
+            )}
+          </div>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+</section>
+     
         
      {/* residential and expo */}
       <div className="max-w-6xl mx-auto px-6 mt-12 space-y-10">
@@ -588,70 +1013,310 @@ export default function HomePage() {
   </motion.div>
 
 </div>
-
-     </section>
+ 
 
       {/* GALLERY */}
-      <section id="gallery-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
-        <div className="max-w-7xl mx-auto px-6">
-          <motion.h1 initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-4xl md:text-5xl font-extrabold text-[#0f2547] text-center mb-3">
-            Gallery Highlights
-          </motion.h1>
-          <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.8 }} className="mt-3 text-gray-600 max-w-2xl mx-auto text-center mb-8">
-            Moments that define our academy — passion, teamwork, and excellence captured in every frame.
-          </motion.p>
+<section id="gallery-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
+  <div className="max-w-7xl mx-auto px-6">
 
-          {/* Admin upload button */}
-          {user?.role === "admin" && (
-            <div className="text-center mb-8">
-              <Link to="/upload?type=gallery" className="px-6 py-2 bg-gradient-to-r from-sky-500 to-pink-500 text-white rounded-full font-semibold shadow-md hover:scale-105 transition">
-                Upload New Event
-              </Link>
-            </div>
-          )}
+    {/* Heading */}
+    <motion.h1
+      initial={{ opacity: 0, y: -20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.8 }}
+      className="text-4xl md:text-5xl font-extrabold text-[#0f2547] text-center mb-3"
+    >
+      Gallery Highlights
+    </motion.h1>
 
-          <div className="space-y-16 pb-4">
-            {/*—  events array  */}
-            {[
-              {
-                title: "Maharashtra Premier League Selections",
-                desc: "Our academy players giving their best in the MPL selection trials with dedication and sportsmanship.",
-                images: ["/images/GLphotos/mpl1.jpeg", "/images/GLphotos/mpl2.jpeg", "/images/GLphotos/mpl3.jpeg", "/images/GLphotos/mpl4.jpeg"],
-              },
-              {
-                title: "Women’s Cricket Empowerment Camp",
-                desc: "Focused on enhancing skills and confidence of our women cricketers through specialized coaching sessions.",
-                images: ["/images/women1.jpeg", "/images/women2.jpeg", "/images/women3.jpeg","/images/women7.jpeg"],
-              },
-              {
-                title: "Annual Trophy Tournament 2025",
-                desc: "Celebrating team spirit and performance at our annual cricket tournament held at Sangli ground.",
-                images: ["/images/fitness.jpeg", "/images/GLphotos/trophy3.jpeg", "/images/team.jpeg", "/images/GLphotos/trophy2.jpeg"],
-              },
-              {
-                title: "Junior Cricket Summer Camp",
-                desc: "A training camp to shape young players with technical drills, fun matches, and motivational sessions.",
-                images: ["/images/camp1.jpeg", "/images/camp2.jpeg", "/images/camp3.jpeg","/images/players/player7.jpeg"],
-              },
-            ].map((event, idx) => (
-              <motion.section key={idx} initial="hidden" whileInView="visible" viewport={{ once: true }} className="bg-white rounded-3xl shadow-lg p-8 md:p-10">
-                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-[#0f2547] mb-3">{event.title}</h2>
-                  <p className="text-gray-700 mb-6 leading-relaxed">{event.desc}</p>
-                </div>
+    <motion.p
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 0.3, duration: 0.8 }}
+      className="mt-3 text-gray-600 max-w-2xl mx-auto text-center mb-8"
+    >
+      Moments that define our academy — passion, teamwork, and excellence captured in every frame.
+    </motion.p>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {event.images.map((img, i) => (
-                    <motion.div key={i} initial={{ opacity: 0, scale: 0.9 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.1, duration: 0.4 }} className="rounded-xl overflow-hidden shadow-md hover:shadow-xl transform hover:-translate-y-1">
-                      <img src={img} alt={`${event.title} - ${i + 1}`} className="w-full h-56 object-cover" />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.section>
-            ))}
+    {/* Admin Upload Button */}
+    {user?.role === "admin" && (
+      <div className="text-center mb-8">
+        <Link
+          to="/upload?type=gallery"
+          className="px-6 py-2 bg-gradient-to-r from-sky-500 to-pink-500 text-white rounded-full font-semibold shadow-md hover:scale-105 transition"
+        >
+          Upload New Event
+        </Link>
+      </div>
+    )}
+
+    {/* CATEGORY FILTERS */}
+    <div className="flex justify-center gap-3 flex-wrap mb-10">
+      {["All", "MPL", "Women", "Trophy", "Camp"].map((cat) => (
+        <button
+          key={cat}
+          onClick={() => setActiveFilter(cat)}
+          className={`px-5 py-2 rounded-full border text-sm font-semibold transition 
+          ${activeFilter === cat ? "bg-[#0f2547] text-white" : "bg-white text-gray-700 hover:bg-gray-100"}`}
+        >
+          {cat}
+        </button>
+      ))}
+    </div>
+
+    {/* IMAGE GRID */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+
+      {filteredImages.slice(0, visibleCount).map((img, index) => (
+        <motion.div
+          key={index}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ delay: index * 0.03, duration: 0.4 }}
+          className="group relative rounded-xl overflow-hidden shadow-md hover:shadow-xl transition cursor-pointer"
+          onClick={() => {
+            setCurrentIndex(index);
+            openImage(img.url);
+          }}
+        >
+          {/* Image */}
+          <img src={img.url} alt="Gallery" className="w-full h-56 object-cover" />
+
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 
+            transition flex items-center justify-center">
+            <p className="text-white text-lg font-semibold">View</p>
           </div>
-        </div>
-      </section>
+        </motion.div>
+      ))}
+
+    </div>
+
+    {/* LOAD MORE */}
+    <div className="text-center mt-10">
+      {visibleCount < filteredImages.length && (
+        <button
+          onClick={() => setVisibleCount(prev => prev + 8)}
+          className="px-6 py-3 bg-[#0f2547] text-white rounded-full shadow hover:bg-[#1b396a] transition"
+        >
+          Load More
+        </button>
+      )}
+    </div>
+
+    {/* MODAL PREVIEW */}
+    
+<AnimatePresence>
+  {modalOpen && modalImage && (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={closeModal}
+    >
+      {/* Background overlay */}
+      <motion.div
+        className="absolute inset-0 bg-black/70"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+      />
+
+      {/* MODAL CONTENT */}
+      <motion.div
+        className="relative max-w-[90vw] max-h-[90vh] z-10 rounded-lg overflow-hidden"
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        exit={{ scale: 0.8, opacity: 0 }}
+        transition={{ duration: 0.25 }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* IMAGE */}
+        <img
+          src={modalImage}
+          alt="Preview"
+          className="max-h-[80vh] w-auto object-contain bg-black rounded-xl"
+        />
+
+        {/* TITLE */}
+        <p className="text-center text-white mt-3 text-lg font-semibold">
+          {filteredImages[currentIndex]?.title || "Gallery Image"}
+        </p>
+
+        {/* PREVIOUS */}
+        {currentIndex > 0 && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const prev = currentIndex - 1;
+              setCurrentIndex(prev);
+              setModalImage(filteredImages[prev].url);
+            }}
+            className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white text-black p-3 rounded-full shadow text-xl"
+          >
+            ‹
+          </button>
+        )}
+
+        {/* NEXT */}
+        {currentIndex < filteredImages.length - 1 && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              const next = currentIndex + 1;
+              setCurrentIndex(next);
+              setModalImage(filteredImages[next].url);
+            }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/60 hover:bg-white text-black p-3 rounded-full shadow text-xl"
+          >
+            ›
+          </button>
+        )}
+
+        {/* CLOSE */}
+        <button
+          onClick={closeModal}
+          className="absolute top-4 right-4 bg-white/90 text-black p-2 rounded-full shadow text-xl"
+        >
+          ✕
+        </button>
+      </motion.div>
+    </motion.div>
+  )}
+</AnimatePresence>
+
+  </div>
+</section>
+
+{/* FOOTBALL SECTION */}
+<section id="football-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
+  <div className="max-w-7xl mx-auto px-6">
+
+    {/* Hero Banner */}
+    <motion.div
+      initial={{ opacity: 0, y: -20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      className="relative rounded-3xl overflow-hidden shadow-xl mb-16"
+    >
+      <img
+        src="/images/football1.jpeg"
+        className="w-full h-72 object-cover"
+        alt="Football Training"
+      />
+      <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg">
+          Football at Sumeet Sports
+        </h2>
+      </div>
+    </motion.div>
+
+    {/* Subtitle */}
+    <motion.p
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className="text-center text-gray-800 max-w-2xl mx-auto text-lg md:text-xl mb-12"
+    >
+      Training • Tournaments • Weekend Matches  
+      <br />
+      High-quality football sessions and ground bookings available.
+    </motion.p>
+
+    {/* Feature Cards */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+      {/* Coaching Card */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
+      >
+        <img src="/images/fc coaching.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Coaching" />
+        <h3 className="text-xl font-bold text-[#0f1724] mb-2">Football Coaching Sessions</h3>
+        <ul className="text-gray-800 text-sm space-y-1">
+          <li>Beginner & intermediate batches</li>
+          <li>Basic drills, agility & ball control</li>
+          <li>Sessions supervised by experienced trainers</li>
+        </ul>
+      </motion.div>
+
+      {/* Ground Booking */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.1 }}
+        className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
+      >
+        <img src="/images/advanced.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Ground Booking" />
+        <h3 className="text-xl font-bold text-[#0f1724] mb-2">Ground Booking for Football</h3>
+        <ul className="text-gray-800 text-sm space-y-1">
+          <li>7-a-side & 9-a-side formats</li>
+          <li>Weekend match bookings</li>
+          <li>Goalpost & boundary setup available</li>
+        </ul>
+      </motion.div>
+
+      {/* Tournaments */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.4, delay: 0.2 }}
+        className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
+      >
+        <img src="/images/fc tournament.png" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Tournaments" />
+        <h3 className="text-xl font-bold text-[#0f1724] mb-2">Football Tournaments</h3>
+        <ul className="text-gray-800 text-sm space-y-1">
+          <li>Friendly matches & school events</li>
+          <li>Club tournaments hosted periodically</li>
+          <li>Trophies & certificates arranged by academy</li>
+        </ul>
+      </motion.div>
+    </div>
+
+    {/* Mini Gallery */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
+      {[
+        "/images/football1.jpeg",
+        "/images/football/fc match.jpeg",
+        "/images/football/roller.jpeg",
+        "/images/football/strike.jpeg", 
+      ].map((img, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="relative group rounded-xl overflow-hidden shadow-md"
+        >
+          <img src={img} className="w-full h-40 object-cover" alt="Football Scene" />
+
+          {/* Hover Overlay */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition flex items-center justify-center">
+            <p className="text-white font-semibold">View</p>
+          </div>
+        </motion.div>
+      ))}
+    </div>
+
+
+   
+    {/* CTA */}
+    <div className="text-center mt-12">
+      <button
+        onClick={() => {
+          const el = document.getElementById("contact-section");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="px-8 py-3 bg-gradient-to-r from-sky-500 to-pink-500 text-white text-lg font-semibold rounded-full shadow hover:scale-105 transition"
+      >
+        Enquire for Football Training
+      </button>
+    </div>
+  </div>
+</section>
+
 
       
       {/* CONTACT */}
@@ -810,7 +1475,6 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Quick Guarantee */}
         
 
       </div>

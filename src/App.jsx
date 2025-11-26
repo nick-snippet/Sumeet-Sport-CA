@@ -6,8 +6,8 @@ import Home from "./pages/Homepage";
 import About from "./pages/AboutPage";
 import Contact from "./pages/ContactPage";
 import GalleryPage from "./pages/GalleryPage";
-import AdminGate from "./pages/AdminGate";
-import Upload from "./pages/upload";
+
+import AdminUpload from "./components/AdminUpload"; 
 
 function App() {
   return (
@@ -22,11 +22,8 @@ function App() {
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* ADMIN ENTRY (Password Protected) */}
-          <Route path="/admin" element={<AdminGate />} />
-
           {/* ADMIN UPLOAD PANEL */}
-          <Route path="/upload" element={<Upload />} />
+          <Route path="/upload" element={<AdminUpload />} />
 
           {/* UNKNOWN ROUTES */}
           <Route path="*" element={<Navigate to="/" replace />} />
