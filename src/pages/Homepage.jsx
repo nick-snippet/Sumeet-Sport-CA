@@ -575,7 +575,7 @@ useEffect(() => {
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {[
-        { key: "ageWise", title: "Age Wise Coaching", desc: "Age-specific training for young talent.", img: "/images/juniors.jpeg" },
+        { key: "ageWise", title: "Age Wise Coaching", desc: "Age-specific training for young talent.", img: "/images/Agewisecard.jpeg" },
         { key: "ground", title: "Spacious Ground For Booking", desc: "Available for matches & practice.", img: "/images/advanced.jpeg" },
         { key: "night", title: "Night Practice Sessions", desc: "Under Flood Lights", img: "/images/GLphotos/trophy3.jpeg" },
         { key: "residential", title: "Residential Facilities", desc: "Comfortable stay & nutrition for outstation students.", img: "/images/team.jpeg" },
@@ -1317,7 +1317,141 @@ useEffect(() => {
   </div>
 </section>
 
+{/* ⭐ START SHOP SECTION ⭐ */}
+<section id="shop-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
+  <div className="max-w-6xl mx-auto px-6">
 
+    <h2 className="text-5xl font-extrabold text-center text-[#0f2547] mb-12">
+      Academy Sports Shop
+    </h2>
+
+    <p className="text-center max-w-2xl mx-auto text-gray-700 mb-12 text-lg">
+      Explore professional sports clothing and equipment — everything in one place at our academy store.
+    </p>
+
+    {/* Grid – Two Big Cards */}
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+
+      {/* 🟩 SHOP 1 – SPORTS CLOTHING */}
+      <div className="relative backdrop-blur-xl bg-white/30 border border-white/40 rounded-3xl shadow-xl px-8 pt-10 pb-12 overflow-hidden">
+
+        {/* Hero Section */}
+        <div className="relative flex justify-center mb-8">
+          <img 
+            src="/images/shophero.png"
+            alt="Sports Clothing Hero"
+            className="w-64 drop-shadow-xl"
+          />
+        </div>
+
+        <h3 className="text-3xl font-extrabold text-[#0f1724] text-center mb-6">
+          Sports Clothing Store
+        </h3>
+
+        <p className="text-gray-800 text-center mb-8 leading-relaxed">
+          Premium quality sportswear for cricket, football and fitness.  
+          Designed for comfort, performance and durability.
+        </p>
+
+        {/* Categories */}
+        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Categories</h4>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
+          {[
+            { title: "T-Shirts", img: "/images/shop1/tshirt.jpg" },
+            { title: "Track Pants", img: "/images/shop1/trackpants.jpg" },
+            { title: "Shorts", img: "/images/shop1/shorts.jpg" },
+            { title: "Hoodies", img: "/images/shop1/hoodies.jpg" },
+            { title: "Caps", img: "/images/shop1/caps.jpg" },
+            { title: "Jerseys", img: "/images/shop1/jerseys.jpg" },
+            { title: "Gloves", img: "/images/shop1/gloves.jpg" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="relative bg-white/70 rounded-xl shadow-md overflow-hidden cursor-pointer group"
+            >
+              <img
+                src={item.img}
+                alt={item.title}
+                className="w-full h-28 object-cover group-hover:scale-110 transition duration-500"
+              />
+              <div className="absolute bottom-0 inset-x-0 bg-black/40 text-center py-1 opacity-0 group-hover:opacity-100 transition">
+                <p className="text-white text-sm font-medium">{item.title}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <a
+          href="#contact-section"
+          className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
+        >
+          Contact for Clothing Orders
+        </a>
+      </div>
+
+      {/* 🟦 SHOP 2 – SPORTS EQUIPMENT */}
+      <div className="relative backdrop-blur-xl bg-white/30 border border-white/40 rounded-3xl shadow-xl px-8 pt-10 pb-12 overflow-hidden">
+
+        {/* Hero Section */}
+        <div className="relative flex justify-center mb-8">
+          <img 
+            src="/images/shop/shop2hero.jpeg"
+            alt="Sports Equipment Hero"
+            className="w-64 drop-shadow-xl"
+          />
+        </div>
+
+        <h3 className="text-3xl font-extrabold text-[#0f1724] text-center mb-6">
+          Sports Equipment Store
+        </h3>
+
+        <p className="text-gray-800 text-center mb-8 leading-relaxed">
+          High-performance cricket and fitness equipment used by academy players.  
+          Trusted by athletes and coaches.
+        </p>
+
+        {/* Categories */}
+        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Categories</h4>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
+          {[
+            { title: "Bats", img: "/images/shop2/bats.jpg" },
+            { title: "Balls", img: "/images/shop2/balls.jpg" },
+            { title: "Helmets", img: "/images/shop2/helmets.jpg" },
+            { title: "Pads", img: "/images/shop2/pads.jpg" },
+            { title: "Shoes", img: "/images/shop2/shoes.jpg" },
+            { title: "Accessories", img: "/images/shop2/accessories.jpg" },
+            { title: "Kits", img: "/images/shop2/kits.jpg" },
+          ].map((item, i) => (
+            <div
+              key={i}
+              className="relative bg-white/70 rounded-xl shadow-md overflow-hidden cursor-pointer group"
+            >
+              <img
+                src={item.img}
+                alt={item.title}
+                className="w-full h-28 object-cover group-hover:scale-110 transition duration-500"
+              />
+              <div className="absolute bottom-0 inset-x-0 bg-black/40 text-center py-1 opacity-0 group-hover:opacity-100 transition">
+                <p className="text-white text-sm font-medium">{item.title}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <a
+          href="#contact-section"
+          className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
+        >
+          Contact for Equipment Orders
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+{/* ⭐ END SHOP SECTION ⭐ */}
       
       {/* CONTACT */}
 <section id="contact-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
