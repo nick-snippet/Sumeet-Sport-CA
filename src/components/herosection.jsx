@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 export default function HeroSection() {
   const heroImages = [
     "/images/hero1.jpeg",
-    "/images/team.jpeg",
+    "/images/hero2.jpeg",
     "/images/hero.jpeg",
     "/images/academy.jpeg",
   ];
@@ -25,7 +25,7 @@ export default function HeroSection() {
       className="
         relative
         h-screen
-        -mt-20          /* Pull hero behind transparent navbar */
+        pt-40        /* Pull hero behind transparent navbar */
         w-full
         overflow-hidden
         flex

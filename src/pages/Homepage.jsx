@@ -54,7 +54,7 @@ const galleryImages = [
   { url: "/images/GLphotos/mpl4.jpeg", category: "MPL", title: "MPL Capture 4" },
 
   { url: "/images/women1.jpeg", category: "Women", title: "Women Cricket 1" },
-  { url: "/images/women2.jpeg", category: "Women", title: "Women Cricket 2" },
+  { url: "/images/ng.jpeg", category: "gallery", title: "Women Cricket 2" },
   { url: "/images/women3.jpeg", category: "Women Cricket 3" },
   { url: "/images/women7.jpeg", category: "Women Cricket 4" },
 
@@ -403,7 +403,20 @@ useEffect(() => {
        giving players real-time match experience and building confidence. 
       These initiatives ensure players are well-prepared for higher-level challenges
     </p>
+    <br />
+    <h3 className="text-4xl font-bold text-[#0f2547] mb-3">⏱Timing Sessions: </h3>
+    <br />
+  <p className="text-gray-800 leading-relaxed text-lg">
+    The Weekly Session Timings Are given below: 
+ <ul className="list-disc pl-5 text-gray-800 space-y-2">
+        <li>Morning 7 to 9 AM</li>
+        <li>Evening 4 to 6 PM</li>
+        <li>Night(Under Flood Light Session) 6 to 8 PM</li>
+        
+      </ul>  
+ </p>
     </div>
+
     </section>
       {/* COACHES */}
       <section id="coaches-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
@@ -417,6 +430,7 @@ useEffect(() => {
           </div>
         </div>
       </section>
+      
       {/* PROUD PLAYERS SECTION */}
   <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
     <div className="max-w-6xl mx-auto px-6">
@@ -460,6 +474,7 @@ useEffect(() => {
       </div>
     </div>
   </section>
+
 
      
 {/* VISION / MISSION / GOALS – NEW SECTION */}
@@ -577,9 +592,9 @@ useEffect(() => {
       {[
         { key: "ageWise", title: "Age Wise Coaching", desc: "Age-specific training for young talent.", img: "/images/Agewisecard.jpeg" },
         { key: "ground", title: "Spacious Ground For Booking", desc: "Available for matches & practice.", img: "/images/advanced.jpeg" },
-        { key: "night", title: "Night Practice Sessions", desc: "Under Flood Lights", img: "/images/nightfc/nightflood.jpeg" },
-        { key: "residential", title: "Residential Facilities", desc: "Comfortable stay & nutrition for outstation students.", img: "/images/team.jpeg" },
-        { key: "competitions", title: "Competitions & Exposure", desc: "Real match exposure & tournaments.", img: "/images/tournament.jpeg" },
+        { key: "night", title: "Night Practice Sessions Under Flood Light", desc: "Intense Practice", img: "/images/nightfc/nightflood.jpeg" },
+        { key: "residential", title: "Residential Facilities", desc: "Comfortable stay & nutrition for outstation students.", img: "/images/hostelss.png" },
+        { key: "competitions", title: "Competitions & Exposure", desc: "Real match exposure & tournaments.", img: "/images/compT.jpeg" },
         { key: "seasonal", title: "Seasonal Camps", desc: "Intensive holiday camps with guest coaches.", img: "/images/camps.jpeg" },
       ].map((p) => (
         <motion.div
@@ -671,7 +686,7 @@ useEffect(() => {
             <div className="flex items-center gap-3">
               <button
                 onClick={() => { setProgramModalOpen(false); setActiveProgram(null); setActiveInner(null); }}
-                className="px-3 py-2 bg-white/90 rounded-full shadow hover:bg-white text-gray-900"
+                className="px-3 py-2 bg-red-500 rounded-full shadow hover:bg-white text-gray-900"
                 aria-label="Close"
               >
                 ✕
@@ -681,7 +696,7 @@ useEffect(() => {
 
           {/* modal body */}
           <div className="p-6">
-            {/* ---------- AGE WISE: 3 centered mini-cards (expand downward) ---------- */}
+            {/* ---------- `1`: 3 centered mini-cards (expand downward) ---------- */}
             {activeProgram === "ageWise" && (
               <div>
                 <div className="flex flex-col md:flex-row items-stretch justify-center gap-6">
@@ -692,9 +707,9 @@ useEffect(() => {
                       tabIndex={0}
                       onClick={() => setActiveInner(prev => prev === "beginner" ? null : "beginner")}
                       onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "beginner" ? null : "beginner"); }}
-                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "beginner" ? "ring-2 ring-sky-300" : ""}`}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "beginner" ? "ring-2 ring-white" : ""}`}
                     >
-                      <img src="/images/juniors.jpeg" alt="Beginner 6-10" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <img src="/images/players/player3.jpeg" alt="Beginner 6-10" className="w-full h-40 object-cover rounded-md mb-1" />
                       <h4 className="font-semibold text-lg">Beginner Batch (6 – 10 Years)</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
                         <li>Introduction to cricket fundamentals and basic skill development</li>
@@ -702,28 +717,14 @@ useEffect(() => {
                         <li>Practice sessions conducted using soft leather ball for safety</li>
                         <li>Regular practice matches to build confidence and game awareness</li>
                       </ul>
-                    </div>
-
-                    <AnimatePresence initial={false}>
-                      {activeInner === "beginner" && (
-                        <motion.div
-                          key="beginner-details"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.28 }}
-                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
-                        >
-                          <div className="py-3">
+                    
+                      <div className="py-3">
                             <p className="mb-2"><b>Beginner plan:</b> Twice weekly sessions, equipment guidance, parent progress updates.</p>
                             <p className="mb-2">Ideal for first-time players learning fundamentals through play-based drills.</p>
-                            <div className="text-right">
-                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    </div>
+                    </div>
+
+                   
                   </motion.div>
 
                   {/* Intermediate */}
@@ -733,9 +734,9 @@ useEffect(() => {
                       tabIndex={0}
                       onClick={() => setActiveInner(prev => prev === "intermediate" ? null : "intermediate")}
                       onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "intermediate" ? null : "intermediate"); }}
-                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "intermediate" ? "ring-2 ring-sky-300" : ""}`}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "intermediate" ? "ring-2 ring-white" : ""}`}
                     >
-                      <img src="/images/intermediate.jpeg" alt="Intermediate 10-14" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <img src="/images/intermediate.jpeg" alt="Intermediate 10-14" className="w-full h-40 object-cover rounded-md mb-1" />
                       <h4 className="font-semibold text-lg">Intermediate Batch (10 – 14 Years)</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
                         <li>Advanced skill development in batting, bowling and fielding</li>
@@ -743,28 +744,14 @@ useEffect(() => {
                         <li>Training and matches conducted using leather ball</li>
                         <li>Students participate in external tournaments to gain competitive exposure</li>
                       </ul>
-                    </div>
-
-                    <AnimatePresence initial={false}>
-                      {activeInner === "intermediate" && (
-                        <motion.div
-                          key="intermediate-details"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.28 }}
-                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
-                        >
-                          <div className="py-3">
+                      <br />
+                      <div className="py-3">
                             <p className="mb-2"><b>Intermediate plan:</b> Three sessions weekly, match simulations, strength basics and diet guidance.</p>
                             <p className="mb-2">Focus on polishing technique and introducing competitive strategies.</p>
-                            <div className="text-right">
-                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
-                            </div>
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    </div>
+
+                    
                   </motion.div>
 
                   {/* Advanced */}
@@ -774,37 +761,22 @@ useEffect(() => {
                       tabIndex={0}
                       onClick={() => setActiveInner(prev => prev === "advanced" ? null : "advanced")}
                       onKeyDown={(e) => { if (e.key === "Enter") setActiveInner(prev => prev === "advanced" ? null : "advanced"); }}
-                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "advanced" ? "ring-2 ring-sky-300" : ""}`}
+                      className={`p-4 flex flex-col items-start gap-3 cursor-pointer ${activeInner === "advanced" ? "ring-2 ring-white" : ""}`}
                     >
-                      <img src="/images/players/player7.jpeg" alt="Advanced 15+" className="w-full h-28 object-cover rounded-md mb-1" />
+                      <img src="/images/players/player4.jpg" alt="Advanced 15+" className="w-full h-40 object-cover rounded-md mb-1" />
                       <h4 className="font-semibold text-lg">Advance Batch (15 Years & Above)</h4>
                       <ul className="list-disc pl-5 text-sm text-gray-700 mt-1 space-y-1">
                         <li>High-performance training program focused on fitness and professional techniques</li>
                         <li>Full-time leather-ball matches and competitive tournaments</li>
                         <li>Match simulations, tactical awareness and mental conditioning for higher-level cricket</li>
                       </ul>
-                    </div>
-
-                    <AnimatePresence initial={false}>
-                      {activeInner === "advanced" && (
-                        <motion.div
-                          key="advanced-details"
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.28 }}
-                          className="px-4 pb-4 pt-0 bg-gray-50 text-sm text-gray-700"
-                        >
-                          <div className="py-3">
+                      <br />
+                       <div className="py-3">
                             <p className="mb-2"><b>Advanced plan:</b> Daily focused training, personalized video analysis, tournament prep & trial support.</p>
                             <p className="mb-2">Designed for serious aspirants preparing for district/state selection.</p>
-                            <div className="text-right">
-                              <button className="px-3 py-1 rounded-full bg-[#0f2547] text-white text-sm">Know More</button>
-                            </div>
+                           
                           </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
+                    </div>
                   </motion.div>
                 </div>
               </div>
@@ -858,7 +830,7 @@ useEffect(() => {
                       "/images/nightfc/night4.jpeg",
                       "/images/nightfc/night5.jpeg",
                     ].map((src, i) => (
-                      <img key={i} src={src} alt={`night-${i}`} className="w-full h-24 object-cover rounded-md" />
+                      <img key={i} src={src} alt={`night-${i}`} className="w-full h-46 object-cover rounded-md" />
                     ))}
                   </div>
 
@@ -879,13 +851,13 @@ useEffect(() => {
                 </motion.div>
 
                 <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
-                  <img src="/images/food.jpeg" alt="food" className="w-full h-28 object-cover rounded-md mb-3" />
+                  <img src="/images/food.jpg" alt="food" className="w-full h-28 object-cover rounded-md mb-3" />
                   <h4 className="font-semibold text-lg">Food</h4>
                   <p className="text-sm text-gray-700 mt-2">Nutritious, balanced meals prepared daily. Special sport-focused diets available on request.</p>
                 </motion.div>
 
                 <motion.div className="bg-white rounded-xl border shadow-sm overflow-hidden p-4">
-                  <img src="/images/safety.jpeg" alt="safety" className="w-full h-28 object-cover rounded-md mb-3" />
+                  <img src="/images/safeT.png" alt="safety" className="w-full h-28 object-cover rounded-md mb-3" />
                   <h4 className="font-semibold text-lg">Safety</h4>
                   <p className="text-sm text-gray-700 mt-2">Monitored entry/exit, CCTV coverage and hostel wardens provide a safe environment for all trainees.</p>
                 </motion.div>
@@ -1152,7 +1124,7 @@ useEffect(() => {
         transition={{ duration: 0.4 }}
         className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
       >
-        <img src="/images/football/sumeet fc mg.png" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Coaching" />
+        <img src="/images/football/sumeetfc.jpeg" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Coaching" />
         <h3 className="text-xl font-bold text-[#0f1724] mb-2">Football Coaching Sessions</h3>
         <ul className="text-gray-800 text-sm space-y-1">
           <li>Beginner & intermediate batches</li>
@@ -1184,7 +1156,7 @@ useEffect(() => {
         transition={{ duration: 0.4, delay: 0.2 }}
         className="p-6 bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg"
       >
-        <img src="/images/fc tournament.png" className="w-full h-40 object-cover rounded-xl mb-4" alt="Football Tournaments" />
+        <img src="/images/fc tournament.png" className="w-full h-47 object-cover rounded-xl mb-4" alt="Football Tournaments" />
         <h3 className="text-xl font-bold text-[#0f1724] mb-2">Football Tournaments</h3>
         <ul className="text-gray-800 text-sm space-y-1">
           <li>Friendly matches & school events</li>
@@ -1248,6 +1220,36 @@ useEffect(() => {
       Explore professional sports clothing and equipment — everything in one place at our academy store.
     </p>
 
+{/* NEW INFO CARD */}
+<div
+  onClick={() =>
+    setSelectedVision({
+      title: "About Our Stores",
+      paragraphs: [
+        "Your detailed paragraph 1 goes here. It will appear inside the popup modal.",
+        "You can add as many paragraphs as needed inside this array.",
+      ],
+    })
+  }
+  className="bg-gradient-to-r from-pink-100 to-sky-100 rounded-3xl p-8 shadow-xl cursor-pointer hover:scale-[1.02] transition mb-10"
+>
+  <h3 className="text-4xl font-bold text-[#0f2547] mb-3">🔥 About Our Stores</h3>
+
+  <p className="text-gray-800 leading-relaxed text-lg">  
+<b>About The Store</b>
+<br />
+Sumeet Sports Shoppe Is The Most Trusted And Established Sports Equipment Outlet In The Region,
+<br /> 
+Proudly Completing 10 Successful Years In The Sports Business. 
+<br />
+Founded By Passionate Sportsperson<b> Mr. Sumeet Chavan,</b> The Shop Has Been Built With A Mission To Make Quality Sports Gear Affordable And Easily Accessible To Every Athlete — From Beginners To Professional Players.
+<br />
+With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution For All Sporting Needs, Supporting Athletes, Students And Clubs With Premium Products And Personalized Guidance.
+<br />
+☎️<b>Contact</b> - 9403230200/8830807879
+  </p>
+
+</div>
     {/* Grid – Two Big Cards */}
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
 
@@ -1273,11 +1275,11 @@ useEffect(() => {
         </p>
 
         {/* Categories */}
-        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Categories</h4>
+        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Products</h4>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           {[
-            { title: "T-Shirts", img: "/images/shop1/tshirt.jpeg" },
+            { title: "T-Shirts", img: "/images/shop1/tshirts.jpeg" },
             { title: "Track Pants", img: "/images/shop1/trackpants.png" },
             { title: "Shorts", img: "/images/shop1/shorts.png" },
             { title: "Hoodies", img: "/images/shop1/hoodies.jpg" },
@@ -1315,9 +1317,9 @@ useEffect(() => {
         {/* Hero Section */}
         <div className="relative flex justify-center mb-8">
           <img 
-            src="/images/shop2/shop2hero.jpeg"
+            src="/images/shop2/hero2.jpeg"
             alt="Sports Equipment Hero"
-            className="w-64 drop-shadow-xl"
+            className="w-64 h-50 drop-shadow-xl"
           />
         </div>
 
@@ -1331,11 +1333,11 @@ useEffect(() => {
         </p>
 
         {/* Categories */}
-        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Categories</h4>
+        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Products</h4>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
           {[
-            { title: "Bats", img: "/images/shop2/bats.jpg" },
+            { title: "Bats", img: "/images/shop2/baTs.jpeg" },
             { title: "Balls", img: "/images/shop2/balls.jpg" },
             { title: "Helmets", img: "/images/shop2/helmet.jpg" },
             { title: "Pads", img: "/images/shop2/pads.jpg" },
@@ -1373,7 +1375,7 @@ useEffect(() => {
 {/* ⭐ END SHOP SECTION ⭐ */}
       
       {/* CONTACT */}
-<section id="contact-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
+  <section id="contact-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
   <div className="container mx-auto px-6">
 
     {/* Heading */}
@@ -1527,9 +1529,6 @@ useEffect(() => {
             </div>
           </div>
         </div>
-
-        
-
       </div>
     </div>
 

@@ -1,5 +1,5 @@
 // src/components/Navbar.jsx
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { HiMenuAlt3, HiX } from "react-icons/hi";
@@ -11,41 +11,38 @@ export default function Navbar() {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState("home-section");
 
-  // nav items (order matters)
   const navItems = [
     { label: "Home", id: "home-section" },
     { label: "About", id: "about-section" },
     { label: "Programs", id: "programs-section" },
     { label: "Gallery", id: "gallery-section" },
+    { label: "Shop", id: "shop-section" },
     { label: "Contact", id: "contact-section" },
-    { label: "Shop", id: "contact-section" },
   ];
 
-  // scroll-to-section helper (works across routes)
   const scrollToSection = (id) => {
     setOpen(false);
-    // small delay if we're navigating from other route
+
     if (location.pathname !== "/") {
       navigate("/");
-      setTimeout(() => document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }), 350);
+      setTimeout(() => {
+        document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      }, 350);
     } else {
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
+      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
     }
   };
 
-  // small capsule shadow on scroll
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20);
+    const onScroll = () => setScrolled(window.scrollY > 10);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // IntersectionObserver to set active section reliably.
-  // Keeps the current section active until the next section crosses the threshold.
   useEffect(() => {
     const observerOptions = {
       root: null,
-      rootMargin: "-40% 0px -40% 0px", // center of viewport — adjust if needed
+      rootMargin: "-40% 0px -40% 0px",
       threshold: 0,
     };
 
@@ -53,80 +50,113 @@ export default function Navbar() {
     if (!sections.length) return;
 
     const observer = new IntersectionObserver((entries) => {
-      // entries includes whichever sections intersect the center area; pick the one closest to center
       const visible = entries.filter((e) => e.isIntersecting);
       if (visible.length) {
-        // choose the entry whose bounding rect top is closest to 0
         visible.sort((a, b) => Math.abs(a.boundingClientRect.top) - Math.abs(b.boundingClientRect.top));
         setActiveSection(visible[0].target.id);
-      } else {
-        // fallback: if none intersect, pick the section whose top is above center (last visited)
-        const fromTop = sections.map((el) => ({ id: el.id, top: el.getBoundingClientRect().top }));
-        fromTop.sort((a, b) => a.top - b.top);
-        const candidate = fromTop.reverse().find((c) => c.top <= 150);
-        if (candidate) setActiveSection(candidate.id);
       }
     }, observerOptions);
 
-    sections.forEach((sec) => observer.observe(sec));
-    return () => sections.forEach((sec) => observer.unobserve(sec));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.pathname]); // re-run when route changes so elements exist
+    sections.forEach((s) => observer.observe(s));
+    return () => sections.forEach((s) => observer.unobserve(s));
+  }, [location.pathname]);
 
   return (
-    <nav className="fixed inset-x-0 top-4 z-50 pointer-events-none">
-      <div className="flex justify-center px-4">
+    <nav
+      className={`
+        fixed inset-x-0 top-0 z-50 pointer-events-auto
+        transition-all duration-300
+
+        /* GLASS BACKGROUND FOR WHOLE TOP BAR */
+        ${scrolled ? "backdrop-blur-xl bg-white/40 shadow-md" : "backdrop-blur-lg bg-white/30 shadow-sm"}
+      `}
+    >
+      {/* SPACING TO KEEP NAV FLOATING APART FROM HERO LIKE BEFORE */}
+      <div className="pt-4"></div>
+
+      <div className="max-w-7xl mx-auto relative flex items-center justify-between px-6">
+        
+        {/* LEFT LOGO */}
+        <Link
+          to="/"
+          className="pointer-events-auto  flex flex-col items-center gap-2  select-none"
+          onClick={() => scrollToSection("home-section")}
+        >
+          <img
+            src="/images/logo4.png"
+            className="h-25 w-25 rounded-full shadow-md object-cover"
+            alt="logo"
+          />
+          <span className="text-[20px] font-extrabold bg-gradient-to-r from-sky-500 to-blue-950 bg-clip-text text-transparent">
+            |SUMEET SPORTS|
+          </span>
+        </Link>
+
+        {/* CENTER NAV CAPSULE (unchanged logic + styling) */}
         <motion.div
           initial={{ y: -14, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.35 }}
-          className={`pointer-events-auto w-full max-w-4xl rounded-full px-4 py-3 flex items-center justify-between gap-6 backdrop-blur-2xl border border-white/20 shadow-[0_8px_25px_rgba(0,0,0,0.35)] transition-all duration-300 ${scrolled ? "bg-white/10" : "bg-white/5"}`}
+          className={`
+            hidden md:flex absolute left-1/2 -translate-x-1/2
+            pointer-events-auto rounded-full px-6 py-3
+            backdrop-blur-2xl border border-white/60 shadow-lg
+            bg-white/70 transition-all duration-300
+            ${scrolled ? "bg-white/85 shadow-xl" : ""}
+          `}
         >
-          {/* Logo (left) */}
-          <Link to="/" className="flex items-center gap-3 select-none" onClick={() => scrollToSection("home-section")}>
-            <img src="/images/logo4.png" alt="logo" className="h-12 w-12 rounded-full shadow-lg object-cover" />
-            <span className="text-2xl font-extrabold bg-gradient-to-r from-sky-500 to-pink-500 bg-clip-text text-transparent tracking-wide">SUMEET SPORTS</span>
-          </Link>
-
-          {/* Desktop nav buttons */}
-          <div className="hidden md:flex flex-1 justify-center gap-4 text-black font-semibold text-lg">
+          <div className="flex gap-6 font-semibold text-lg">
             {navItems.map((item, i) => (
               <button
                 key={i}
                 onClick={() => scrollToSection(item.id)}
-                className={`relative px-4 py-1 rounded-full transition flex items-center justify-center
-                  ${activeSection === item.id ? "bg-white/20  shadow-lg ring-1 ring-white/20" : "text-black  hover:text-white"}
+                className={`
+                  px-4 py-2 rounded-full transition-all
+                  ${activeSection === item.id
+                    ? "bg-gradient-to-r from-sky-500 to-pink-500 text-white shadow-md"
+                    : "text-gray-700 hover:text-black"
+                  }
                 `}
-                aria-current={activeSection === item.id ? "true" : "false"}
               >
                 {item.label}
               </button>
             ))}
           </div>
-
-          {/* Mobile menu button */}
-          <button className="md:hidden text-black text-2xl pointer-events-auto" onClick={() => setOpen(!open)} aria-label="menu">
-            {open ? <HiX /> : <HiMenuAlt3 />}
-          </button>
         </motion.div>
+
+        {/* MOBILE MENU BUTTON */}
+        <button
+          className="md:hidden text-black text-2xl pointer-events-auto"
+          onClick={() => setOpen(!open)}
+        >
+          {open ? <HiX /> : <HiMenuAlt3 />}
+        </button>
       </div>
 
-      {/* Mobile dropdown */}
+      {/* MOBILE DROPDOWN */}
       <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
-            className="md:hidden mt-4 mx-auto w-[92%] rounded-3xl bg-white/90 backdrop-blur-xl border border-gray-200 p-4 text-center shadow-2xl pointer-events-auto"
+            className="
+              md:hidden mt-4 mx-auto w-[92%] rounded-3xl bg-white/95
+              backdrop-blur-xl border border-gray-200 p-4 text-center
+              shadow-xl pointer-events-auto
+            "
           >
             {navItems.map((item, i) => (
               <button
                 key={i}
                 onClick={() => scrollToSection(item.id)}
-                className={`block w-full py-3 text-lg font-semibold hover:text-pink-500 hover:bg-white/20 rounded-full transition mb-2 ${
-                  activeSection === item.id ? "bg-white/20" : ""
-                }`}
+                className={`
+                  block w-full py-3 text-lg font-semibold rounded-full transition mb-2
+                  ${activeSection === item.id
+                    ? "bg-gradient-to-r from-sky-500 to-pink-500 text-white shadow"
+                    : "text-gray-700 hover:bg-gray-100"
+                  }
+                `}
               >
                 {item.label}
               </button>
