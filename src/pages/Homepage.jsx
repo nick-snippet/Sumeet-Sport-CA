@@ -43,11 +43,13 @@ const normalizeBullets = (input) => {
   
   // Contact form state + popup
   const [contactForm, setContactForm] = useState({
-    first: "",
-    last: "",
-    email: "",
-    message: "",
-  });
+  first: "",
+  last: "",
+  phone: "",
+  email: "",
+  message: "",
+});
+
   const [showContactPopup, setShowContactPopup] = useState(false);
 
   // ensure smooth-scroll behavior on mount
@@ -973,7 +975,7 @@ useEffect(() => {
         <h5 className="font-semibold text-md mt-3 mb-1 text-[#0f2547]">
           🔹 Residential Camp Facilities:
         </h5>
-
+ 
         <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
           {normalizeBullets(`
             Safe and secure accommodation,
@@ -1018,29 +1020,30 @@ useEffect(() => {
           { label: "Batting Pads, Gloves & Guards", img: "/images/shop2/pads.jpg" },
           { label: "Helmets & Accessories", img: "/images/shop2/helmet.jpg" },
           { label: "Spikes & Cricket Shoes", img: "/images/shop2/shoes.jpg" },
-          { label: "Full Cricket Kits", img: "/images/shop2/kits.png" },
+          { label: "Full Cricket Kits for Training", img: "/images/shop2/kits.png" },
         ]
       },
       {
         title: "Fitness & Gym Equipment:",
         items: [
-          { label: "Dumbbells & Plates", img: "/images/fitness.jpeg" },
-          { label: "Resistance Bands", img: "/images/GLphotos/trophy3.jpeg" },
-          { label: "Skipping Ropes", img: "/images/shop2/ropes.jpeg" },
-          { label: "Training Mats", img: "/images/shop2/mats.jpeg" },
+          { label: "Dumbbells & Plates", img: "/images/shop1/dumble.png" },
+          { label: "Resistance Bands", img: "/images/shop1/band.png" },
+          { label: "Skipping Ropes", img: "/images/shop2/ropes.png" },
+          { label: "Training Mats", img: "/images/shop2/mats.png" },
           { label: "Gloves & Grips", img: "/images/shop1/gloves.jpg" },
-          { label: "Agility Accessories", img: "/images/balling.jpeg" },
+          { label: "Agility Accessories", img: "/images/shop2/agility.png" },
         ]
       },
       {
         title: "Indoor & Outdoor Sports:",
         items: [
-          { label: "Badminton Racquets", img: "/images/football1.jpeg" },
-          { label: "Football / Volleyball", img: "/images/football/strike.jpeg" },
-          { label: "Basketballs", img: "/images/compT.jpeg" },
-          { label: "Carrom Boards", img: "/images/shop2/carrom.jpeg" },
-          { label: "Table Tennis Kits", img: "/images/shop2/tt.jpeg" },
-          { label: "Swimming / Skating Gear", img: "/images/shop2/skate.jpg" },
+          { label: "Badminton Racquets", img: "/images/shop2/racket.png" },
+          { label: "Football / Volleyball", img: "/images/shop2/football.png" },
+          { label: "Basketballs", img: "/images/shop2/basket.png" },
+          { label: "Carrom Boards", img: "/images/shop2/carrom.png" },
+          { label: "Table Tennis Kits", img: "/images/shop2/table_tenis.png" },
+          { label: "Swimming Gear", img: "/images/shop2/swims.png" },
+          { label: "Skating Gear", img: "/images/shop2/skate.png" },
         ]
       },
       {
@@ -1049,9 +1052,9 @@ useEffect(() => {
           { label: "T-Shirts & Jerseys", img: "/images/shop1/tshirts.jpeg" },
           { label: "Shorts & Lowers", img: "/images/shop1/shorts.png" },
           { label: "Hoodies & Warmups", img: "/images/shop1/hoodies.jpg" },
-          { label: "Caps & Sleeves", img: "/images/shop1/caps.jpeg" },
-          { label: "Track Suits", img: "/images/shop1/jersy.jpeg" },
-          { label: "Arm Sleeves & Gloves", img: "/images/shop1/hand.png" },
+          { label: "Cricket Caps ", img: "/images/shop1/caps.jpeg" },
+          { label: "Track Suits", img: "/images/shop2/tracks.png" },
+          { label: "Arm Sleeves ", img: "/images/shop1/hand.png" },
         ]
       }
     ].map((cat, idx) => (
@@ -1065,9 +1068,9 @@ useEffect(() => {
         <div className="grid grid-cols-1 mx-auto sm:grid-cols-4 gap-6">
           {cat.items.map((item, i) => (
             <div key={i}>
-              <h4 className="font-semibold text-gray-600 mb-2">• {item.label}</h4>
+              <h4 className="font-semibold text-black mb-2">• {item.label}</h4>
 
-              <div className="relative h-32 w-full rounded-xl overflow-hidden shadow-md">
+              <div className="relative h-35 w-full rounded-xl overflow-hidden shadow-md">
                 <img
                   src={item.img}
                   className="w-full h-full object-cover"
@@ -1295,9 +1298,9 @@ Founded By Passionate Sportsperson<b> Mr. Sumeet Chavan,</b> The Shop Has Been B
 <br />
 With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution For All Sporting Needs, Supporting Athletes, Students And Clubs With Premium Products And Personalized Guidance.
 <br />
+<p> 📍🛒<b>Address- Varad Morya Apt, Behind Chetana Petrol Pump, 100ft Road,sangli.</b></p>
 ☎️<b>Contact</b> - 9403230200/8830807879
-  </p> 
-
+</p>
 </div>
     {/* Grid – Two Big Cards */}
    {/* ⭐ MAIN SHOP HERO CARD ⭐ */}
@@ -1370,7 +1373,7 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
       <p className="text-xl text-gray-600 max-w-3xl mx-auto">
         Have questions about admissions, programs or training?
         <br />  
-        -just connect with us via given email form.
+        -just connect with us on whatsapp via given form.
       </p>
     </div>
 
@@ -1385,72 +1388,94 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
               Send us a Message
             </h3>
 
-            <form className="space-y-6" onSubmit={handleContactSubmit}>
-              
-              {/* First + Last Name */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="text-gray-800">First Name</label>
-                  <input
-                    value={contactForm.first}
-                    onChange={(e) =>
-                      setContactForm({ ...contactForm, first: e.target.value })
-                    }
-                    placeholder="Enter your first name"
-                    className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
-                  />
-                </div>
+           <form
+  className="space-y-6"
+  onSubmit={(e) => {
+    e.preventDefault();
 
-                <div>
-                  <label className="text-gray-800">Last Name</label>
-                  <input
-                    value={contactForm.last}
-                    onChange={(e) =>
-                      setContactForm({ ...contactForm, last: e.target.value })
-                    }
-                    placeholder="Enter your last name"
-                    className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
-                  />
-                  
-                </div>
-                </div>
+    const msg = `Hello Sumeet Sports Academy,%0A%0AName: ${contactForm.first} ${contactForm.last}%0AContact: ${contactForm.phone}%0AEmail: ${contactForm.email}%0AMessage: ${contactForm.message}`;
 
-              {/* Email */}
-              <div>
-                <label className="text-gray-800">Email</label>
-                <input
-                  value={contactForm.email}
-                  onChange={(e) =>
-                    setContactForm({ ...contactForm, email: e.target.value })
-                  }
-                  placeholder="Enter your email address"
-                  type="email"
-                  className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
-                />
-              </div>
+    const whatsappURL = `https://wa.me/9657923492?text=${msg}`;
+    window.open(whatsappURL, "_blank");
+  }}
+>
+  {/* First + Last Name */}
+  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <div>
+      <label className="text-gray-800">First Name</label>
+      <input
+        value={contactForm.first}
+        onChange={(e) =>
+          setContactForm({ ...contactForm, first: e.target.value })
+        }
+        placeholder="Enter your first name"
+        className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+      />
+    </div>
 
-              {/* Message */}
-              <div>
-                <label className="text-gray-800">Message</label>
-                <textarea
-                  value={contactForm.message}
-                  onChange={(e) =>
-                    setContactForm({ ...contactForm, message: e.target.value })
-                  }
-                  rows="6"
-                  placeholder="Write your message here"
-                  className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
-                ></textarea>
-              </div>
+    <div>
+      <label className="text-gray-800">Last Name</label>
+      <input
+        value={contactForm.last}
+        onChange={(e) =>
+          setContactForm({ ...contactForm, last: e.target.value })
+        }
+        placeholder="Enter your last name"
+        className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+      />
+    </div>
+  </div>
 
-              {/* Submit */}
-              <button
-                type="submit"
-                className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium bg-gradient-to-r from-sky-500 to-pink-500 hover:opacity-90 transition"
-              >
-                Send Message
-              </button>
-            </form>
+  {/* Contact Number */}
+  <div>
+    <label className="text-gray-800">Contact Number</label>
+    <input
+      value={contactForm.phone}
+      onChange={(e) =>
+        setContactForm({ ...contactForm, phone: e.target.value })
+      }
+      placeholder="Enter your contact number"
+      type="tel"
+      className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+    />
+  </div>
+
+  {/* Email */}
+  <div>
+    <label className="text-gray-800">Email</label>
+    <input
+      value={contactForm.email}
+      onChange={(e) =>
+        setContactForm({ ...contactForm, email: e.target.value })
+      }
+      placeholder="Enter your email address"
+      type="email"
+      className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+    />
+  </div>
+
+  {/* Message */}
+  <div>
+    <label className="text-gray-800">Message</label>
+    <textarea
+      value={contactForm.message}
+      onChange={(e) =>
+        setContactForm({ ...contactForm, message: e.target.value })
+      }
+      rows="6"
+      placeholder="Write your message here"
+      className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white"
+    ></textarea>
+  </div>
+
+  {/* Submit — WhatsApp Redirect */}
+  <button
+    type="submit"
+    className="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl text-white font-medium bg-green-500 hover:bg-green-600 transition"
+  >
+    💬 Send on WhatsApp
+  </button>
+</form>
 
           </div>
         </div>
