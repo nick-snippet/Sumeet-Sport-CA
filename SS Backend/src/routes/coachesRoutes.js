@@ -17,6 +17,15 @@ router.post(
   coachesController.createCoach
 );
 
+// Admin update (supports optional image)
+router.put(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  upload.single("image"),
+  coachesController.updateCoach
+);
+
 // Admin delete
 router.delete(
   "/:id",

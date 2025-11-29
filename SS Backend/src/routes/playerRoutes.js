@@ -17,6 +17,15 @@ router.post(
   playerControllers.createPlayer
 );
 
+// Admin update
+router.put(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  upload.single("image"),
+  playerControllers.updatePlayer
+);
+
 // Admin delete
 router.delete(
   "/:id",

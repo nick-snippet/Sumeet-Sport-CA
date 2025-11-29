@@ -17,7 +17,41 @@ router.post(
   galleryControllers.createEvent
 );
 
-// Admin delete
+// Admin: Edit title/desc
+router.put(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  galleryControllers.updateEvent
+);
+
+// Admin: Add more images
+router.post(
+  "/:id/images",
+  firebaseAuth,
+  requireAdmin,
+  upload.array("images", 12),
+  galleryControllers.addImagesToEvent
+);
+
+// Admin: Replace single image
+router.put(
+  "/:id/images/:index",
+  firebaseAuth,
+  requireAdmin,
+  upload.single("image"),
+  galleryControllers.replaceImageInEvent
+);
+
+// Admin: Delete single image
+router.delete(
+  "/:id/images/:index",
+  firebaseAuth,
+  requireAdmin,
+  galleryControllers.deleteImageInEvent
+);
+
+// Admin delete whole event
 router.delete(
   "/:id",
   firebaseAuth,
