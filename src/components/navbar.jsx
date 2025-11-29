@@ -83,8 +83,8 @@ export default function Navbar() {
           onClick={() => scrollToSection("home-section")}
         >
           <img
-            src="/images/logo4.png"
-            className="h-25 w-25 rounded-full shadow-md object-cover"
+            src="/images/logobg.png"
+            className="h-25 w-25 rounded-2x shadow-md object-cover"
             alt="logo"
           />
           <span className="text-[20px] font-extrabold bg-gradient-to-r from-sky-500 to-blue-950 bg-clip-text text-transparent">
