@@ -88,7 +88,7 @@ export default function Navbar() {
             alt="logo"
           />
           <span className="text-[20px] font-extrabold bg-gradient-to-r from-sky-500 to-blue-950 bg-clip-text text-transparent">
-            |SUMEET SPORTS|
+            SUMEET SPORTS
           </span>
         </Link>
 
