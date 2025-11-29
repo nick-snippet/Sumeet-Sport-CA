@@ -408,7 +408,7 @@ useEffect(() => {
 {/* ABOUT US  SECTION  */}
 <section id="about-extra" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-6xl mx-auto px-6">
-    <h2 className="text-3xl md:text-4xl font-extrabold text-[#0f2547] mb-4">
+    <h2 className="text-4xl md:text-4xl font-extrabold text-[#0f2547] mb-4">
       About Us
     </h2>
 
@@ -423,18 +423,16 @@ useEffect(() => {
       Real Match Exposure.  
       <br />
       <br />
-      <b>  How We Started - </b>
-      <br />
-      Our Academy was <b>proudly established on 1st October 2020</b>, with the valuable support and encouragement of <b>Appasaheb Birnale Public School, Sangli.</b>
-     Their co-operation played a significant role in laying the strong foundation of our academy.
-      <br />
+      <p className="text-2xl md:text-4xl font-extrabold text-[#0f2547] mb-4"><b>  How We Started - </b></p>
+      Our Academy Was <b>Proudly Established on 1st October 2020</b>, With the Valuable Support and Encouragement of <b>Appasaheb Birnale Public School, Sangli.</b>
+       Their Co-Operation Played A Significant Role In Laying The Strong Foundation Of Our Academy.
       Our Academy Focuses On Shaping Players Not Just As Athletes, 
-     <br />  But As Confident, Responsible, And Mentally Strong Individuals <br />Prepared 
+      But As Confident, Responsible, <br />And Mentally Strong Individuals Prepared 
       For District, State, And National-Level Selections.
       <br /> <br />
-      The academy frequently arranges practice matches and tournaments,
-       giving players real-time match experience and building confidence. 
-      These initiatives ensure players are well-prepared for higher-level challenges
+      The Academy Frequently Arranges Practice Matches And Tournaments,
+       Giving Players Real-Time Match Experience And Building Confidence. 
+      These Initiatives Ensure Players Are Well-Prepared For Higher-Level Challenges
     </p>
     <br />
     <h3 className="text-4xl font-bold text-[#0f2547] mb-3 px-0">⏱️Timing Sessions: </h3>
