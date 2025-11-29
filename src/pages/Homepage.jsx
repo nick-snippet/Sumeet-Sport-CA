@@ -1,4 +1,4 @@
-// src/pages/Homepage.jsx 
+// src/pages/Homepage.jsx   
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import HeroSection from "../components/herosection";
@@ -7,7 +7,7 @@ import { useAuth } from "../context/AuthContext";
 import CoachCard from "../components/CoachCard";
 import AwardPlayercard from "../components/AwardPlayercard";
 
-// footer / icon imports
+// footer / icon imports  
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
 import { Facebook } from "lucide-react";
