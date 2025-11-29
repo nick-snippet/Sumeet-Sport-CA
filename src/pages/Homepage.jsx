@@ -425,7 +425,7 @@ useEffect(() => {
       <br />
       <b>  How We Started - </b>
       <br />
-      Our academy was <b>proudly established on 1st October 2020</b>, with the valuable support and encouragement of <b>Appasaheb Birnale Public School, Sangli.</b>
+      Our Academy was <b>proudly established on 1st October 2020</b>, with the valuable support and encouragement of <b>Appasaheb Birnale Public School, Sangli.</b>
      Their co-operation played a significant role in laying the strong foundation of our academy.
       <br />
       Our Academy Focuses On Shaping Players Not Just As Athletes, 
