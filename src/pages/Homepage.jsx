@@ -15,6 +15,8 @@ import { Facebook } from "lucide-react";
 export default function HomePage() {
   const { user } = useAuth();
   const [selectedCard, setSelectedCard] = useState(null);
+
+  
   
   // Vision/Mission/Goals modal state
   const [selectedVision, setSelectedVision] = useState(null);
@@ -613,7 +615,6 @@ useEffect(() => {
       
           
 {/* PROGRAMS & FACILITIES */}
-{/* PROGRAMS & FACILITIES */}
 <section id="programs-section" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-6xl mx-auto px-6">
     <h3 className="text-5xl font-bold text-sky-900 text-center mb-12">Programs & Facilities</h3>
@@ -648,6 +649,7 @@ useEffect(() => {
         </motion.div>
       ))}
     </div>
+
   </div>
 
   {/* PROGRAM MODAL */}
@@ -672,8 +674,8 @@ useEffect(() => {
           exit={{ y: 10, opacity: 0, scale: 0.98 }}
         >
           {/* HEADER */}
-          <div className="flex items-start justify-between p-6 border-b">
-            <div>
+          <div className="flex items-start justify-between p-2 border-b">
+            <div> 
               <h3 className="text-2xl font-bold text-[#0f2547]">
                 {{
                   ageWise: "Age Wise Coaching",
@@ -681,13 +683,13 @@ useEffect(() => {
                   night: "Night Practice Sessions",
                   residential: "Residential Facilities",
                   competitions: "Competitions & Exposure",
-                  seasonal: "Seasonal Camps",
+                  seasonal: "Seasonal Camps", 
                 }[activeProgram]}
               </h3>
 
               <p className="text-gray-800 mt-1">
                 {{
-                  ageWise: "Structured coaching by age and level.",
+                  ageWise: "Our Academy Provides Structured Coaching Programs Based On Age, Skill Level And Physical Ability.Each Batch Is Designed To Help Players Progress Step-By-Step Toward Professional Cricket",
                   ground: "Book our academy ground for matches and practice.",
                   night: "Evening training under flood lights.",
                   residential: "Stay + food for outstation students.",
@@ -811,9 +813,15 @@ useEffect(() => {
                 <h4 className="font-semibold text-lg">Night Practice</h4>
 
                 <p className="text-sm text-gray-700">
-                  Evening sessions from 6PM to 8PM with full flood-light setup.
+                  Evening sessions for Students Better Growth.
                 </p>
-
+                <br />
+                <p className="text-1x font-bold">To Support Students With A Busy School And Class Schedule, <br />The Academy Provides:</p>
+                <ul>
+                  <li>-Evening Sessions From 6:00 PM To 8:00 PM</li>
+                  <li>-1st Ever Night Cricket Practice Facility In Sangli</li>              
+                  <li>-Complete Flood-Light Setup For Safe And Professional Training Experience</li>
+                </ul>
                 {/* Images */}
                 <div className="grid grid-cols-3 gap-2">
                   {[
@@ -911,6 +919,8 @@ useEffect(() => {
               </div>
             )}
 
+
+ 
             {/* ───────────────────────────────────────────────
                 SEASONAL CAMPS (3 CARDS)
             ─────────────────────────────────────────────── */}
@@ -993,6 +1003,88 @@ useEffect(() => {
   </div>
 )}
 
+    
+{/* ---------- SHOP CATEGORIES (Improved 3x2 layout) ---------- */}
+{activeProgram === "shopCategories" && (
+  <div className="flex flex-col gap-10">
+
+    {/* ----- CATEGORY CARD ----- */}
+    {[
+      {
+        title: "Cricket Equipments : ",
+        items: [
+          { label: "English & Kashmir Willow Bats", img: "/images/shop2/baTs.jpeg" },
+          { label: "Leather & Tennis Balls for Cricket", img: "/images/shop2/balls.jpg" },
+          { label: "Batting Pads, Gloves & Guards", img: "/images/shop2/pads.jpg" },
+          { label: "Helmets & Accessories", img: "/images/shop2/helmet.jpg" },
+          { label: "Spikes & Cricket Shoes", img: "/images/shop2/shoes.jpg" },
+          { label: "Full Cricket Kits", img: "/images/shop2/kits.png" },
+        ]
+      },
+      {
+        title: "Fitness & Gym Equipment:",
+        items: [
+          { label: "Dumbbells & Plates", img: "/images/fitness.jpeg" },
+          { label: "Resistance Bands", img: "/images/GLphotos/trophy3.jpeg" },
+          { label: "Skipping Ropes", img: "/images/shop2/ropes.jpeg" },
+          { label: "Training Mats", img: "/images/shop2/mats.jpeg" },
+          { label: "Gloves & Grips", img: "/images/shop1/gloves.jpg" },
+          { label: "Agility Accessories", img: "/images/balling.jpeg" },
+        ]
+      },
+      {
+        title: "Indoor & Outdoor Sports:",
+        items: [
+          { label: "Badminton Racquets", img: "/images/football1.jpeg" },
+          { label: "Football / Volleyball", img: "/images/football/strike.jpeg" },
+          { label: "Basketballs", img: "/images/compT.jpeg" },
+          { label: "Carrom Boards", img: "/images/shop2/carrom.jpeg" },
+          { label: "Table Tennis Kits", img: "/images/shop2/tt.jpeg" },
+          { label: "Swimming / Skating Gear", img: "/images/shop2/skate.jpg" },
+        ]
+      },
+      {
+        title: "Sportswear & Accessories:",
+        items: [
+          { label: "T-Shirts & Jerseys", img: "/images/shop1/tshirts.jpeg" },
+          { label: "Shorts & Lowers", img: "/images/shop1/shorts.png" },
+          { label: "Hoodies & Warmups", img: "/images/shop1/hoodies.jpg" },
+          { label: "Caps & Sleeves", img: "/images/shop1/caps.jpeg" },
+          { label: "Track Suits", img: "/images/shop1/jersy.jpeg" },
+          { label: "Arm Sleeves & Gloves", img: "/images/shop1/hand.png" },
+        ]
+      }
+    ].map((cat, idx) => (
+      <motion.div
+        key={idx}
+        className="bg-white rounded-2xl border shadow-md p-6"
+      >
+        <h3 className="text-2xl font-bold text-[#0f2547] mb-4">{cat.title}</h3>
+
+        {/* 3×2 GRID */}
+        <div className="grid grid-cols-1 mx-auto sm:grid-cols-4 gap-6">
+          {cat.items.map((item, i) => (
+            <div key={i}>
+              <h4 className="font-semibold text-gray-600 mb-2">• {item.label}</h4>
+
+              <div className="relative h-32 w-full rounded-xl overflow-hidden shadow-md">
+                <img
+                  src={item.img}
+                  className="w-full h-full object-cover"
+                  alt={item.label}
+                />
+                <div className="absolute bottom-0 inset-x-0 bg-black/50 text-white text-xs py-1 text-center">
+                  {item.label}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </motion.div>
+    ))}
+
+  </div>
+)}
 
           </div>
         </motion.div>
@@ -1002,7 +1094,7 @@ useEffect(() => {
 </section>
 
 
-
+ 
       {/* GALLERY */}
 <section id="gallery-section" className="py-20 bg-gradient-to-r from-sky-200 to-pink-200">
   <div className="max-w-7xl mx-auto px-6">
@@ -1195,9 +1287,7 @@ useEffect(() => {
   <h3 className="text-4xl font-bold text-[#0f2547] mb-3">🔥 About Our Stores</h3>
 
   <p className="text-gray-800 leading-relaxed text-lg">  
-<b>About The Store</b>
-<br />
-Sumeet Sports Shoppe Is The Most Trusted And Established Sports Equipment Outlet In The Region,
+<b>Sumeet Sports </b>Shop Is The Most Trusted And Established Sports Equipment Outlet In The Region,
 <br /> 
 Proudly Completing 10 Successful Years In The Sports Business. 
 <br />
@@ -1206,129 +1296,62 @@ Founded By Passionate Sportsperson<b> Mr. Sumeet Chavan,</b> The Shop Has Been B
 With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution For All Sporting Needs, Supporting Athletes, Students And Clubs With Premium Products And Personalized Guidance.
 <br />
 ☎️<b>Contact</b> - 9403230200/8830807879
-  </p>
+  </p> 
 
 </div>
     {/* Grid – Two Big Cards */}
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+   {/* ⭐ MAIN SHOP HERO CARD ⭐ */}
+<div
+  className="
+    relative rounded-3xl overflow-hidden shadow-xl mb-12
+    h-110 w-full bg-cover bg-center
+  "
+  style={{ backgroundImage: "url('/images/ro45n.png')" }} // your RO45 image here
+>
+  {/* Black overlay */}
+  <div className="absolute inset-0 bg-black/50"></div>
 
-      {/* 🟩 SHOP 1 – SPORTS CLOTHING */}
-      <div className="relative backdrop-blur-xl bg-white/30 border border-white/40 rounded-3xl shadow-xl px-8 pt-10 pb-12 overflow-hidden">
+  {/* Card Content */}
+  <div className="relative z-10 h-full flex flex-col items-center justify-center text-center px-6">
+    <h2 className="text-4xl md:text-5xl font-extrabold text-white drop-shadow-lg">
+      Official Sumeet Sports Shop
+    </h2>
 
-        {/* Hero Section */}
-        <div className="relative flex justify-center mb-8">
-          <img 
-            src="/images/shophero.png"
-            alt="Sports Clothing Hero"
-            className="w-64 drop-shadow-xl"
-          />
-        </div>
+    <p className="text-gray-200 text-lg max-w-2xl mt-4">
+      Premium Sports kits, Equipment & Clothing Trusted by Athletes.
+    </p>
 
-        <h3 className="text-3xl font-extrabold text-[#0f1724] text-center mb-6">
-          Sports Clothing Store
-        </h3>
+    <div className="flex gap-4 mt-8 flex-wrap justify-center">
+      {/* Explore Categories */}
+      <button
+        onClick={() => {
+          setActiveProgram("shopCategories");
+          setProgramModalOpen(true);
+        }}
+        className="
+          px-6 py-3 rounded-xl bg-white/20 backdrop-blur-md border border-white/40 
+          text-white font-semibold hover:bg-white/30 transition
+        "
+      >
+        Explore Categories
+      </button>
 
-        <p className="text-gray-800 text-center mb-8 leading-relaxed">
-          Premium quality sportswear for cricket, football and fitness.  
-          Designed for comfort, performance and durability.
-        </p>
-
-        {/* Categories */}
-        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Products</h4>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
-          {[
-            { title: "T-Shirts", img: "/images/shop1/tshirts.jpeg" },
-            { title: "Track Pants", img: "/images/shop1/trackpants.png" },
-            { title: "Shorts", img: "/images/shop1/shorts.png" },
-            { title: "Hoodies", img: "/images/shop1/hoodies.jpg" },
-            { title: "Caps", img: "/images/shop1/caps.jpeg" },
-            { title: "Jerseys", img: "/images/shop1/jersy.jpeg" },
-            { title: "inners", img: "/images/shop1/hand.png" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="relative bg-white/70 rounded-xl shadow-md overflow-hidden cursor-pointer group"
-            >
-              <img
-                src={item.img}
-                alt={item.title}
-                className="w-full h-28 object-cover group-hover:scale-110 transition duration-500"
-              />
-              <div className="absolute bottom-0 inset-x-0 bg-black/40 text-center py-1 opacity-0 group-hover:opacity-100 transition">
-                <p className="text-white text-sm font-medium">{item.title}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <a
-          href="#contact-section"
-          className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
-        >
-          Contact for Clothing Orders
-        </a>
-      </div>
-
-      {/* 🟦 SHOP 2 – SPORTS EQUIPMENT */}
-      <div className="relative backdrop-blur-xl bg-white/30 border border-white/40 rounded-3xl shadow-xl px-8 pt-10 pb-12 overflow-hidden">
-
-        {/* Hero Section */}
-        <div className="relative flex justify-center mb-8">
-          <img 
-            src="/images/shop2/hero2.jpeg"
-            alt="Sports Equipment Hero"
-            className="w-64 h-50 drop-shadow-xl"
-          />
-        </div>
-
-        <h3 className="text-3xl font-extrabold text-[#0f1724] text-center mb-6">
-          Sports Equipment Store
-        </h3>
-
-        <p className="text-gray-800 text-center mb-8 leading-relaxed">
-          High-performance cricket and fitness equipment used by academy players.  
-          Trusted by athletes and coaches.
-        </p>
-
-        {/* Categories */}
-        <h4 className="font-bold text-xl text-[#0f1724] mb-4">Products</h4>
-
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-10">
-          {[
-            { title: "Bats", img: "/images/shop2/baTs.jpeg" },
-            { title: "Balls", img: "/images/shop2/balls.jpg" },
-            { title: "Helmets", img: "/images/shop2/helmet.jpg" },
-            { title: "Pads", img: "/images/shop2/pads.jpg" },
-            { title: "Shoes", img: "/images/shop2/shoes.jpg" },
-            { title: "gloves", img: "/images/shop1/gloves.jpg" },
-            { title: "Kits", img: "/images/shop2/kits.png" },
-          ].map((item, i) => (
-            <div
-              key={i}
-              className="relative bg-white/70 rounded-xl shadow-md overflow-hidden cursor-pointer group"
-            >
-              <img
-                src={item.img}
-                alt={item.title}
-                className="w-full h-28 object-cover group-hover:scale-110 transition duration-500"
-              />
-              <div className="absolute bottom-0 inset-x-0 bg-black/40 text-center py-1 opacity-0 group-hover:opacity-100 transition">
-                <p className="text-white text-sm font-medium">{item.title}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <a
-          href="#contact-section"
-          className="block w-full text-center py-3 rounded-xl bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:opacity-90 transition"
-        >
-          Contact for Equipment Orders
-        </a>
-      </div>
-
+      {/* Contact Shop */}
+      <button
+        onClick={() => {
+          const el = document.getElementById("contact-section");
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="
+          px-6 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-pink-500
+          text-white font-semibold shadow-md hover:opacity-90 transition
+        "
+      >
+        Contact Shop
+      </button>
     </div>
+  </div>
+</div>
   </div>
 </section>
 {/* ⭐ END SHOP SECTION ⭐ */}
