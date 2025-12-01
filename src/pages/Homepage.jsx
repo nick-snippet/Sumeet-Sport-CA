@@ -1558,7 +1558,7 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
       <footer className="bg-[#0b1020] text-gray-300 rounded-t-[40px] pt-12">
         <div className="max-w-6xl mx-auto px-6 pb-12 grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
-            <img src="/images/logo4.png" className="w-20 h-20 rounded-full mb-3 border border-gray-400" alt="logo" />
+            <img src="/images/logobg.png" className="w-20 h-20 rounded-full mb-3 border border-gray-400" alt="logo" />
             <p className=" text-2xl"><b>Sumeet Sports</b> </p> <p>Cricket Academy — Sangli</p>
           </div>
 
