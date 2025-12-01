@@ -1,18 +1,13 @@
+// src/services/uploadService.js
 import { bucket } from "../config/firebase.js";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import fs from "fs";
 
 if (!bucket) {
-  console.warn(
-    "uploadService: Firebase bucket not initialized. Uploads will fail until firebase config is fixed."
-  );
+  console.warn("uploadService: Firebase bucket not initialized.");
 }
 
-/**
- * Upload a local file (multer tmp file) to Firebase Storage
- * Returns: { publicUrl, pathInBucket }
- */
 export async function uploadFileToFirebase(localFilePath, destinationFolder = "uploads") {
   if (!bucket) {
     throw new Error("Firebase bucket not initialized");
@@ -21,7 +16,6 @@ export async function uploadFileToFirebase(localFilePath, destinationFolder = "u
   const ext = path.extname(localFilePath);
   const filename = `${destinationFolder}/${Date.now()}-${uuidv4()}${ext}`;
 
-  // Upload to Firebase Storage
   await bucket.upload(localFilePath, {
     destination: filename,
     public: false,

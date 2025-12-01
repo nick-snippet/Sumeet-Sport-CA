@@ -25,7 +25,7 @@ export default function HeroSection() {
       className="
         relative
         h-screen
-        pt-40        /* Pull hero behind transparent navbar */
+        pt-32        /* Pull hero behind transparent navbar */
         w-full
         overflow-hidden
         flex

@@ -1,62 +1,33 @@
+// src/routes/galleryRoutes.js
 import express from "express";
 import upload from "../middlewares/upload.js";
 import { firebaseAuth, requireAdmin } from "../middlewares/auth.js";
-import * as galleryControllers from "../controller/galleryControllers.js";
+import * as galleryController from "../controller/galleryControllers.js";
 
 const router = express.Router();
 
-// Public
-router.get("/", galleryControllers.listEvents);
+// Public: list all gallery images
+router.get("/", galleryController.listImages);
 
-// Admin create (multiple images)
+// Admin: create (single image)
 router.post(
   "/",
   firebaseAuth,
   requireAdmin,
-  upload.array("images", 12),
-  galleryControllers.createEvent
+  upload.single("image"),
+  galleryController.createImage
 );
 
-// Admin: Edit title/desc
+// Admin: update (title/category and optionally replace image)
 router.put(
   "/:id",
-  firebaseAuth,
-  requireAdmin,
-  galleryControllers.updateEvent
-);
-
-// Admin: Add more images
-router.post(
-  "/:id/images",
-  firebaseAuth,
-  requireAdmin,
-  upload.array("images", 12),
-  galleryControllers.addImagesToEvent
-);
-
-// Admin: Replace single image
-router.put(
-  "/:id/images/:index",
   firebaseAuth,
   requireAdmin,
   upload.single("image"),
-  galleryControllers.replaceImageInEvent
+  galleryController.updateImage
 );
 
-// Admin: Delete single image
-router.delete(
-  "/:id/images/:index",
-  firebaseAuth,
-  requireAdmin,
-  galleryControllers.deleteImageInEvent
-);
-
-// Admin delete whole event
-router.delete(
-  "/:id",
-  firebaseAuth,
-  requireAdmin,
-  galleryControllers.deleteEvent
-);
+// Admin: delete image
+router.delete("/:id", firebaseAuth, requireAdmin, galleryController.deleteImage);
 
 export default router;

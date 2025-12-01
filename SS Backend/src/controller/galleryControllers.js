@@ -1,150 +1,137 @@
 // src/controller/galleryControllers.js
+import { db } from "../config/firebase.js";
 import { uploadFileToFirebase } from "../services/uploadService.js";
-import { deleteFileFromFirebase } from "../services/deleteService.js";
+import { deleteFileFromBucket } from "../services/deleteService.js";
 
-const galleryStore = []; // { id, title, desc, images: [ { publicUrl, pathInBucket } ] }
+/**
+ * Firestore collection: "gallery"
+ * doc fields: { title, category, url, pathInBucket, createdAt }
+ */
 
-export function listEvents(req, res) {
-  res.json(galleryStore);
-}
+const COLLECTION = "gallery";
 
-export async function createEvent(req, res, next) {
+export async function listImages(req, res, next) {
   try {
-    const { title, desc } = req.body;
-    const files = req.files;
-
-    if (!files || files.length === 0) {
-      return res.status(400).json({ error: "At least one image required" });
-    }
-
-    const uploaded = [];
-
-    for (const file of files) {
-      const uploadResult = await uploadFileToFirebase(file.path, "gallery");
-      uploaded.push(uploadResult);
-    }
-
-    const event = {
-      id: Date.now().toString(),
-      title,
-      desc,
-      images: uploaded,
-    };
-
-    galleryStore.push(event);
-    res.status(201).json(event);
+    const snap = await db.collection(COLLECTION).orderBy("createdAt", "asc").get();
+    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    res.json(items);
   } catch (err) {
     next(err);
   }
 }
 
-export async function addImagesToEvent(req, res, next) {
+/**
+ * POST /api/gallery
+ * multipart/form-data with: image (file), title (optional), category (optional)
+ */
+export async function createImage(req, res, next) {
   try {
-    const { id } = req.params;
-    const files = req.files;
+    const { title = "", category = "" } = req.body;
 
-    const event = galleryStore.find((g) => g.id === id);
-    if (!event) return res.status(404).json({ error: "Event not found" });
-
-    const uploaded = [];
-    for (const file of files) {
-      const uploadResult = await uploadFileToFirebase(file.path, "gallery");
-      uploaded.push(uploadResult);
+    if (!req.file) {
+      return res.status(400).json({ error: "Image file required" });
     }
 
-    event.images.push(...uploaded);
-
-    res.json(event);
-  } catch (err) {
-    next(err);
-  }
-}
-
-export async function replaceImageInEvent(req, res, next) {
-  try {
-    const { id, index } = req.params;
-
-    const event = galleryStore.find((g) => g.id === id);
-    if (!event) return res.status(404).json({ error: "Event not found" });
-
-    const idx = parseInt(index, 10);
-    if (!event.images[idx]) {
-      return res.status(404).json({ error: "Image index not found" });
-    }
-
-    // Delete old image from Firebase
-    await deleteFileFromFirebase(event.images[idx].pathInBucket);
-
-    // Upload new image
     const uploadResult = await uploadFileToFirebase(req.file.path, "gallery");
 
-    // Replace in array
-    event.images[idx] = uploadResult;
+    const docRef = await db.collection(COLLECTION).add({
+      title,
+      category,
+      url: uploadResult.publicUrl,
+      pathInBucket: uploadResult.pathInBucket,
+      createdAt: Date.now(),
+    });
 
-    res.json(event);
+    const doc = await docRef.get();
+    res.status(201).json({ id: doc.id, ...doc.data() });
   } catch (err) {
     next(err);
   }
 }
 
-export async function deleteImageInEvent(req, res, next) {
-  try {
-    const { id, index } = req.params;
-
-    const event = galleryStore.find((g) => g.id === id);
-    if (!event) return res.status(404).json({ error: "Event not found" });
-
-    const idx = parseInt(index, 10);
-    if (!event.images[idx]) {
-      return res.status(404).json({ error: "Image index not found" });
-    }
-
-    // Delete from Firebase
-    await deleteFileFromFirebase(event.images[idx].pathInBucket);
-
-    // Remove from array
-    event.images.splice(idx, 1);
-
-    res.json(event);
-  } catch (err) {
-    next(err);
-  }
-}
-
-// NEW: update title/desc (and category if you want)
-export async function updateEvent(req, res, next) {
+/**
+ * PUT /api/gallery/:id
+ * multipart/form-data allowed for optional image replacement
+ * body: title, category
+ */
+export async function updateImage(req, res, next) {
   try {
     const { id } = req.params;
-    const { title, desc } = req.body;
+    const { title, category } = req.body;
 
-    const event = galleryStore.find((g) => g.id === id);
-    if (!event) return res.status(404).json({ error: "Event not found" });
+    const docRef = db.collection(COLLECTION).doc(id);
+    const doc = await docRef.get();
 
-    if (typeof title !== "undefined") event.title = title;
-    if (typeof desc !== "undefined") event.desc = desc;
+    if (!doc.exists) {
+      return res.status(404).json({ error: "Not found" });
+    }
 
-    res.json(event);
+    const data = doc.data();
+    const updates = {};
+
+    // Update title/category if provided
+    if (typeof title !== "undefined") updates.title = title;
+    if (typeof category !== "undefined") updates.category = category;
+
+    // If new image uploaded, upload and delete old
+    if (req.file) {
+      // upload new
+      const uploadResult = await uploadFileToFirebase(req.file.path, "gallery");
+      updates.url = uploadResult.publicUrl;
+      updates.pathInBucket = uploadResult.pathInBucket;
+
+      // delete old file (best-effort)
+      if (data.pathInBucket) {
+        try {
+          await deleteFileFromBucket(data.pathInBucket);
+        } catch (err) {
+          console.warn("Failed to delete old gallery file:", err.message);
+        }
+      }
+    }
+
+    if (Object.keys(updates).length === 0) {
+      return res.status(400).json({ error: "Nothing to update" });
+    }
+
+    updates.updatedAt = Date.now();
+
+    await docRef.update(updates);
+
+    const updatedDoc = await docRef.get();
+    res.json({ id: updatedDoc.id, ...updatedDoc.data() });
   } catch (err) {
     next(err);
   }
 }
 
-export function deleteEvent(req, res) {
-  const { id } = req.params;
+/**
+ * DELETE /api/gallery/:id
+ */
+export async function deleteImage(req, res, next) {
+  try {
+    const { id } = req.params;
+    const docRef = db.collection(COLLECTION).doc(id);
+    const doc = await docRef.get();
 
-  const idx = galleryStore.findIndex((g) => g.id === id);
-  if (idx === -1) {
-    return res.status(404).json({ error: "Not found" });
+    if (!doc.exists) return res.status(404).json({ error: "Not found" });
+
+    const data = doc.data();
+
+    // delete document
+    await docRef.delete();
+
+    // delete file from storage (best-effort)
+    if (data.pathInBucket) {
+      try {
+        await deleteFileFromBucket(data.pathInBucket);
+      } catch (err) {
+        console.warn("deleteImage: failed to delete file from bucket:", err.message);
+      }
+    }
+
+    res.json({ ok: true });
+  } catch (err) {
+    next(err);
   }
-
-  // optional: delete all images from firebase
-  const event = galleryStore[idx];
-  if (Array.isArray(event.images)) {
-    event.images.forEach((img) => {
-      if (img.pathInBucket) deleteFileFromFirebase(img.pathInBucket).catch(() => {});
-    });
-  }
-
-  galleryStore.splice(idx, 1);
-  res.json({ ok: true });
 }

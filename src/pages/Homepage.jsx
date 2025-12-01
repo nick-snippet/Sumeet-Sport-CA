@@ -6,7 +6,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../context/AuthContext";
 import CoachCard from "../components/CoachCard";
 import AwardPlayercard from "../components/AwardPlayercard";
-
+import api from "../api";
+import EditGalleryModal from "../components/modals/EditGalleryModal";
+ 
 // footer / icon imports  
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
@@ -66,12 +68,25 @@ const [modalOpen, setModalOpen] = useState(false);
 const [modalImage, setModalImage] = useState(null);
 const [currentIndex, setCurrentIndex] = useState(0);
 const [modalTitle, setModalTitle] = useState("");
+ 
+//gallery backend data and states
+// gallery data from backend
+const [galleryImages, setGalleryImages] = useState([]); // used to render grid
+const [loadingGallery, setLoadingGallery] = useState(false);
+
+// editing modal state
+const [editingImage, setEditingImage] = useState(null);
+const [editModalOpen, setEditModalOpen] = useState(false);
+
+
+
+
 
 
 const [visibleCount, setVisibleCount] = useState(12);
 
 // Gallery Images
-const galleryImages = [
+const staticGallery = [
   // ROW 1 → MPL
   { url: "/images/GLphotos/mpl1.jpeg", category: "row1", title: "Junior players" },
   { url: "/images/GLphotos/mpl2.jpeg", category: "row1", title: "Coach Guidance" },
@@ -99,7 +114,7 @@ const galleryImages = [
 
 
 // Filtering Logic
-const filteredImages = galleryImages;
+const filteredImages = staticGallery;
 
 
 // Modal functions
@@ -441,7 +456,7 @@ useEffect(() => {
     The Weekly Session Timings Are given below: 
  <ul className="list-disc pl-5 text-gray-800 space-y-2">
         <li>Morning 7 to 9 AM</li>
-        <li>Evening 4 to 6 PM</li>
+        <li>Night 4 to 6 PM</li>
         <li>Night 6 to 8 PM</li>
         <p className="text-gray-800 leading-sm text-lg">-Under Flood Light Session</p>
       </ul>  
@@ -691,7 +706,7 @@ useEffect(() => {
                 {{
                   ageWise: "Our Academy Provides Structured Coaching Programs Based On Age, Skill Level And Physical Ability.Each Batch Is Designed To Help Players Progress Step-By-Step Toward Professional Cricket",
                   ground: "Book our academy ground for matches and practice.",
-                  night: "Evening training under flood lights.",
+                  night: "Night training under flood lights.",
                   residential: "Stay + food for outstation students.",
                   competitions: "Match experience and tournaments.",
                   seasonal: "Sumeet Sports Cricket Academy is pleased to announce its Summer Coaching Camp and Residential Summer Camp for the months of April and May.",
@@ -813,12 +828,12 @@ useEffect(() => {
                 <h4 className="font-semibold text-lg">Night Practice</h4>
 
                 <p className="text-sm text-gray-700">
-                  Evening sessions for Students Better Growth.
+                  Night sessions for Students Better Growth.
                 </p>
                 <br />
                 <p className="text-1x font-bold">To Support Students With A Busy School And Class Schedule, <br />The Academy Provides:</p>
                 <ul>
-                  <li>-Evening Sessions From 6:00 PM To 8:00 PM</li>
+                  <li>-Night Sessions From 6:00 PM To 8:00 PM</li>
                   <li>-1st Ever Night Cricket Practice Facility In Sangli</li>              
                   <li>-Complete Flood-Light Setup For Safe And Professional Training Experience</li>
                 </ul>
@@ -930,8 +945,8 @@ useEffect(() => {
     {/* Summer Camp */}
     <motion.div className="w-full md:w-1/2 bg-white rounded-xl border shadow-sm">
       <img
-        src="/images/seasonal/summer.jpeg"
-        className="w-full h-40 object-cover rounded-t-md"
+        src="/images/seasonal/summerCamp.jpg"
+        className="w-full h-45 object-cover rounded-t-md"
       />
       <div className="p-4">
         <h4 className="font-semibold text-xl mb-2">
