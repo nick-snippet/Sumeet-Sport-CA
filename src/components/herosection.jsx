@@ -70,22 +70,38 @@ export default function HeroSection() {
         </p>
 
         <div className="mt-8 flex justify-center gap-4 flex-wrap">
-          <Link
-            to="/about"
-            className="
-              px-6 py-3 rounded-full
-              bg-gradient-to-r from-sky-500 to-pink-500
-              text-white shadow-lg
-              hover:scale-105 transition
-            "
-          >
-            Learn More
-          </Link>
 
-         <a className="px-6 py-3 rounded-full border border-gray-300 text-black hover:bg-gray-50 transition" href="#contact-section">
-                    Contact Us
-                  </a>
-        </div>
+  {/* Learn More → scroll to about-section */}
+  <button
+    onClick={() => {
+      document.getElementById("about-section")?.scrollIntoView({
+        behavior: "smooth",
+      });
+    }}
+    className="
+      px-6 py-3 rounded-full
+      bg-gradient-to-r from-sky-500 to-pink-500
+      text-white shadow-lg
+      hover:scale-105 transition
+    "
+  >
+    Learn More
+  </button>
+
+  {/* Contact Us → already correct */}
+  <a
+    href="#contact-section"
+    className="
+      px-6 py-3 rounded-full
+      border border-gray-300
+      text-black hover:bg-gray-50 transition
+    "
+  >
+    Contact Us
+  </a>
+
+</div>
+
       </motion.div>
 
       {/* FADE TO WHITE BOTTOM */}

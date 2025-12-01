@@ -371,7 +371,7 @@ useEffect(() => {
                 </p>
 
                 <div className="flex gap-4 flex-wrap">
-                  <a className="px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:scale-105 transition" href="#about-section">
+                  <a className="px-6 py-3 rounded-full bg-gradient-to-r from-sky-500 to-pink-500 text-white font-semibold shadow-md hover:scale-105 transition" href="#programs-section">
                     Learn More
                   </a>
                   <a className="px-6 py-3 rounded-full border border-gray-300 text-gray-800 hover:bg-gray-50 transition" href="#contact-section">
@@ -405,7 +405,7 @@ useEffect(() => {
           ))}
         </div>
       </section>
-{/* ABOUT US  SECTION  */}
+{/* ABOUT US  SECTION  */} 
 <section id="about-extra" className="py-12 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-6xl mx-auto px-6">
     <h2 className="text-4xl md:text-4xl font-extrabold text-[#0f2547] mb-4">
@@ -1037,7 +1037,7 @@ useEffect(() => {
         items: [
           { label: "Badminton Racquets", img: "/images/shop2/racket.png" },
           { label: "Football / Volleyball", img: "/images/shop2/football.png" },
-          { label: "Basketballs", img: "/images/shop2/basket.png" },
+          { label: "Basketballs Acsessories", img: "/images/shop2/basket.png" },
           { label: "Carrom Boards", img: "/images/shop2/carrom.png" },
           { label: "Table Tennis Kits", img: "/images/shop2/table_tenis.png" },
           { label: "Swimming Gear", img: "/images/shop2/swims.png" },
@@ -1051,7 +1051,7 @@ useEffect(() => {
           { label: "Shorts & Lowers", img: "/images/shop1/shorts.png" },
           { label: "Hoodies & Warmups", img: "/images/shop1/hoodies.jpg" },
           { label: "Cricket Caps ", img: "/images/shop1/caps.jpeg" },
-          { label: "Track Suits", img: "/images/shop2/tracks.png" },
+          { label: "Track Suits For Sports", img: "/images/shop2/TrackN.png" },
           { label: "Arm Sleeves ", img: "/images/shop1/hand.png" },
         ]
       }

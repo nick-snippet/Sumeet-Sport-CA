@@ -72,19 +72,19 @@ export default function Navbar() {
       `}
     >
       {/* SPACING TO KEEP NAV FLOATING APART FROM HERO LIKE BEFORE */}
-      <div className="pt-4"></div>
+      <div className="pt-1 md:pt-4"></div>
 
       <div className="max-w-7xl mx-auto relative flex items-center justify-between px-6">
         
         {/* LEFT LOGO */}
         <Link
           to="/"
-          className="pointer-events-auto  flex flex-col items-center gap-2  select-none"
+          className="pointer-events-auto  flex flex-col items-center gap-1  select-none"
           onClick={() => scrollToSection("home-section")}
         >
           <img
             src="/images/logobg.png"
-            className="h-25 w-25 rounded-2x shadow-md object-cover"
+            className="h-14 w-14 md:h-24 md:w-24 rounded-2xl shadow-md object-cover"
             alt="logo"
           />
           <span className="text-[20px] font-extrabold bg-gradient-to-r from-sky-500 to-blue-950 bg-clip-text text-transparent">
