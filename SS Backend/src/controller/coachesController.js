@@ -1,35 +1,42 @@
-// src/controller/coachesController.js
+import { db } from "../config/firebase.js";
 import { uploadFileToFirebase } from "../services/uploadService.js";
-import { deleteFileFromFirebase } from "../services/deleteService.js";
+import { deleteFileFromBucket } from "../utils/storageUtils.js";
 
-// Temporary in-memory store (replace with Firestore later)
-const coachesStore = []; // { id, name, title, description, imageUrl, pathInBucket }
+const COACHES_COLLECTION = "coaches";
 
-export function listCoaches(req, res) {
-  return res.json(coachesStore);
+export async function listCoaches(req, res, next) {
+  try {
+    const snap = await db.collection(COACHES_COLLECTION)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const coaches = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    res.json(coaches);
+
+  } catch (err) {
+    next(err);
+  }
 }
 
 export async function createCoach(req, res, next) {
   try {
-    const { name, title, description, instagram } = req.body;
-    if (!req.file) {
-      return res.status(400).json({ error: "Image file required" });
-    }
+    const { name, title, description } = req.body;
+    if (!req.file) return res.status(400).json({ error: "Image file required" });
 
-    const uploadResult = await uploadFileToFirebase(req.file.path, "coaches");
+    const uploaded = await uploadFileToFirebase(req.file.path, "coaches");
 
-    const newCoach = {
-      id: Date.now().toString(),
+    const ref = await db.collection(COACHES_COLLECTION).add({
       name,
       title,
       description,
-      instagram,
-      imageUrl: uploadResult.publicUrl,
-      pathInBucket: uploadResult.pathInBucket,
-    };
+      imageUrl: uploaded.publicUrl,
+      pathInBucket: uploaded.pathInBucket,
+      createdAt: Date.now(),
+    });
 
-    coachesStore.push(newCoach);
-    return res.status(201).json(newCoach);
+    const doc = await ref.get();
+    res.status(201).json({ id: doc.id, ...doc.data() });
+
   } catch (err) {
     next(err);
   }
@@ -38,56 +45,59 @@ export async function createCoach(req, res, next) {
 export async function updateCoach(req, res, next) {
   try {
     const { id } = req.params;
-    const { name, title, description, instagram } = req.body;
+    const ref = db.collection(COACHES_COLLECTION).doc(id);
+    const snap = await ref.get();
+    if (!snap.exists) return res.status(404).json({ error: "Coach not found" });
 
-    const idx = coachesStore.findIndex((c) => c.id === id);
-    if (idx === -1) return res.status(404).json({ error: "Coach not found" });
+    const data = snap.data();
+    const updateData = {};
 
-    const coach = coachesStore[idx];
+    const { name, title, description } = req.body;
+    if (name !== undefined) updateData.name = name;
+    if (title !== undefined) updateData.title = title;
+    if (description !== undefined) updateData.description = description;
 
-    // If new file present, delete old and upload new
     if (req.file) {
-      if (coach.pathInBucket) {
-        try {
-          await deleteFileFromFirebase(coach.pathInBucket);
-        } catch (e) {
-          console.warn("Failed to delete old coach image:", e.message);
-        }
+      const uploaded = await uploadFileToFirebase(req.file.path, "coaches");
+
+      // Delete old image
+      if (data.pathInBucket) {
+        await deleteFileFromBucket(data.pathInBucket);
       }
 
-      const uploadResult = await uploadFileToFirebase(req.file.path, "coaches");
-      coach.imageUrl = uploadResult.publicUrl;
-      coach.pathInBucket = uploadResult.pathInBucket;
+      updateData.imageUrl = uploaded.publicUrl;
+      updateData.pathInBucket = uploaded.pathInBucket;
     }
 
-    // Update text fields (only if provided)
-    if (typeof name !== "undefined") coach.name = name;
-    if (typeof title !== "undefined") coach.title = title;
-    if (typeof description !== "undefined") coach.description = description;
-    if (typeof instagram !== "undefined") coach.instagram = instagram;
+    updateData.updatedAt = Date.now();
+    await ref.update(updateData);
 
-    coachesStore[idx] = coach;
-    res.json(coach);
+    const updated = await ref.get();
+    res.json({ id, ...updated.data() });
+
   } catch (err) {
     next(err);
   }
 }
 
-export function deleteCoach(req, res) {
-  const { id } = req.params;
+export async function deleteCoach(req, res, next) {
+  try {
+    const { id } = req.params;
+    const ref = db.collection(COACHES_COLLECTION).doc(id);
+    const snap = await ref.get();
 
-  const idx = coachesStore.findIndex((c) => c.id === id);
-  if (idx === -1) {
-    return res.status(404).json({ error: "Not found" });
+    if (!snap.exists) return res.status(404).json({ error: "Not found" });
+
+    const data = snap.data();
+
+    if (data.pathInBucket) {
+      await deleteFileFromBucket(data.pathInBucket);
+    }
+
+    await ref.delete();
+    res.json({ ok: true });
+
+  } catch (err) {
+    next(err);
   }
-
-  // optionally delete file from storage if exists
-  const coach = coachesStore[idx];
-  if (coach.pathInBucket) {
-    // fire-and-forget; you may want to await
-    deleteFileFromFirebase(coach.pathInBucket).catch((e) => console.warn(e.message));
-  }
-
-  coachesStore.splice(idx, 1);
-  return res.json({ ok: true });
 }

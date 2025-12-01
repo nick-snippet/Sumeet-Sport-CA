@@ -7,7 +7,7 @@ import About from "./pages/AboutPage";
 import Contact from "./pages/ContactPage";
 import GalleryPage from "./pages/GalleryPage";
 
-import AdminUpload from "./components/AdminUpload"; 
+ 
 
 function App() {
   return (
@@ -22,8 +22,7 @@ function App() {
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/contact" element={<Contact />} />
 
-          {/* ADMIN UPLOAD PANEL */}
-          <Route path="/upload" element={<AdminUpload />} />
+          
 
           {/* UNKNOWN ROUTES */}
           <Route path="*" element={<Navigate to="/" replace />} />

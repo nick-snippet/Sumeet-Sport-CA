@@ -1,33 +1,41 @@
-// src/controller/playerControllers.js
+import { db } from "../config/firebase.js";
 import { uploadFileToFirebase } from "../services/uploadService.js";
-import { deleteFileFromFirebase } from "../services/deleteService.js";
+import { deleteFileFromBucket } from "../utils/storageUtils.js";
 
-const playersStore = []; // { id, name, tournament, imageUrl, pathInBucket }
+const PLAYERS_COLLECTION = "players";
 
-export function listPlayers(req, res) {
-  res.json(playersStore);
+export async function listPlayers(req, res, next) {
+  try {
+    const snap = await db.collection(PLAYERS_COLLECTION)
+      .orderBy("createdAt", "desc")
+      .get();
+
+    const players = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    res.json(players);
+
+  } catch (err) {
+    next(err);
+  }
 }
 
 export async function createPlayer(req, res, next) {
   try {
     const { name, tournament } = req.body;
+    if (!req.file) return res.status(400).json({ error: "Image file required" });
 
-    if (!req.file) {
-      return res.status(400).json({ error: "Image file required" });
-    }
+    const uploaded = await uploadFileToFirebase(req.file.path, "players");
 
-    const uploadResult = await uploadFileToFirebase(req.file.path, "players");
-
-    const newPlayer = {
-      id: Date.now().toString(),
+    const ref = await db.collection(PLAYERS_COLLECTION).add({
       name,
       tournament,
-      imageUrl: uploadResult.publicUrl,
-      pathInBucket: uploadResult.pathInBucket,
-    };
+      imageUrl: uploaded.publicUrl,
+      pathInBucket: uploaded.pathInBucket,
+      createdAt: Date.now(),
+    });
 
-    playersStore.push(newPlayer);
-    return res.status(201).json(newPlayer);
+    const doc = await ref.get();
+    res.status(201).json({ id: doc.id, ...doc.data() });
+
   } catch (err) {
     next(err);
   }
@@ -36,49 +44,58 @@ export async function createPlayer(req, res, next) {
 export async function updatePlayer(req, res, next) {
   try {
     const { id } = req.params;
+    const ref = db.collection(PLAYERS_COLLECTION).doc(id);
+    const snap = await ref.get();
+
+    if (!snap.exists) return res.status(404).json({ error: "Player not found" });
+
+    const data = snap.data();
+    const updateData = {};
+
     const { name, tournament } = req.body;
-
-    const idx = playersStore.findIndex((p) => p.id === id);
-    if (idx === -1) return res.status(404).json({ error: "Player not found" });
-
-    const player = playersStore[idx];
+    if (name !== undefined) updateData.name = name;
+    if (tournament !== undefined) updateData.tournament = tournament;
 
     if (req.file) {
-      if (player.pathInBucket) {
-        try {
-          await deleteFileFromFirebase(player.pathInBucket);
-        } catch (e) {
-          console.warn("Failed to delete old player image:", e.message);
-        }
+      const uploaded = await uploadFileToFirebase(req.file.path, "players");
+
+      if (data.pathInBucket) {
+        await deleteFileFromBucket(data.pathInBucket);
       }
-      const uploadResult = await uploadFileToFirebase(req.file.path, "players");
-      player.imageUrl = uploadResult.publicUrl;
-      player.pathInBucket = uploadResult.pathInBucket;
+
+      updateData.imageUrl = uploaded.publicUrl;
+      updateData.pathInBucket = uploaded.pathInBucket;
     }
 
-    if (typeof name !== "undefined") player.name = name;
-    if (typeof tournament !== "undefined") player.tournament = tournament;
+    updateData.updatedAt = Date.now();
+    await ref.update(updateData);
 
-    playersStore[idx] = player;
-    res.json(player);
+    const updated = await ref.get();
+    res.json({ id, ...updated.data() });
+
   } catch (err) {
     next(err);
   }
 }
 
-export function deletePlayer(req, res) {
-  const { id } = req.params;
+export async function deletePlayer(req, res, next) {
+  try {
+    const { id } = req.params;
+    const ref = db.collection(PLAYERS_COLLECTION).doc(id);
+    const snap = await ref.get();
 
-  const idx = playersStore.findIndex((p) => p.id === id);
-  if (idx === -1) {
-    return res.status(404).json({ error: "Not found" });
+    if (!snap.exists) return res.status(404).json({ error: "Not found" });
+
+    const data = snap.data();
+
+    if (data.pathInBucket) {
+      await deleteFileFromBucket(data.pathInBucket);
+    }
+
+    await ref.delete();
+    res.json({ ok: true });
+
+  } catch (err) {
+    next(err);
   }
-
-  const player = playersStore[idx];
-  if (player.pathInBucket) {
-    deleteFileFromFirebase(player.pathInBucket).catch((e) => console.warn(e.message));
-  }
-
-  playersStore.splice(idx, 1);
-  res.json({ ok: true });
 }

@@ -1,33 +1,35 @@
-// src/routes/galleryRoutes.js
 import express from "express";
 import upload from "../middlewares/upload.js";
 import { firebaseAuth, requireAdmin } from "../middlewares/auth.js";
-import * as galleryController from "../controller/galleryControllers.js";
+import * as galleryControllers from "../controller/galleryControllers.js";
 
 const router = express.Router();
 
-// Public: list all gallery images
-router.get("/", galleryController.listImages);
+router.get("/", galleryControllers.listEvents);
+router.get("/:id", galleryControllers.getEventById?.bind(null)); // optional
 
-// Admin: create (single image)
 router.post(
   "/",
   firebaseAuth,
   requireAdmin,
-  upload.single("image"),
-  galleryController.createImage
+  upload.array("images", 24),
+  galleryControllers.createEvent
 );
 
-// Admin: update (title/category and optionally replace image)
+// update event (fields or images)
 router.put(
   "/:id",
   firebaseAuth,
   requireAdmin,
-  upload.single("image"),
-  galleryController.updateImage
+  upload.array("files", 24), // frontend can send files under 'files' or 'images' — be consistent
+  galleryControllers.updateEvent
 );
 
-// Admin: delete image
-router.delete("/:id", firebaseAuth, requireAdmin, galleryController.deleteImage);
+router.delete(
+  "/:id",
+  firebaseAuth,
+  requireAdmin,
+  galleryControllers.deleteEvent
+);
 
 export default router;

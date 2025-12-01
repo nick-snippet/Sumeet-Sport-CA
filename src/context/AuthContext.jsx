@@ -1,22 +1,32 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // {name, role}
+  const [user, setUser] = useState(null);
 
-  const login = (username, password) => {
-    if (username === "admin" && password === "admin123") {
-      setUser({ name: "Admin", role: "admin" });
-    } else {
-      setUser({ name: username, role: "user" });
+  // Restore admin login from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("ss-admin");
+    if (saved === "true") {
+      setUser({ role: "admin" });
     }
+  }, []);
+
+  // Login as admin
+  const loginAsAdmin = () => {
+    setUser({ role: "admin" });
+    localStorage.setItem("ss-admin", "true");
   };
 
-  const logout = () => setUser(null);
+  // Logout admin
+  const logoutAdmin = () => {
+    setUser(null);
+    localStorage.removeItem("ss-admin");
+  };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, loginAsAdmin, logoutAdmin }}>
       {children}
     </AuthContext.Provider>
   );

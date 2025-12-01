@@ -78,6 +78,35 @@ const [loadingGallery, setLoadingGallery] = useState(false);
 const [editingImage, setEditingImage] = useState(null);
 const [editModalOpen, setEditModalOpen] = useState(false);
 
+const [backendGallery, setBackendGallery] = useState([]);
+
+
+useEffect(() => {
+  async function loadGallery() {
+    try {
+      const res = await fetch("YOUR_BACKEND_URL/api/gallery");
+      const data = await res.json();
+
+      // flatten each event → multiple images
+      const dynamicImages = data.flatMap(ev =>
+        ev.images.map(img => ({
+          id: img.id,
+          url: img.publicUrl,
+          title: ev.title,
+          category: ev.category || "row1", // or default
+          eventId: ev.id,
+          isDynamic: true
+        }))
+      );
+
+      setBackendGallery(dynamicImages);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  loadGallery();
+}, []);
 
 
 

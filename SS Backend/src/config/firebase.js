@@ -1,66 +1,54 @@
-// src/config/firebase.js
-// Firebase Admin initialization for backend (Node.js Express)
+// ---------------------------------------------------------
+// 🔥 Firebase Admin SDK Initialization (Backend)
+// ---------------------------------------------------------
+//
+// REQUIRED .env VALUES (EXAMPLE):
+//
+// FIREBASE_PROJECT_ID=sumeet-sports-app
+// FIREBASE_CLIENT_EMAIL=firebase-adminsdk-abc12@sumeet-sports-app.iam.gserviceaccount.com
+//
+// IMPORTANT: PRIVATE KEY FORMAT MUST BE EXACT
+//
+// FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG...\n-----END PRIVATE KEY-----\n"
+//
+// FIREBASE_STORAGE_BUCKET=sumeet-sports-app.appspot.com
+//
+// ---------------------------------------------------------
 
 import admin from "firebase-admin";
-import dotenv from "dotenv";
 
-dotenv.config();
+// Fix private key formatting completely
+const FIXED_PRIVATE_KEY = process.env.FIREBASE_PRIVATE_KEY
+  ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
+  : undefined;
 
-/**
- * ============================
- * 🔥 HOW TO FILL THE .ENV FILE
- * ============================
- *
- * 1️⃣ FIREBASE_PROJECT_ID
- *     • Go to: Firebase Console → Project Settings → General
- *     • Copy “Project ID”
- *
- * 2️⃣ FIREBASE_CLIENT_EMAIL
- *     • Go to: Project Settings → Service Accounts
- *     • Under “Firebase Admin SDK”, copy: client_email
- *
- * 3️⃣ FIREBASE_PRIVATE_KEY
- *     • In the same Service Accounts section, click:
- *           "Generate new private key" → downloads JSON
- *     • Inside the JSON, copy the entire `private_key` value.
- *     • Replace ALL newlines with `\n`
- *
- *        Example:
- *        FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nABC123...\n-----END PRIVATE KEY-----\n"
- *
- * 4️⃣ FIREBASE_STORAGE_BUCKET
- *     • Go to Firebase Console → Storage
- *     • At the top, you will see something like:
- *           gs://your-project-id.appspot.com
- *     • Put only:
- *           your-project-id.appspot.com
- *
- * 5️⃣ Frontend VITE_FIREBASE_* values
- *     • These come from Firebase Console → Project Settings → General → "Your Apps" → Web App
- *     • These are NOT used in backend; they are only for your frontend.
- */
+// Safety checks for missing env
+if (!process.env.FIREBASE_PROJECT_ID) console.error("❌ Missing FIREBASE_PROJECT_ID");
+if (!process.env.FIREBASE_CLIENT_EMAIL) console.error("❌ Missing FIREBASE_CLIENT_EMAIL");
+if (!FIXED_PRIVATE_KEY) console.error("❌ Missing FIREBASE_PRIVATE_KEY");
+if (!process.env.FIREBASE_STORAGE_BUCKET) console.error("❌ Missing FIREBASE_STORAGE_BUCKET");
 
-// Fix private key formatting (\n → actual newlines)
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
-
-// Initialize Firebase Admin SDK once
+// Initialize Admin SDK (only once)
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey,
+        privateKey: FIXED_PRIVATE_KEY,
       }),
       storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     });
-  } catch (err) {
-    console.error("Failed to initialize Firebase Admin:", err);
+
+    console.log("✅ Firebase Admin initialized successfully");
+
+  } catch (error) {
+    console.error("❌ Firebase Admin Initialization Failed:", error);
   }
 }
 
-// Export Firebase admin tools
-const db = admin.firestore();
-const bucket = admin.storage().bucket();
+// Export Firestore & Storage
+export const db = admin.firestore();
+export const bucket = admin.storage().bucket();
 
-export { admin, db, bucket };
+export default admin;

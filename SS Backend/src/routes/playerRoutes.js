@@ -5,10 +5,8 @@ import * as playerControllers from "../controller/playerControllers.js";
 
 const router = express.Router();
 
-// Public list
 router.get("/", playerControllers.listPlayers);
 
-// Admin create (single image)
 router.post(
   "/",
   firebaseAuth,
@@ -17,7 +15,6 @@ router.post(
   playerControllers.createPlayer
 );
 
-// Admin update
 router.put(
   "/:id",
   firebaseAuth,
@@ -26,7 +23,6 @@ router.put(
   playerControllers.updatePlayer
 );
 
-// Admin delete
 router.delete(
   "/:id",
   firebaseAuth,

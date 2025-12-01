@@ -5,10 +5,8 @@ import * as coachesController from "../controller/coachesController.js";
 
 const router = express.Router();
 
-// Public read
 router.get("/", coachesController.listCoaches);
 
-// Admin create (single image)
 router.post(
   "/",
   firebaseAuth,
@@ -17,7 +15,6 @@ router.post(
   coachesController.createCoach
 );
 
-// Admin update (supports optional image)
 router.put(
   "/:id",
   firebaseAuth,
@@ -26,7 +23,6 @@ router.put(
   coachesController.updateCoach
 );
 
-// Admin delete
 router.delete(
   "/:id",
   firebaseAuth,

@@ -1,44 +1,47 @@
 // src/controller/galleryControllers.js
 import { db } from "../config/firebase.js";
 import { uploadFileToFirebase } from "../services/uploadService.js";
-import { deleteFileFromBucket } from "../services/deleteService.js";
+import { deleteFileFromBucket } from "../utils/storageUtils.js";
+
+const GALLERY_COLLECTION = "gallery";
 
 /**
- * Firestore collection: "gallery"
- * doc fields: { title, category, url, pathInBucket, createdAt }
+ * listEvents — returns events ordered by createdAt (newest first)
  */
-
-const COLLECTION = "gallery";
-
-export async function listImages(req, res, next) {
+export async function listEvents(req, res, next) {
   try {
-    const snap = await db.collection(COLLECTION).orderBy("createdAt", "asc").get();
-    const items = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
-    res.json(items);
+    const snap = await db.collection(GALLERY_COLLECTION).orderBy("createdAt", "desc").get();
+    const events = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    res.json(events);
   } catch (err) {
     next(err);
   }
 }
 
 /**
- * POST /api/gallery
- * multipart/form-data with: image (file), title (optional), category (optional)
+ * createEvent — expects form-data: title, desc, category (optional), images[] (multipart)
  */
-export async function createImage(req, res, next) {
+export async function createEvent(req, res, next) {
   try {
-    const { title = "", category = "" } = req.body;
+    const { title = "", desc = "", category = "" } = req.body;
+    const files = req.files || [];
 
-    if (!req.file) {
-      return res.status(400).json({ error: "Image file required" });
+    if (!files.length) return res.status(400).json({ error: "At least one image required" });
+
+    const uploaded = [];
+    for (const file of files) {
+      const resu = await uploadFileToFirebase(file.path, "gallery");
+      uploaded.push({
+        imageUrl: resu.publicUrl,
+        pathInBucket: resu.pathInBucket,
+      });
     }
 
-    const uploadResult = await uploadFileToFirebase(req.file.path, "gallery");
-
-    const docRef = await db.collection(COLLECTION).add({
+    const docRef = await db.collection(GALLERY_COLLECTION).add({
       title,
+      desc,
       category,
-      url: uploadResult.publicUrl,
-      pathInBucket: uploadResult.pathInBucket,
+      images: uploaded, // preserve upload order
       createdAt: Date.now(),
     });
 
@@ -50,86 +53,92 @@ export async function createImage(req, res, next) {
 }
 
 /**
- * PUT /api/gallery/:id
- * multipart/form-data allowed for optional image replacement
- * body: title, category
+ * updateEvent — two modes:
+ *  - replace entire event fields (title, desc, category) and optionally replace images[]
+ *  - replace single image inside images[] (if you send imageIndex in body + single file)
+ *
+ * Expect:
+ *  - multipart: files[] (optional)
+ *  - body: title, desc, category, imageIndex (optional integer)
  */
-export async function updateImage(req, res, next) {
+export async function updateEvent(req, res, next) {
   try {
     const { id } = req.params;
-    const { title, category } = req.body;
-
-    const docRef = db.collection(COLLECTION).doc(id);
+    const docRef = db.collection(GALLERY_COLLECTION).doc(id);
     const doc = await docRef.get();
-
-    if (!doc.exists) {
-      return res.status(404).json({ error: "Not found" });
-    }
+    if (!doc.exists) return res.status(404).json({ error: "Event not found" });
 
     const data = doc.data();
-    const updates = {};
+    const payload = {};
+    const { title, desc, category } = req.body;
+    if (title !== undefined) payload.title = title;
+    if (desc !== undefined) payload.desc = desc;
+    if (category !== undefined) payload.category = category;
 
-    // Update title/category if provided
-    if (typeof title !== "undefined") updates.title = title;
-    if (typeof category !== "undefined") updates.category = category;
+    const files = req.files || [];
+    const imageIndex = req.body.imageIndex !== undefined ? parseInt(req.body.imageIndex, 10) : undefined;
 
-    // If new image uploaded, upload and delete old
-    if (req.file) {
-      // upload new
-      const uploadResult = await uploadFileToFirebase(req.file.path, "gallery");
-      updates.url = uploadResult.publicUrl;
-      updates.pathInBucket = uploadResult.pathInBucket;
-
-      // delete old file (best-effort)
-      if (data.pathInBucket) {
-        try {
-          await deleteFileFromBucket(data.pathInBucket);
-        } catch (err) {
-          console.warn("Failed to delete old gallery file:", err.message);
-        }
+    // If imageIndex is provided and a single file is sent -> replace that image only
+    if (imageIndex !== undefined && files.length === 1) {
+      const oldImages = Array.isArray(data.images) ? data.images : [];
+      const idx = imageIndex;
+      if (idx < 0 || idx >= oldImages.length) {
+        return res.status(400).json({ error: "imageIndex out of range" });
       }
+
+      // upload new image
+      const uploadResult = await uploadFileToFirebase(files[0].path, "gallery");
+      // delete old file
+      const oldPath = oldImages[idx].pathInBucket;
+      if (oldPath) await deleteFileFromBucket(oldPath);
+
+      // replace in array (preserve order)
+      oldImages[idx] = {
+        imageUrl: uploadResult.publicUrl,
+        pathInBucket: uploadResult.pathInBucket,
+      };
+
+      payload.images = oldImages;
+    } else if (files.length > 0) {
+      // If multiple files provided -> append in order after existing images
+      const existing = Array.isArray(data.images) ? data.images : [];
+      const uploaded = [];
+      for (const f of files) {
+        const r = await uploadFileToFirebase(f.path, "gallery");
+        uploaded.push({ imageUrl: r.publicUrl, pathInBucket: r.pathInBucket });
+      }
+      // append while preserving existing order
+      payload.images = [...existing, ...uploaded];
     }
 
-    if (Object.keys(updates).length === 0) {
-      return res.status(400).json({ error: "Nothing to update" });
-    }
+    payload.updatedAt = Date.now();
+    await docRef.update(payload);
 
-    updates.updatedAt = Date.now();
-
-    await docRef.update(updates);
-
-    const updatedDoc = await docRef.get();
-    res.json({ id: updatedDoc.id, ...updatedDoc.data() });
+    const updated = await docRef.get();
+    res.json({ id: updated.id, ...updated.data() });
   } catch (err) {
     next(err);
   }
 }
 
 /**
- * DELETE /api/gallery/:id
+ * deleteEvent — deletes event doc and all images inside Storage
  */
-export async function deleteImage(req, res, next) {
+export async function deleteEvent(req, res, next) {
   try {
     const { id } = req.params;
-    const docRef = db.collection(COLLECTION).doc(id);
+    const docRef = db.collection(GALLERY_COLLECTION).doc(id);
     const doc = await docRef.get();
-
     if (!doc.exists) return res.status(404).json({ error: "Not found" });
 
-    const data = doc.data();
-
-    // delete document
-    await docRef.delete();
-
-    // delete file from storage (best-effort)
-    if (data.pathInBucket) {
-      try {
-        await deleteFileFromBucket(data.pathInBucket);
-      } catch (err) {
-        console.warn("deleteImage: failed to delete file from bucket:", err.message);
+    const images = doc.data().images || [];
+    for (const img of images) {
+      if (img.pathInBucket) {
+        await deleteFileFromBucket(img.pathInBucket);
       }
     }
 
+    await docRef.delete();
     res.json({ ok: true });
   } catch (err) {
     next(err);

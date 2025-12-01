@@ -1,29 +1,31 @@
 import React, { useState } from "react";
-import Upload from "./upload";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export default function AdminGate() {
   const [pass, setPass] = useState("");
-  const [granted, setGranted] = useState(false);
+  const { loginAsAdmin } = useAuth();
+  const navigate = useNavigate();
 
-  const adminPassword = "cricket123"; // 🔐 Backend protected
+  const correctPassword = "cricket123";
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (pass === adminPassword) {
-      setGranted(true);
+
+    if (pass === correctPassword) {
+      loginAsAdmin();         // 🔥 set global admin role
+      navigate("/");          // 🔥 redirect to homepage
     } else {
       alert("Incorrect Password");
-      window.location.href = "/";
+      navigate("/");
     }
   };
-
-  if (granted) return <Upload />;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <div className="p-6 rounded-xl shadow-lg w-full max-w-sm text-center border">
-        <h2 className="text-2xl font-bold mb-4">Admin Access</h2>
-        <p className="mb-4 text-gray-600">Enter admin password to continue</p>
+        <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
+        <p className="mb-4 text-gray-600">Enter admin password</p>
 
         <form onSubmit={handleSubmit}>
           <input
@@ -33,11 +35,12 @@ export default function AdminGate() {
             value={pass}
             onChange={(e) => setPass(e.target.value)}
           />
+
           <button
             type="submit"
             className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
           >
-            Unlock Dashboard
+            Unlock Admin Mode
           </button>
         </form>
       </div>
