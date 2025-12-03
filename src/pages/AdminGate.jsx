@@ -1,48 +1,85 @@
+// src/pages/AdminGate.jsx
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 export default function AdminGate() {
-  const [pass, setPass] = useState("");
-  const { loginAsAdmin } = useAuth();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const correctPassword = "cricket123";
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true);
 
-    if (pass === correctPassword) {
-      loginAsAdmin();         // 🔥 set global admin role
-      navigate("/");          // 🔥 redirect to homepage
-    } else {
-      alert("Incorrect Password");
-      navigate("/");
+    try {
+      await login(email, password);
+
+      // Give Firebase time to refresh token/claims
+      setTimeout(() => navigate("/"), 300);
+
+    } catch (err) {
+      console.error("Admin login failed:", err);
+      alert("Invalid admin email or password");
     }
-  };
+
+    setLoading(false);
+  }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-white">
-      <div className="p-6 rounded-xl shadow-lg w-full max-w-sm text-center border">
-        <h2 className="text-2xl font-bold mb-4">Admin Login</h2>
-        <p className="mb-4 text-gray-600">Enter admin password</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-sky-200 to-pink-200 px-4">
+      <div className="w-full max-w-sm bg-white rounded-2xl shadow-xl p-8 border border-gray-200">
 
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            placeholder="Enter Password"
-            className="w-full px-4 py-2 border rounded-md mb-4"
-            value={pass}
-            onChange={(e) => setPass(e.target.value)}
-          />
+        <h2 className="text-3xl text-center font-bold mb-2 text-[#0f2547]">
+          Admin Login
+        </h2>
 
+        <p className="text-center text-gray-600 mb-6">
+          Enter admin credentials to access dashboard
+        </p>
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+
+          {/* Email */}
+          <div>
+            <label className="text-gray-800 text-sm font-medium">Email</label>
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@sumeetsports.com"
+              className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-sky-200"
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="text-gray-800 text-sm font-medium">Password</label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter admin password"
+              className="mt-2 w-full px-4 py-2 rounded-lg border border-gray-300 bg-white focus:ring focus:ring-sky-200"
+            />
+          </div>
+
+          {/* Login Button */}
           <button
             type="submit"
-            className="w-full bg-black text-white py-2 rounded-md hover:bg-gray-800"
+            disabled={loading}
+            className="w-full py-3 bg-[#0f2547] text-white rounded-lg font-semibold hover:bg-[#1b396a] transition"
           >
-            Unlock Admin Mode
+            {loading ? "Logging in..." : "Login"}
           </button>
+
         </form>
+
       </div>
     </div>
   );

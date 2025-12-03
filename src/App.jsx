@@ -6,7 +6,7 @@ import Home from "./pages/Homepage";
 import About from "./pages/AboutPage";
 import Contact from "./pages/ContactPage";
 import GalleryPage from "./pages/GalleryPage";
-
+import AdminGate from "./pages/AdminGate";
  
 
 function App() {
@@ -21,7 +21,8 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/gallery" element={<GalleryPage />} />
           <Route path="/contact" element={<Contact />} />
-
+          <Route path="/admin" element={<AdminGate />} />
+           
           
 
           {/* UNKNOWN ROUTES */}
