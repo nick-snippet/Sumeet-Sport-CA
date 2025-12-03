@@ -1,7 +1,7 @@
 // src/context/AuthContext.jsx
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-// ✅ FIXED IMPORT
+// ✅ FIXED IMPORT 
 import { auth } from "../firebase";
 
 import {

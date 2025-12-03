@@ -14,11 +14,16 @@ import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
 import { Facebook } from "lucide-react";
 
+import AddPlayerModal from "../components/modals/AddPlayerModal";
+import AddCoachModal from "../components/modals/AddCoachModal";
+
+
 export default function HomePage() {
   const { user } = useAuth();
   const [selectedCard, setSelectedCard] = useState(null);
 
-  
+const [addPlayerOpen, setAddPlayerOpen] = useState(false);
+const [addCoachOpen, setAddCoachOpen] = useState(false);
   
   // Vision/Mission/Goals modal state
   const [selectedVision, setSelectedVision] = useState(null);
@@ -69,7 +74,7 @@ const [modalImage, setModalImage] = useState(null);
 const [currentIndex, setCurrentIndex] = useState(0);
 const [modalTitle, setModalTitle] = useState("");
  
-//gallery backend data and states
+//gallery backend data and states 
 // gallery data from backend
 const [galleryImages, setGalleryImages] = useState([]); // used to render grid
 const [loadingGallery, setLoadingGallery] = useState(false);
@@ -125,7 +130,7 @@ const staticGallery = [
   // ROW 2 → Women Cricket
   { url: "/images/football1.jpeg", category: "row2", title: "Early Morning Practice" },
   { url: "/images/ng.jpeg", category: "row2", title: "Guidance to Juniors" },
-  { url: "/images/compT.jpeg", category: "row2", title: "Match Toss" },
+  { url: "/images/compT2.jpg", category: "row2", title: "Match Moment" },
   { url: "/images/Agewisecard.jpeg", category: "row2", title: "Juniors Spirit" },
 
   // ROW 3 → Trophy & Fitness
@@ -518,7 +523,7 @@ useEffect(() => {
         <div className="text-center mb-8">
           <Link
             to="/upload?type=players"
-            className="px-6 py-2 bg-gradient-to-r from-sky-100 to-pink-100 text-white rounded-full font-semibold shadow-md hover:scale-105 transition"
+            className="px-6 py-2 bg-gradient-to-r from-sky-400 to-pink-500 text-white rounded-full font-semibold shadow-md hover:scale-105 transition"
           >
             Add New Player
           </Link>
