@@ -33,7 +33,7 @@ export default function AwardPlayerCard({ name, tournament, image, isAdmin }) {
       </div>
 
       {/* Player Image */}
-      <div className="w-full h-68 rounded-2xl overflow-hidden mb-4">
+      <div className="w-full h-80 rounded-2xl overflow-hidden mb-4">
         <img src={image} alt={name} className="w-full h-full object-cover" />
       </div>
 

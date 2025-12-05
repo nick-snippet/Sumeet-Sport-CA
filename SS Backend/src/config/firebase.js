@@ -1,54 +1,44 @@
-// ---------------------------------------------------------
-// 🔥 Firebase Admin SDK Initialization (Backend)
-// ---------------------------------------------------------
-//
-// REQUIRED .env VALUES (EXAMPLE):
-//
-// FIREBASE_PROJECT_ID=sumeet-sports-app
-// FIREBASE_CLIENT_EMAIL=firebase-adminsdk-abc12@sumeet-sports-app.iam.gserviceaccount.com
-//
-// IMPORTANT: PRIVATE KEY FORMAT MUST BE EXACT
-//
-// FIREBASE_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG...\n-----END PRIVATE KEY-----\n"
-//
-// FIREBASE_STORAGE_BUCKET=sumeet-sports-app.appspot.com
-//
-// ---------------------------------------------------------
-
+// src/config/firebase.js
 import admin from "firebase-admin";
+import dotenv from "dotenv";
 
-// Fix private key formatting completely
-const FIXED_PRIVATE_KEY = process.env.FIREBASE_PRIVATE_KEY
-  ? process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n")
-  : undefined;
+dotenv.config();
 
-// Safety checks for missing env
-if (!process.env.FIREBASE_PROJECT_ID) console.error("❌ Missing FIREBASE_PROJECT_ID");
-if (!process.env.FIREBASE_CLIENT_EMAIL) console.error("❌ Missing FIREBASE_CLIENT_EMAIL");
-if (!FIXED_PRIVATE_KEY) console.error("❌ Missing FIREBASE_PRIVATE_KEY");
-if (!process.env.FIREBASE_STORAGE_BUCKET) console.error("❌ Missing FIREBASE_STORAGE_BUCKET");
+// ========================
+// 🛑 SAFETY CHECKS
+// ========================
+if (!process.env.FIREBASE_PROJECT_ID ||
+    !process.env.FIREBASE_CLIENT_EMAIL ||
+    !process.env.FIREBASE_PRIVATE_KEY ||
+    !process.env.FIREBASE_STORAGE_BUCKET) {
+  console.error("❌ Missing Firebase environment variables.\nCheck your .env file!");
+  console.error("➡ Required keys: FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY, FIREBASE_STORAGE_BUCKET");
+  process.exit(1);
+}
 
-// Initialize Admin SDK (only once)
+// Convert newline-escaped private key to actual newlines
+const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, "\n");
+
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
       credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,
         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: FIXED_PRIVATE_KEY,
+        privateKey,
       }),
       storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
     });
 
-    console.log("✅ Firebase Admin initialized successfully");
-
-  } catch (error) {
-    console.error("❌ Firebase Admin Initialization Failed:", error);
+    console.log("🔥 Firebase Admin initialized successfully!");
+  } catch (err) {
+    console.error("❌ Firebase Admin Initialization Failed:", err);
+    process.exit(1);
   }
 }
 
-// Export Firestore & Storage
+// Exports
 export const db = admin.firestore();
 export const bucket = admin.storage().bucket();
-
+export { admin };
 export default admin;

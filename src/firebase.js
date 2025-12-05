@@ -4,17 +4,22 @@ import { getAuth } from "firebase/auth";
 
 // ------------------------------------------------------------
 // 🔥 FRONTEND FIREBASE CONFIG (Your REAL values) 
+
+
+
 // ------------------------------------------------------------
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAoVg95Cg130eP-iIWo2V0WUlYZg01ETDo",
-  authDomain: "sumeet-sports.firebaseapp.com",
-  projectId: "sumeet-sports",
-  storageBucket: "sumeet-sports.firebasestorage.app",
-  messagingSenderId: "117371219052",
-  appId: "1:117371219052:web:2c061c439f6f3ac5e9fc49",
-  measurementId: "G-50N77PKYQ4"
+  apiKey:import.meta.env.VITE_FIREBASE_apiKey,
+  authDomain:import.meta.env.VITE_FIREBASE_authDomain,
+  projectId:import.meta.env.VITE_FIREBASE_projectId,
+  storageBucket:import.meta.env.VITE_FIREBASE_storageBucket,
+  messagingSenderId:import.meta.env.VITE_FIREBASE_messagingSenderId,
+  appId:import.meta.env.VITE_FIREBASE_appId,
+  measurementId:import.meta.env.VITE_FIREBASE_measurementId,
 };
+
+console.log("firebase config (frontend)=",firebaseConfig);
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);

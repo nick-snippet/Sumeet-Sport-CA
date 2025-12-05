@@ -11,45 +11,49 @@ export default function AddPlayerModal({ open, onClose, onSuccess }) {
   if (!open) return null;
 
   const submit = async (e) => {
-    e.preventDefault();
-    if (!name || !tournament || !file) {
-      setErr("Please fill all fields and select an image.");
-      return;
+  e.preventDefault();
+  if (!name || !tournament || !file) {
+    setErr("Please fill all fields and select an image.");
+    return;
+  }
+
+  setErr("");
+  setLoading(true);
+  try {
+    const token = localStorage.getItem("ss_admin_token") || "";
+    const form = new FormData();
+    form.append("name", name);
+    form.append("tournament", tournament);
+    form.append("image", file);
+
+    const headers = { "Content-Type": "multipart/form-data" };
+    if (token) {
+      headers.Authorization = `Bearer ${token}`; // FIXED ✔
     }
 
-    setErr("");
-    setLoading(true);
-    try {
-      const token = localStorage.getItem("ss_admin_token") || "";
-      const form = new FormData();
-      form.append("name", name);
-      form.append("tournament", tournament);
-      form.append("image", file);
+    const res = await axios.post(
+      "http://localhost:5000/api/players",  // TEMP FIX ✔
+      form,
+      { headers }
+    );
 
-      const headers = { "Content-Type": "multipart/form-data" };
-      if (token) {
-
-       headers.Authorization =' Bearer ${token}';
-      }
-      const res = await axios.post("/api/players", form, { headers });
-
-      setLoading(false);
-      setName("");
-      setTournament("");
-      setFile(null);
-      if (onSuccess) onSuccess(res.data);
-      onClose();
-    } catch (error) {
-      setLoading(false);
-      setErr(
-        error?.response?.data?.error ||
-          error?.response?.data?.message ||
-          error.message ||
-          "Upload failed"
-      );
-    }
-  };
-
+    setLoading(false);
+    setName("");
+    setTournament("");
+    setFile(null);
+    if (onSuccess) onSuccess(res.data);
+    onClose();
+  } catch (error) {
+    setLoading(false);
+    setErr(
+      error?.response?.data?.error ||
+        error?.response?.data?.message ||
+        error.message ||
+        "Upload failed"
+    );
+  }
+}; 
+   
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div className="absolute inset-0 bg-black/60" onClick={onClose} />

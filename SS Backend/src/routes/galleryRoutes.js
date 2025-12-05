@@ -6,7 +6,7 @@ import * as galleryControllers from "../controller/galleryControllers.js";
 const router = express.Router();
 
 router.get("/", galleryControllers.listEvents);
-router.get("/:id", galleryControllers.getEventById?.bind(null)); // optional
+
 
 router.post(
   "/",

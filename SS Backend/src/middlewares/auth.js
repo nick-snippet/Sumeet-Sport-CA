@@ -2,7 +2,7 @@
 // Verifies Firebase ID token and enforces admin-only routes.
 // Expects `src/config/firebase.js` to export `admin`.
 
-import { admin } from "../config/firebase.js";
+import  admin  from "../config/firebase.js";
 
 /**
  * Verify Firebase ID Token from Authorization header.

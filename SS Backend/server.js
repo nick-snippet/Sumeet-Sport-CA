@@ -1,16 +1,20 @@
-import express from "express";
-import cors from "cors";
 import dotenv from "dotenv";
-import path from "path";
-
 dotenv.config();
 
-// Initialize Firebase Admin
-import "./firebase.js";
 
+import express from "express";
+import cors from "cors";
+import path from "path";
+
+// Initialize Firebase Admin
+import "./src/config/firebase.js";
+
+
+//express app setup
 const app = express();
 app.use(cors());
 app.use(express.json());
+
 
 // Routes
 import coachesRoutes from "./src/routes/coachesRoutes.js";

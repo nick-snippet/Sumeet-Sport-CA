@@ -1,4 +1,5 @@
-// src/pages/Homepage.jsx   
+// src/pages/Homepage.jsx  
+import axios from "axios";
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import HeroSection from "../components/herosection";
@@ -8,6 +9,7 @@ import CoachCard from "../components/CoachCard";
 import AwardPlayercard from "../components/AwardPlayercard";
 import api from "../api";
 import EditGalleryModal from "../components/modals/EditGalleryModal";
+import AddCoachCard from "../components/AddCoachCard.jsx"; 
  
 // footer / icon imports  
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
@@ -24,8 +26,26 @@ export default function HomePage() {
 
 const [addPlayerOpen, setAddPlayerOpen] = useState(false);
 const [addCoachOpen, setAddCoachOpen] = useState(false);
+
+//dynamic players state
+const [dynamicPlayers, setDynamicPlayers] = useState([]);
+
+// Fetch players from backend 
+async function fetchPlayers() {
+  try {
+    const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    const res = await axios.get(`${backendURL}/api/players`);
+    setDynamicPlayers(res.data.reverse());
+  } catch (err) {
+    console.error("Failed to load players:", err);
+  }
+}
+
+useEffect(() => {
+  fetchPlayers();
+}, []);
   
-  // Vision/Mission/Goals modal state
+  // Vision/Mission/Goals modal state  
   const [selectedVision, setSelectedVision] = useState(null);
  
   // Converts any input into bullet lines
@@ -504,56 +524,94 @@ useEffect(() => {
           <h3 className="text-3xl font-bold mb-8 text-[#0f2547]">Expert Coaches</h3>
 
           <div className="flex flex-col gap-12">
-            {coaches.map((c, i) => (
-              <CoachCard key={i} name={c.name} title={c.title} description={c.description} image={c.image} instagram={c.instagram} />
-            ))}
-          </div>
+  {/* EXISTING COACHES */}
+  {coaches.map((c, i) => (
+    <CoachCard
+      key={i}
+      name={c.name}
+      title={c.title}
+      description={c.description}
+      image={c.image}
+      instagram={c.instagram}
+    />
+  ))}
+
+  {/* ADMIN ONLY: ADD NEW COACH CARD */}
+  {user?.role === "admin" && (
+    <AddCoachCard onClick={() => setAddCoachOpen(true)} />
+  )}
+
+</div>
         </div>
       </section>
       
       {/* PROUD PLAYERS SECTION */}
-  <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
-    <div className="max-w-6xl mx-auto px-6">
-      <h2 className="text-5xl font-extrabold text-[#0f2547] text-center mb-12">
-        Our Proud Players
-      </h2>
+ <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
+  <div className="max-w-6xl mx-auto px-6">
+    <h2 className="text-5xl font-extrabold text-[#0f2547] text-center mb-12">
+      Our Proud Players
+    </h2>
 
-      {/* ADMIN UPLOAD BUTTON */}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      {/* ➕ ADD NEW PLAYER CARD (only for admin) */}
       {user?.role === "admin" && (
-        <div className="text-center mb-8">
-          <Link
-            to="/upload?type=players"
-            className="px-6 py-2 bg-gradient-to-r from-sky-400 to-pink-500 text-white rounded-full font-semibold shadow-md hover:scale-105 transition"
-          >
-            Add New Player
-          </Link>
+        <div
+          onClick={() => setAddPlayerOpen(true)}
+          className="cursor-pointer flex flex-col items-center justify-center rounded-2xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-xl p-10 hover:scale-105 transition relative"
+        >
+          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-sky-500 to-pink-500 flex items-center justify-center text-white text-5xl shadow-lg">
+            +
+          </div>
+          <p className="mt-4 font-semibold text-lg text-gray-800">
+            Add Player
+          </p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[
-          { name: "Nikhil Kadam", tournament: "Maharshtra Premiere League 2024 & 2025 \n Syed Mustak Ali T20 Maharashtra Camp", image: "/images/players/player1.jpg" },
-          { name: "Bhakti Mirajkar", tournament: "Maharashtra U-19, U-23 & Open Team", image: "/images/players/player2.jpg" },
-          { name: "Soham Chavan", tournament: "Maharashtra U-14 Team", image: "/images/players/player3.jpeg" },
-          { name: "Aneesh Joshi", tournament: "Maharashtra U-19 , Maharashtra U-16 Team", image: "/images/players/player4.jpg" },
-          { name: "Aryan Desai", tournament: "U-19 Maharashtra Camp", image: "/images/players/player5.jpeg" },
-          { name: "Soham Sargar", tournament: "U-16 Maharashtra Camp", image: "/images/players/player7.jpeg" },
-          { name: "Nidhi Shambhawani", tournament: "U-19 Women's Maharashtra Camp", image: "/images/women3.jpeg" },
-          { name: "Madhushree Uplavikar", tournament: "U-15 Women's Maharashtra Camp", image: "/images/women7.jpeg" },
+      {/* 📌 STATIC PLAYERS */}
+      {[
+        { name: "Nikhil Kadam", tournament: "Maharshtra Premiere League 2024 & 2025 \n Syed Mustak Ali T20 Maharashtra Camp", image: "/images/players/player1.jpg" },
+        { name: "Bhakti Mirajkar", tournament: "Maharashtra U-19, U-23 & Open Team", image: "/images/players/player2.jpg" },
+        { name: "Soham Chavan", tournament: "Maharashtra U-14 Team", image: "/images/players/player3.jpeg" },
+        { name: "Aneesh Joshi", tournament: "Maharashtra U-19 , Maharashtra U-16 Team", image: "/images/players/player4.jpg" },
+        { name: "Aryan Desai", tournament: "U-19 Maharashtra Camp", image: "/images/players/player5.jpeg" },
+        { name: "Soham Sargar", tournament: "U-16 Maharashtra Camp", image: "/images/players/player7.jpeg" },
+        { name: "Nidhi Shambhawani", tournament: "U-19 Women's Maharashtra Camp", image: "/images/women3.jpeg" },
+        { name: "Madhushree Uplavikar", tournament: "U-15 Women's Maharashtra Camp", image: "/images/women7.jpeg" },
+      ].map((p, i) => (
+        <AwardPlayercard
+          key={i}
+          name={p.name}
+          tournament={p.tournament}
+          image={p.image}
+          isAdmin={user?.role === "admin"}
+        />
+      ))}
 
-        ].map((p, i) => (
-    
-          <AwardPlayercard
-            key={i}
-            name={p.name}
-            tournament={p.tournament}
-            image={p.image}
-            isAdmin={user?.role === "admin"}
-          />
-        ))}
-      </div>
+      {/* 🆕 DYNAMIC PLAYERS FROM BACKEND */}
+      {dynamicPlayers?.map((p, i) => (
+        <AwardPlayercard
+          key={`dy-${i}`}
+          name={p.name}
+          tournament={p.tournament}
+          image={p.image}
+          isAdmin={user?.role === "admin"}
+        />
+      ))}
+
     </div>
-  </section>
+
+    {/* 🏆 ADD PLAYER MODAL */}
+    {addPlayerOpen && (
+      <AddPlayerModal
+        open={addPlayerOpen}
+        onClose={() => setAddPlayerOpen(false)}
+        onSuccess={() => fetchPlayers()} // 🔄 reload dynamic players after upload
+      />
+    )}
+</div>
+</section>
 
 
      
@@ -1417,10 +1475,10 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
           Touch
         </span>
       </h2>
-      <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+      <p className="text-xl text-gray-800 max-w-3xl mx-auto">
         Have questions about admissions, programs or training?
         <br />  
-        -just connect with us on whatsapp via given form.
+        -just connect with us on <b>whatsapp</b> via given form.
       </p>
     </div>
 
@@ -1651,6 +1709,10 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
           </motion.div>
         )}
       </AnimatePresence>
+     {/* add coach  */}
+     {addCoachOpen && (
+  <AddCoachModal onClose={() => setAddCoachOpen(false)} />
+)}
 
       {/* CONTACT SUBMIT POPUP */}
       <AnimatePresence>
