@@ -10,8 +10,6 @@ export default function CoachCard({
   details,
   image,
   instagram,
-  linkedin,
-  website,
 }) {
   return (
     <motion.div
@@ -48,7 +46,7 @@ export default function CoachCard({
             ))}
           </ul>
 
-          {/* QUOTE */}
+          {/* QUOTE */} 
           {description && (
             <p className="italic text-gray-700 border-l-4 border-pink-400 pl-4 mt-4">
               “{description}”
@@ -68,27 +66,7 @@ export default function CoachCard({
               </a>
             )}
 
-            {linkedin && (
-              <a
-                href={linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-blue-700 flex items-center justify-center hover:scale-110 transition"
-              >
-                <FaLinkedin className="text-white" />
-              </a>
-            )}
-
-            {website && (
-              <a
-                href={website}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:scale-110 transition"
-              >
-                <FaGlobe className="text-white" />
-              </a>
-            )}
+          
           </div>
 
           <p className="text-gray-800 text-[15px] leading-relaxed"></p>

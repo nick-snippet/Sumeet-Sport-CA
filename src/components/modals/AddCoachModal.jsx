@@ -1,5 +1,7 @@
+// src/components/modals/AddCoachModal.jsx
 import React, { useState } from "react";
-import axios from "axios";
+import { addCoach } from "../../firebase/coaches.js";
+
 
 export default function AddCoachModal({ open, onClose, onSuccess }) {
   const [name, setName] = useState("");
@@ -11,45 +13,46 @@ export default function AddCoachModal({ open, onClose, onSuccess }) {
 
   if (!open) return null;
 
-  const submit = async (e) => {
-    e.preventDefault();
-    if (!name || !title || !description || !file) {
-      setErr("Please fill all fields and select an image.");
+  // 🔎 Image validation (only message, not strict block)
+  const handleFile = (e) => {
+    const selected = e.target.files[0];
+    if (!selected) return;
+
+    if (!selected.type.startsWith("image/")) {
+      setErr("⚠️ Please upload a valid image (jpg, jpeg, png).");
+      setFile(null);
       return;
     }
 
     setErr("");
-    setLoading(true);
+    setFile(selected);
+  };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!name || !title || !description || !file) {
+      setErr("⚠️ Please fill all fields & upload an image.");
+      return;
+    }
+
     try {
-      const token = localStorage.getItem("ss_admin_token") || "";
-      const form = new FormData();
-      form.append("name", name);
-      form.append("title", title);
-      form.append("description", description);
-      form.append("image", file);
+      setErr("");
+      setLoading(true);
 
-      const headers = {
-        "Content-Type": "multipart/form-data",
-      };
-      if (token) { headers.Authorization = 'Bearer ${token}';
-      }
-      const res = await axios.post("/api/coaches", form, { headers });
+      await addCoach({ name, title, description, file });
 
-      setLoading(false);
+      // Reset & Close
       setName("");
       setTitle("");
       setDescription("");
       setFile(null);
-      if (onSuccess) onSuccess(res.data);
+      setLoading(false);
+
+      onSuccess && onSuccess();
       onClose();
     } catch (error) {
       setLoading(false);
-      setErr(
-        error?.response?.data?.error ||
-          error?.response?.data?.message ||
-          error.message ||
-          "Upload failed"
-      );
+      setErr(error.message || "Upload failed");
     }
   };
 
@@ -59,6 +62,7 @@ export default function AddCoachModal({ open, onClose, onSuccess }) {
       <div className="relative z-10 max-w-lg w-full bg-white rounded-2xl p-6 shadow-xl">
         <h3 className="text-xl font-semibold mb-3">Add New Coach</h3>
         {err && <div className="text-sm text-red-600 mb-2">{err}</div>}
+
         <form onSubmit={submit} className="space-y-3">
           <input
             value={name}
@@ -66,12 +70,14 @@ export default function AddCoachModal({ open, onClose, onSuccess }) {
             placeholder="Coach name"
             className="w-full px-3 py-2 border rounded"
           />
+
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="Title / role"
             className="w-full px-3 py-2 border rounded"
           />
+
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -79,11 +85,33 @@ export default function AddCoachModal({ open, onClose, onSuccess }) {
             className="w-full px-3 py-2 border rounded"
             rows={4}
           />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setFile(e.target.files[0])}
-          />
+
+          {/* 📤 Upload Button */}
+          <label className="block">
+            <span className="text-sm font-medium text-gray-700">Image</span>
+
+            <label
+              htmlFor="coachFile"
+              className="mt-2 inline-block px-4 py-2 bg-pink-600 text-white text-sm rounded cursor-pointer hover:bg-pink-700 transition"
+            >
+              📤 Upload Image
+            </label>
+
+            <input
+              id="coachFile"
+              type="file"
+              accept="image/*"
+              onChange={handleFile}
+              className="hidden"
+            />
+
+            {file && (
+              <p className="mt-2 text-sm text-gray-600">
+                Selected: <span className="font-medium">{file.name}</span>
+              </p>
+            )}
+          </label>
+
           <div className="flex gap-2">
             <button
               type="submit"
@@ -92,6 +120,7 @@ export default function AddCoachModal({ open, onClose, onSuccess }) {
             >
               {loading ? "Uploading..." : "Add Coach"}
             </button>
+
             <button
               type="button"
               onClick={onClose}

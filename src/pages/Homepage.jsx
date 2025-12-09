@@ -1,52 +1,105 @@
-// src/pages/Homepage.jsx  
-import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+  // src/pages/Homepage.jsx
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext.jsx";
 import HeroSection from "../components/herosection";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "../context/AuthContext";
 import CoachCard from "../components/CoachCard";
 import AwardPlayercard from "../components/AwardPlayercard";
-import api from "../api";
-import EditGalleryModal from "../components/modals/EditGalleryModal";
-import AddCoachCard from "../components/AddCoachCard.jsx"; 
- 
-// footer / icon imports  
+import AddPlayerModal from "../components/modals/AddPlayerModal.jsx";
+
+import AddCoachCard from "../components/AddCoachCard.jsx";
+import AddCoachModal from "../components/modals/AddCoachModal.jsx";
+
+import { storage } from "../firebase/client.js";
 import { FaInstagram, FaLinkedin, FaGlobe } from "react-icons/fa";
 import { GiCricketBat } from "react-icons/gi";
-import { Facebook } from "lucide-react";
+//players
+import { fetchPlayers, deletePlayer,updatePlayer,replacePlayerImage } from "../firebase/players.js";
+import EditTextModal from "../components/admin/EditTextModal.jsx";
+import ReplaceImageModal from "../components/admin/ReplaceImageModal.jsx";
+//gallery
+import { fetchGallery, addGalleryImage, deleteGallery } from "../firebase/gallery.js";
+import AddGalleryModal from "../components/modals/AddGalleryModal.jsx";
 
-import AddPlayerModal from "../components/modals/AddPlayerModal";
-import AddCoachModal from "../components/modals/AddCoachModal";
 
+//coaches
+import { fetchCoaches } from "../firebase/coaches.js";
+import { deleteCoach } from "../firebase/coaches.js";
+
+//import { useAuth } from "../context/AuthContext.jsx"; 
 
 export default function HomePage() {
   const { user } = useAuth();
   const [selectedCard, setSelectedCard] = useState(null);
 
-const [addPlayerOpen, setAddPlayerOpen] = useState(false);
-const [addCoachOpen, setAddCoachOpen] = useState(false);
+  //temp debug
+  console.log("CURRENT USER =>", user);
+//gallery
+// 🖼️ Load dynamic gallery images once
+useEffect(() => {
+  fetchGallery().then(setGalleryImages);
+}, []);
 
-//dynamic players state
-const [dynamicPlayers, setDynamicPlayers] = useState([]);
+//players useeffect
+useEffect(() => {
+  fetchPlayers().then(setDynamicPlayers);
+}, []);
 
-// Fetch players from backend 
-async function fetchPlayers() {
+useEffect(() => {
+  if (user?.role==="admin") 
+    {
+      fetchPlayers().then(setDynamicPlayers);
+    }
+}, [user]);
+
+async function handleDeletePlayer(id) {
+  if (!confirm("Delete this player permanently?")) return;
   try {
-    const backendURL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
-    const res = await axios.get(`${backendURL}/api/players`);
-    setDynamicPlayers(res.data.reverse());
-  } catch (err) {
-    console.error("Failed to load players:", err);
+    await deletePlayer(id);
+    fetchPlayers().then(setDynamicPlayers);
+  } catch {
+    alert("Failed to delete player!");
   }
 }
 
+
+ //const state coaches
+ const [dynamicCoaches, setDynamicCoaches] = useState([]);
 useEffect(() => {
-  fetchPlayers();
+  fetchCoaches().then(setDynamicCoaches);
 }, []);
+
+async function handleDeleteCoach(id) {
+  if (!window.confirm("Delete this coach permanently?")) return;
+
+  try {
+    await deleteCoach(id);
+
+    // Refresh list from Firestore
+    const updated = await fetchCoaches();
+    setDynamicCoaches(updated);
+
+    console.log("✅ Coach deleted from UI + Firestore + Storage");
+  } catch (err) {
+    console.error("❌ Failed to delete coach:", err);
+    alert("Failed to delete coach. Check console for details.");
+  }
+}
+
   
-  // Vision/Mission/Goals modal state  
-  const [selectedVision, setSelectedVision] = useState(null);
+//coach states
+const [addCoachOpen, setAddCoachOpen] = useState(false);
+//players states
+const [dynamicPlayers, setDynamicPlayers] = useState([]);
+const [addPlayerOpen, setAddPlayerOpen] = useState(false);
+const [editingPlayer, setEditingPlayer] = useState(null);
+const [replacingImagePlayer, setReplacingImagePlayer] = useState(null);
+
+// Load players once
+
+// Vision/Mission/Goals modal state  
+const [selectedVision, setSelectedVision] = useState(null);
  
   // Converts any input into bullet lines
 const normalizeBullets = (input) => {
@@ -92,52 +145,12 @@ const normalizeBullets = (input) => {
 const [modalOpen, setModalOpen] = useState(false);
 const [modalImage, setModalImage] = useState(null);
 const [currentIndex, setCurrentIndex] = useState(0);
-const [modalTitle, setModalTitle] = useState("");
  
-//gallery backend data and states 
-// gallery data from backend
-const [galleryImages, setGalleryImages] = useState([]); // used to render grid
-const [loadingGallery, setLoadingGallery] = useState(false);
-
-// editing modal state
-const [editingImage, setEditingImage] = useState(null);
-const [editModalOpen, setEditModalOpen] = useState(false);
-
-const [backendGallery, setBackendGallery] = useState([]);
-
-
-useEffect(() => {
-  async function loadGallery() {
-    try {
-      const res = await fetch("YOUR_BACKEND_URL/api/gallery");
-      const data = await res.json();
-
-      // flatten each event → multiple images
-      const dynamicImages = data.flatMap(ev =>
-        ev.images.map(img => ({
-          id: img.id,
-          url: img.publicUrl,
-          title: ev.title,
-          category: ev.category || "row1", // or default
-          eventId: ev.id,
-          isDynamic: true
-        }))
-      );
-
-      setBackendGallery(dynamicImages);
-    } catch (err) {
-      console.error(err);
-    }
-  }
-
-  loadGallery();
-}, []);
-
-
-
-
-
 const [visibleCount, setVisibleCount] = useState(12);
+// 📌 GALLERY STATES (dynamic from firebase)
+const [galleryImages, setGalleryImages] = useState([]);
+const [loadingGallery, setLoadingGallery] = useState(false);
+const [addGalleryOpen, setAddGalleryOpen] = useState(false);
 
 // Gallery Images
 const staticGallery = [
@@ -227,6 +240,8 @@ useEffect(() => {
   return () => window.removeEventListener("keydown", onKey);
 }, [programModalOpen, activeProgram, activeInner]);
 
+
+
   // Coaches (dynamic; can add more later)
  const coaches = [
     {
@@ -236,7 +251,7 @@ useEffect(() => {
       Facebook:"",
       description: (
   <div className="space-y-3 text-gray-800 leading-relaxed">
-    <p className="text-2xl font-bold text-[#0f2547]">🔥 *Highlights*</p>
+    <p className="text-2xl font-bold text-[#0f2547]">🔥 *Highlights*</p> 
 
     <ul className="list-disc text-l pl-5 space-y-1 font-medium">
       <li>Co-Owner — Sumeet Sports Cricket Academy, Sangli</li>
@@ -318,6 +333,7 @@ useEffect(() => {
             
           },
         ];
+//dynamic coaches
 
    
 
@@ -524,6 +540,8 @@ useEffect(() => {
           <h3 className="text-3xl font-bold mb-8 text-[#0f2547]">Expert Coaches</h3>
 
           <div className="flex flex-col gap-12">
+  
+  
   {/* EXISTING COACHES */}
   {coaches.map((c, i) => (
     <CoachCard
@@ -531,22 +549,54 @@ useEffect(() => {
       name={c.name}
       title={c.title}
       description={c.description}
-      image={c.image}
+      image={c.imageurl||c.image}
       instagram={c.instagram}
     />
   ))}
+{/* DYNAMIC COACHES */}
+{dynamicCoaches.map((c) => (
+  <div key={c.id} className="relative">
+    <CoachCard
+      name={c.name}
+      title={c.title}
+      description={c.description}
+      image={c.imageUrl}
+    />
 
-  {/* ADMIN ONLY: ADD NEW COACH CARD */}
-  {user?.role === "admin" && (
-    <AddCoachCard onClick={() => setAddCoachOpen(true)} />
-  )}
+    {user?.role === "admin" && (
+      <button
+        onClick={() => handleDeleteCoach(c.id)}
+        className="absolute top-2 right-2 bg-red-600 text-white text-xs px-3 py-1 rounded shadow hover:bg-red-700"
+      >
+        Delete
+      </button>
+    )}
+  </div>
+))} 
+{/* ADD NEW COACH CARD (visible only for admin) */} 
+      {user?.role === "admin" && (
+        <AddCoachCard onClick={() => setAddCoachOpen(true)} />
+      )}
+
+{/* ADD COACH MODAL */}
+<AddCoachModal
+  open={addCoachOpen}
+  onClose={() => setAddCoachOpen(false)}
+  onSuccess={() => fetchCoaches().then(setDynamicCoaches)}
+/>
+
+
+
+
 
 </div>
         </div>
       </section>
-      
-      {/* PROUD PLAYERS SECTION */}
- <section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
+
+ 
+  
+ {/* PROUD PLAYERS SECTION */}
+<section id="players-section" className="py-20 bg-gradient-to-r from-pink-200 to-sky-200">
   <div className="max-w-6xl mx-auto px-6">
     <h2 className="text-5xl font-extrabold text-[#0f2547] text-center mb-12">
       Our Proud Players
@@ -554,65 +604,135 @@ useEffect(() => {
 
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
-      {/* ➕ ADD NEW PLAYER CARD (only for admin) */}
-      {user?.role === "admin" && (
-        <div
-          onClick={() => setAddPlayerOpen(true)}
-          className="cursor-pointer flex flex-col items-center justify-center rounded-2xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-xl p-10 hover:scale-105 transition relative"
-        >
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-sky-500 to-pink-500 flex items-center justify-center text-white text-5xl shadow-lg">
-            +
-          </div>
-          <p className="mt-4 font-semibold text-lg text-gray-800">
-            Add Player
-          </p>
-        </div>
-      )}
 
-      {/* 📌 STATIC PLAYERS */}
+      {/* 📌 STATIC PLAYERS – ALL 8 */}
       {[
-        { name: "Nikhil Kadam", tournament: "Maharshtra Premiere League 2024 & 2025 \n Syed Mustak Ali T20 Maharashtra Camp", image: "/images/players/player1.jpg" },
-        { name: "Bhakti Mirajkar", tournament: "Maharashtra U-19, U-23 & Open Team", image: "/images/players/player2.jpg" },
-        { name: "Soham Chavan", tournament: "Maharashtra U-14 Team", image: "/images/players/player3.jpeg" },
-        { name: "Aneesh Joshi", tournament: "Maharashtra U-19 , Maharashtra U-16 Team", image: "/images/players/player4.jpg" },
-        { name: "Aryan Desai", tournament: "U-19 Maharashtra Camp", image: "/images/players/player5.jpeg" },
-        { name: "Soham Sargar", tournament: "U-16 Maharashtra Camp", image: "/images/players/player7.jpeg" },
-        { name: "Nidhi Shambhawani", tournament: "U-19 Women's Maharashtra Camp", image: "/images/women3.jpeg" },
-        { name: "Madhushree Uplavikar", tournament: "U-15 Women's Maharashtra Camp", image: "/images/women7.jpeg" },
+        {
+          name: "Nikhil Kadam",
+          tournament:
+            "Maharshtra Premiere League 2024 & 2025 \n Syed Mustak Ali T20 Maharashtra Camp",
+          image: "/images/players/player1.jpg",
+        },
+        {
+          name: "Bhakti Mirajkar",
+          tournament: "Maharashtra U-19, U-23 & Open Team",
+          image: "/images/players/player2.jpg",
+        },
+        {
+          name: "Soham Chavan",
+          tournament: "Maharashtra U-14 Team",
+          image: "/images/players/player3.jpeg",
+        },
+        {
+          name: "Aneesh Joshi",
+          tournament: "Maharashtra U-19 , Maharashtra U-16 Team",
+          image: "/images/players/player4.jpg",
+        },
+        {
+          name: "Aryan Desai",
+          tournament: "U-19 Maharashtra Camp",
+          image: "/images/players/player5.jpeg",
+        },
+        {
+          name: "Soham Sargar",
+          tournament: "U-16 Maharashtra Camp",
+          image: "/images/players/player7.jpeg",
+        },
+        {
+          name: "Nidhi Shambhawani",
+          tournament: "U-19 Women's Maharashtra Camp",
+          image: "/images/women3.jpeg",
+        },
+        {
+          name: "Madhushree Uplavikar",
+          tournament: "U-15 Women's Maharashtra Camp",
+          image: "/images/women7.jpeg",
+        },
       ].map((p, i) => (
         <AwardPlayercard
           key={i}
           name={p.name}
           tournament={p.tournament}
           image={p.image}
-          isAdmin={user?.role === "admin"}
+         // isAdmin={user?.role === "admin"}
         />
       ))}
 
-      {/* 🆕 DYNAMIC PLAYERS FROM BACKEND */}
-      {dynamicPlayers?.map((p, i) => (
-        <AwardPlayercard
-          key={`dy-${i}`}
-          name={p.name}
-          tournament={p.tournament}
-          image={p.image}
-          isAdmin={user?.role === "admin"}
-        />
-      ))}
+      {/* 🆕 DYNAMIC PLAYERS FROM FIREBASE/BACKEND */}
+     {/* 📌 DYNAMIC PLAYERS */}
+{/* 📌 DYNAMIC PLAYERS */}
+{dynamicPlayers.map((p) => (
+  <div key={p.id} className="relative">
 
-    </div>
+    <AwardPlayercard
+      name={p.name}
+      tournament={p.tournament}
+      image={p.imageUrl}
+      isAdmin={user?.role === "admin"}
+      onEdit={() => setEditingPlayer(p)}             // 👈 use existing
+      onReplaceImage={() => setReplacingImagePlayer(p)}  // 👈 use existing
+      onDelete={() => handleDeletePlayer(p.id)}
+    />
+    
+  </div>
+))}
+{/* ➕ ADD PLAYER CARD (Admin only) */}
+{user?.role === "admin" && (
+  <div
+    onClick={() => setAddPlayerOpen(true)}
+    className="cursor-pointer flex flex-col items-center justify-center bg-white/40 backdrop-blur-xl border border-white/60 rounded-3xl shadow-lg hover:shadow-xl hover:scale-105 transition p-8"
+  >
+    <div className="text-5xl text-[#0f2547] font-bold">+</div>
+    <p className="text-lg font-semibold text-[#0f2547] mt-2">
+      Add Player
+    </p>
+  </div>
+)}
 
-    {/* 🏆 ADD PLAYER MODAL */}
-    {addPlayerOpen && (
-      <AddPlayerModal
-        open={addPlayerOpen}
-        onClose={() => setAddPlayerOpen(false)}
-        onSuccess={() => fetchPlayers()} // 🔄 reload dynamic players after upload
-      />
-    )}
-</div>
+    
+   {/* 🏆 ADD PLAYER MODAL */}
+<AddPlayerModal
+  open={addPlayerOpen}
+  onClose={() => setAddPlayerOpen(false)}
+  onSuccess={() => fetchPlayers().then(setDynamicPlayers)}
+/>
+
+{/* ✏ EDIT PLAYER TEXT MODAL */}
+<EditTextModal
+  isOpen={!!editingPlayer}
+  initialText={{
+    title: editingPlayer?.name || "",
+    desc: editingPlayer?.tournament || ""
+  }}
+  onSave={async (data) => {
+    await updatePlayer(editingPlayer.id, {
+      name: data.title,
+      tournament: data.desc
+    });
+    setEditingPlayer(null);
+    fetchPlayers().then(setDynamicPlayers);
+  }}
+  onClose={() => setEditingPlayer(null)}
+/>
+
+
+{/* 🖼 REPLACE IMAGE MODAL */}
+<ReplaceImageModal
+  open={!!replacingImagePlayer}
+  currentUrl={replacingImagePlayer?.imageUrl}
+  onSave={async (file) => {
+    await replacePlayerImage(replacingImagePlayer.id, file);
+    setReplacingImagePlayer(null);
+    fetchPlayers().then(setDynamicPlayers);
+  }}
+  onClose={() => setReplacingImagePlayer(null)}
+/>
+
+
+   
+  </div>
+  </div>
 </section>
-
 
      
 {/* VISION / MISSION / GOALS – NEW SECTION */}
@@ -1226,19 +1346,6 @@ useEffect(() => {
       Moments that define our academy — passion, teamwork, and excellence captured in every frame.
     </motion.p>
 
-    {/* Admin Upload Button */}
-    {user?.role === "admin" && (
-      <div className="text-center mb-8">
-        <Link
-          to="/upload?type=gallery"
-          className="px-6 py-2 bg-gradient-to-r from-sky-500 to-pink-500 text-white rounded-full font-semibold shadow-md hover:scale-105 transition"
-        >
-          Upload New Event
-        </Link>
-      </div>
-    )}
-
-    
 
     {/* IMAGE GRID */}
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -1626,7 +1733,7 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
           </div>
         </div>
 
-        {/* Address */}
+        {/* Address */} 
         <div className="rounded-2xl border mt-4 border-gray-200 shadow-sm bg-white hover:border-pink-400 transition">
           <div className="p-8 flex items-center space-x-4">
             <div className="w-12 h-12 bg-gradient-to-r from-sky-500 to-pink-500 rounded-full flex items-center justify-center text-white">
@@ -1686,7 +1793,7 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
         <h6  className="text-sm"><p className="text-sm text-gray-900"> D.B.Nadim </p></h6>     
       </footer>
 
-      {/* SELECTED CARD MODAL */}
+      {/* SELECTED CARD MODAL */} 
       <AnimatePresence>
         {selectedCard && (
           <motion.div className="fixed inset-0 bg-black/40 backdrop-blur-xl flex items-center justify-center z-50" onClick={() => setSelectedCard(null)} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
@@ -1709,10 +1816,6 @@ With A Decade Of Experience, Sumeet Sports Shoppe Has Become A One-Stop Solution
           </motion.div>
         )}
       </AnimatePresence>
-     {/* add coach  */}
-     {addCoachOpen && (
-  <AddCoachModal onClose={() => setAddCoachOpen(false)} />
-)}
 
       {/* CONTACT SUBMIT POPUP */}
       <AnimatePresence>

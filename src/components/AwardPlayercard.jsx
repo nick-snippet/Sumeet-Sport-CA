@@ -52,16 +52,33 @@ export default function AwardPlayerCard({ name, tournament, image, isAdmin }) {
       )}
 
       {/* Admin Buttons (same as before) */}
-      {isAdmin && (
-        <div className="mt-4 flex justify-center gap-3">
-          <button className="px-5 py-3 bg-blue-600 text-white rounded-full text-sm shadow hover:scale-105 transition">
-            Edit
-          </button>
-          <button className="px-4 py-2 bg-red-600 text-white rounded-full text-sm shadow hover:scale-105 transition">
-            Delete
-          </button>
-        </div>
-      )}
+     {isAdmin && (
+  <div className="mt-4 flex justify-center gap-3">
+    <button
+      onClick={onEdit}
+      className="px-5 py-2 bg-blue-600 text-white rounded-full text-sm shadow hover:scale-105 transition"
+    >
+      Edit
+    </button>
+
+    <button
+      onClick={onReplaceImage}
+      className="px-5 py-2 bg-purple-600 text-white rounded-full text-sm shadow hover:scale-105 transition"
+    >
+      Replace Image
+    </button>
+
+    <button
+      onClick={onDelete}
+      className="px-4 py-2 bg-red-600 text-white rounded-full text-sm shadow hover:scale-105 transition"
+    >
+      Delete
+    </button>
+  </div>
+)}
+
+
+
     </motion.div>
   );
 }
